@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/AssetIQAI.IntegrationTests/AssetIQAI.IntegrationTests.csproj" />
+    <Project Path="tests/AssetIQAI.UnitTests/AssetIQAI.UnitTests.csproj" />
+  </Folder>
+  <Project Path="AssetIQAI.API/AssetIQAI.API.csproj" />
+  <Project Path="AssetIQAI.Domain/AssetIQAI.Domain.csproj" />
+  <Project Path="AssetIQAI.Infrastructure/AssetIQAI.Infrastructure.csproj" />
+</Solution>
