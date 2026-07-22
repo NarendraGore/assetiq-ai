@@ -5,6 +5,7 @@ obj/
 *.suo
 
 appsettings.Development.json
+appsettings.json
 
 .env
 
@@ -13,5 +14,6 @@ appsettings.Development.json
 *.db
 
 logs/
+*.log
 
 TestResults/

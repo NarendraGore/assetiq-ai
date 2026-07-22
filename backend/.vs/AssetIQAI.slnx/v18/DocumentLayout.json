@@ -1,0 +1,168 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{16B8D8A4-512D-6958-2E0F-E8082D342245}|AssetIQAI.Domain\\AssetIQAI.Domain.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.domain\\assetiqai.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{16B8D8A4-512D-6958-2E0F-E8082D342245}|AssetIQAI.Domain\\AssetIQAI.Domain.csproj|solutionrelative:assetiqai.domain\\assetiqai.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5CD16FDE-7C11-783B-4EC3-4F5B9A0C485F}|AssetIQAI.Infrastructure\\AssetIQAI.Infrastructure.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.infrastructure\\assetiqai.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{5CD16FDE-7C11-783B-4EC3-4F5B9A0C485F}|AssetIQAI.Infrastructure\\AssetIQAI.Infrastructure.csproj|solutionrelative:assetiqai.infrastructure\\assetiqai.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.api\\extensions\\swaggerextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|solutionrelative:assetiqai.api\\extensions\\swaggerextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|solutionrelative:assetiqai.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|solutionrelative:assetiqai.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.api\\extensions\\apiversioningextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|solutionrelative:assetiqai.api\\extensions\\apiversioningextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.api\\extensions\\healthcheckextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|solutionrelative:assetiqai.api\\extensions\\healthcheckextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|e:\\full_stack_project\\assetiq-ai\\backend\\assetiqai.api\\extensions\\healthcheckendpointextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51496AB8-3367-1FC8-27B9-707F5F3B8395}|AssetIQAI.API\\AssetIQAI.API.csproj|solutionrelative:assetiqai.api\\extensions\\healthcheckendpointextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AssetIQAI.Infrastructure",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.Infrastructure\\AssetIQAI.Infrastructure.csproj",
+              "RelativeDocumentMoniker": "AssetIQAI.Infrastructure\\AssetIQAI.Infrastructure.csproj",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.Infrastructure\\AssetIQAI.Infrastructure.csproj",
+              "RelativeToolTip": "AssetIQAI.Infrastructure\\AssetIQAI.Infrastructure.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-22T15:32:49.379Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AssetIQAI.Domain",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.Domain\\AssetIQAI.Domain.csproj",
+              "RelativeDocumentMoniker": "AssetIQAI.Domain\\AssetIQAI.Domain.csproj",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.Domain\\AssetIQAI.Domain.csproj",
+              "RelativeToolTip": "AssetIQAI.Domain\\AssetIQAI.Domain.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-22T15:32:36.237Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SwaggerExtensions.cs",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\SwaggerExtensions.cs",
+              "RelativeDocumentMoniker": "AssetIQAI.API\\Extensions\\SwaggerExtensions.cs",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\SwaggerExtensions.cs",
+              "RelativeToolTip": "AssetIQAI.API\\Extensions\\SwaggerExtensions.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAqwCgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T15:09:42.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "AssetIQAI.API\\Controllers\\AuthController.cs",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "AssetIQAI.API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAADwvw8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T14:17:51.796Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ApiVersioningExtensions.cs",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\ApiVersioningExtensions.cs",
+              "RelativeDocumentMoniker": "AssetIQAI.API\\Extensions\\ApiVersioningExtensions.cs",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\ApiVersioningExtensions.cs",
+              "RelativeToolTip": "AssetIQAI.API\\Extensions\\ApiVersioningExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T14:17:08.794Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "HealthCheckEndpointExtensions.cs",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\HealthCheckEndpointExtensions.cs",
+              "RelativeDocumentMoniker": "AssetIQAI.API\\Extensions\\HealthCheckEndpointExtensions.cs",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\HealthCheckEndpointExtensions.cs",
+              "RelativeToolTip": "AssetIQAI.API\\Extensions\\HealthCheckEndpointExtensions.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T14:14:56.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Program.cs",
+              "RelativeDocumentMoniker": "AssetIQAI.API\\Program.cs",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Program.cs",
+              "RelativeToolTip": "AssetIQAI.API\\Program.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAB0AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T14:11:31.226Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HealthCheckExtensions.cs",
+              "DocumentMoniker": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\HealthCheckExtensions.cs",
+              "RelativeDocumentMoniker": "AssetIQAI.API\\Extensions\\HealthCheckExtensions.cs",
+              "ToolTip": "E:\\Full_Stack_Project\\AssetIQ-AI\\backend\\AssetIQAI.API\\Extensions\\HealthCheckExtensions.cs",
+              "RelativeToolTip": "AssetIQAI.API\\Extensions\\HealthCheckExtensions.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAQwBMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-22T14:10:51.494Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-@AssetIQAI.API_HostAddress = http://localhost:5214
+@AssetIQAI.API_HostAddress = http://localhost:5146
 
 GET {{AssetIQAI.API_HostAddress}}/weatherforecast/
 Accept: application/json
