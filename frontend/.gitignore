@@ -51,3 +51,33 @@ out/
 .env
 
 coverage/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build folders
+bin/
+obj/
+
+# Logs
+Logs/
+*.log
+
+# Environment
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# Rider
+.idea/
+
+# Node
+node_modules/
+.next/
+dist/

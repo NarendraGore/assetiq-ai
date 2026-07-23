@@ -1,7 +1,9 @@
-﻿using AssetIQAI.Infrastructure.Persistence;
+﻿using AssetIQAI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AssetIQAI.Infrastructure.Repositories.Implementations;
+using AssetIQAI.Infrastructure.Repositories.Interfaces;
 
 namespace AssetIQAI.Infrastructure;
 
@@ -22,7 +24,16 @@ public static class DependencyInjection
         // Repositories
         RegisterRepositories(services);
 
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        services.AddScoped<ISupplierRepository, SupplierRepository>();
+
         return services;
+     
     }
 
     private static void RegisterServices(IServiceCollection services)
@@ -34,4 +45,6 @@ public static class DependencyInjection
     {
         // Register repositories here
     }
+
+   
 }
