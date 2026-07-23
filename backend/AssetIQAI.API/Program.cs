@@ -1,5 +1,7 @@
 using AssetIQAI.API.Extensions;
 using AssetIQAI.Infrastructure;
+using AssetIQAI.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +33,14 @@ builder.Services.AddApiVersioningConfiguration();
 
 // Build Application
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider
+        .GetRequiredService<ApplicationDbContext>();
+
+    await DbSeeder.SeedAsync(context);
+}
 
 // Configure HTTP Request Pipeline
 if (app.Environment.IsDevelopment())
