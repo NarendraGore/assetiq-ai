@@ -1,10 +1,12 @@
 using AssetIQAI.API.Extensions;
+using AssetIQAI.API.Services;
 using AssetIQAI.Infrastructure;
 using AssetIQAI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -30,6 +32,8 @@ builder.Services.AddCorsPolicy(builder.Configuration);
 builder.Services.AddApplicationHealthChecks(builder.Configuration);
 
 builder.Services.AddApiVersioningConfiguration();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Build Application
 var app = builder.Build();

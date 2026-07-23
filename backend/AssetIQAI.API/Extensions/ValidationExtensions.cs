@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using System.Reflection;
 
 namespace AssetIQAI.API.Extensions;
 
@@ -10,7 +11,8 @@ public static class ValidationExtensions
     {
         services.AddFluentValidationAutoValidation();
 
-        services.AddValidatorsFromAssemblyContaining<Program>();
+        services.AddValidatorsFromAssembly(
+            Assembly.GetExecutingAssembly());
 
         return services;
     }
