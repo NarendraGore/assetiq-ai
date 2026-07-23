@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AssetIQAI.Infrastructure.Repositories.Implementations;
 using AssetIQAI.Infrastructure.Repositories.Interfaces;
+using AssetIQAI.Infrastructure.Security;
 
 namespace AssetIQAI.Infrastructure;
 
@@ -31,6 +32,14 @@ public static class DependencyInjection
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+        // Password Hasher
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
 
         return services;
      
