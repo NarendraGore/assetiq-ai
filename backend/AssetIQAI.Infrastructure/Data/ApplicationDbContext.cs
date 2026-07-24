@@ -19,6 +19,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Product> Products => Set<Product>();
 
+    public DbSet<StockTransaction> StockTransactions => Set<StockTransaction>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -29,6 +31,9 @@ public class ApplicationDbContext : DbContext
         ConfigureCategory(modelBuilder);
         ConfigureSupplier(modelBuilder);
         ConfigureProduct(modelBuilder);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(
+       typeof(ApplicationDbContext).Assembly);
     }
 
     // 👇 Write it here

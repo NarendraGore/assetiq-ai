@@ -1,8 +1,14 @@
 using AssetIQAI.API.Extensions;
 using AssetIQAI.API.Services;
+using AssetIQAI.API.Validators.Stock;
 using AssetIQAI.Infrastructure;
 using AssetIQAI.Infrastructure.Data;
+using AssetIQAI.Infrastructure.DTOs.Stock;
 using AssetIQAI.Infrastructure.Mapping;
+using AssetIQAI.Infrastructure.Mappings;
+using AssetIQAI.Infrastructure.Services.Implementations;
+using AssetIQAI.Infrastructure.Services.Interfaces;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -36,9 +42,16 @@ builder.Services.AddApiVersioningConfiguration();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IValidator<StockInRequest>, CreateStockInValidator>();
+
+builder.Services.AddScoped<IValidator<StockOutRequest>, CreateStockOutValidator>();
+
+builder.Services.AddScoped<IValidator<StockAdjustmentRequest>, StockAdjustmentValidator>();
+
 builder.Services.AddValidationServices();
 
 ProductMapping.Register();
+StockMapping.Register();
 
 // Build Application
 var app = builder.Build();

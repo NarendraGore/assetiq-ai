@@ -1,5 +1,6 @@
 ﻿using AssetIQAI.Domain.Entities;
 using AssetIQAI.Infrastructure.DTOs.Product;
+using AssetIQAI.Infrastructure.DTOs.Stock;
 using Mapster;
 
 namespace AssetIQAI.Infrastructure.Mapping;
@@ -8,6 +9,8 @@ public static class ProductMapping
 {
     public static void Register()
     {
+
+        
         TypeAdapterConfig<Product, ProductResponse>
             .NewConfig()
             .Map(dest => dest.CategoryName,
@@ -22,4 +25,5 @@ public static class ProductMapping
             .Map(dest => dest.SupplierName,
                 src => src.Supplier.CompanyName);
     }
+
 }
