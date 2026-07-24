@@ -2,7 +2,12 @@
 
 namespace AssetIQAI.Infrastructure.Repositories.Interfaces;
 
-public interface ISupplierRepository
-    : IGenericRepository<Supplier>
+public interface ISupplierRepository : IGenericRepository<Supplier>
 {
+    Task<Supplier?> GetByCompanyNameAsync(string companyName);
+
+    Task<(IEnumerable<Supplier> Items, int TotalCount)> GetPagedAsync(
+        int page,
+        int pageSize,
+        string? search);
 }

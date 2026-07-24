@@ -23,9 +23,32 @@ public class GenericRepository<T> : IGenericRepository<T>
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(
+    int page,
+    int pageSize,
+    Expression<Func<T, bool>>? predicate = null,
+    Expression<Func<T, object>>? orderBy = null)
     {
-        return await _dbSet.ToListAsync();
+        IQueryable<T> query = _dbSet.AsQueryable();
+
+        if (predicate != null)
+        {
+            query = query.Where(predicate);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        if (orderBy != null)
+        {
+            query = query.OrderBy(orderBy);
+        }
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
     }
 
     public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)

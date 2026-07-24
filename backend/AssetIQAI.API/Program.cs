@@ -35,6 +35,8 @@ builder.Services.AddApiVersioningConfiguration();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddValidationServices();
+
 // Build Application
 var app = builder.Build();
 
