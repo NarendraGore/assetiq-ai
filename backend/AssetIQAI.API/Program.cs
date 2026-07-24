@@ -2,6 +2,7 @@ using AssetIQAI.API.Extensions;
 using AssetIQAI.API.Services;
 using AssetIQAI.Infrastructure;
 using AssetIQAI.Infrastructure.Data;
+using AssetIQAI.Infrastructure.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -36,6 +37,8 @@ builder.Services.AddApiVersioningConfiguration();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddValidationServices();
+
+ProductMapping.Register();
 
 // Build Application
 var app = builder.Build();
