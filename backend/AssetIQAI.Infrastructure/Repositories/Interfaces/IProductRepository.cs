@@ -11,4 +11,6 @@ public interface IProductRepository : IGenericRepository<Product>
         ProductFilterRequest request);
 
     Task<IEnumerable<Product>> GetLowStockAsync();
+
+    Task<Product?> GetByIdWithDetailsAsync(Guid id);
 }

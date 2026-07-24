@@ -27,4 +27,7 @@ public class Product : BaseEntity
     public string? ImageUrl { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    public ICollection<StockTransaction> StockTransactions { get; set; }
+    = new List<StockTransaction>();
 }

@@ -80,4 +80,11 @@ public class ProductRepository
             .OrderBy(x => x.StockQuantity)
             .ToListAsync();
     }
+    public async Task<Product?> GetByIdWithDetailsAsync(Guid id)
+    {
+        return await _context.Products
+            .Include(x => x.Category)
+            .Include(x => x.Supplier)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
 }
