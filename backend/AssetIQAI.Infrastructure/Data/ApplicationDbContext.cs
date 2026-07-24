@@ -17,6 +17,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Supplier> Suppliers => Set<Supplier>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<Product> Products => Set<Product>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -26,6 +28,7 @@ public class ApplicationDbContext : DbContext
         ConfigureRefreshToken(modelBuilder);
         ConfigureCategory(modelBuilder);
         ConfigureSupplier(modelBuilder);
+        ConfigureProduct(modelBuilder);
     }
 
     // 👇 Write it here
@@ -131,6 +134,51 @@ public class ApplicationDbContext : DbContext
 
             entity.Property(x => x.Phone)
                 .HasMaxLength(20);
+        });
+    }
+
+    private static void ConfigureProduct(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.Property(x => x.Name)
+                .HasMaxLength(150)
+                .IsRequired();
+
+            entity.Property(x => x.SKU)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.HasIndex(x => x.SKU)
+                .IsUnique();
+
+            entity.Property(x => x.Description)
+                .HasMaxLength(500);
+
+            entity.Property(x => x.UnitPrice)
+                .HasColumnType("decimal(18,2)");
+
+            entity.Property(x => x.StockQuantity)
+                .IsRequired();
+
+            entity.Property(x => x.MinimumStock)
+                .IsRequired();
+
+            entity.Property(x => x.ImageUrl)
+                .HasMaxLength(500);
+
+            entity.Property(x => x.IsActive)
+                .HasDefaultValue(true);
+
+            entity.HasOne(x => x.Category)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Supplier)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace AssetIQAI.Infrastructure.DTOs.Product;
 
-public class CreateProductRequest
+public class UpdateProductRequest
 {
     public string Name { get; set; } = string.Empty;
 
