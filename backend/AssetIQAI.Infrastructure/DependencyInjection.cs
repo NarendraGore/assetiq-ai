@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using AssetIQAI.Infrastructure.Repositories.Implementations;
 using AssetIQAI.Infrastructure.Repositories.Interfaces;
 using AssetIQAI.Infrastructure.Security;
+using AssetIQAI.Infrastructure.Services.Interfaces;
+using AssetIQAI.Infrastructure.Services.Implementations;
 
 namespace AssetIQAI.Infrastructure;
 
@@ -40,6 +42,9 @@ public static class DependencyInjection
 
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
+        services.AddScoped<ICategoryService, CategoryService>();
+
+        services.AddScoped<ISupplierService, SupplierService>();
 
         return services;
      

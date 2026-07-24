@@ -1,10 +1,7 @@
-﻿
-using AssetIQAI.Domain.Common;
-
-namespace AssetIQAI.Domain.Entities;
-
-public class Supplier : BaseEntity
+﻿namespace AssetIQAI.Infrastructure.DTOs.Supplier;
+public class UpdateSupplierRequest
 {
+
     public string CompanyName { get; set; } = string.Empty;
 
     public string ContactPerson { get; set; } = string.Empty;

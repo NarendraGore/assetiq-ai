@@ -1,10 +1,9 @@
-﻿
-using AssetIQAI.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace AssetIQAI.Domain.Entities;
+namespace AssetIQAI.Infrastructure.DTOs.Supplier;
 
-public class Supplier : BaseEntity
-{
+    public class CreateSupplierRequest
+    {
     public string CompanyName { get; set; } = string.Empty;
 
     public string ContactPerson { get; set; } = string.Empty;
@@ -15,3 +14,4 @@ public class Supplier : BaseEntity
 
     public string Address { get; set; } = string.Empty;
 }
+

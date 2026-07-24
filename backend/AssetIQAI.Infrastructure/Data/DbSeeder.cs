@@ -1,5 +1,6 @@
 ﻿using AssetIQAI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AssetIQAI.Infrastructure.Data;
 
@@ -8,7 +9,6 @@ public static class DbSeeder
     public static async Task SeedAsync(ApplicationDbContext context)
     {
         await context.Database.MigrateAsync();
-
         if (!await context.Roles.AnyAsync())
         {
             var roles = new List<Role>
