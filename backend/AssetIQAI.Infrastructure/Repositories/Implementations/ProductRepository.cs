@@ -3,6 +3,8 @@ using AssetIQAI.Infrastructure.Data;
 using AssetIQAI.Infrastructure.DTOs.Common;
 using AssetIQAI.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using AssetIQAI.Infrastructure.DTOs.Reports;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetIQAI.Infrastructure.Repositories.Implementations;
 
@@ -86,5 +88,57 @@ public class ProductRepository
             .Include(x => x.Category)
             .Include(x => x.Supplier)
             .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<(IEnumerable<InventoryReportResponse> Items, int TotalCount)>
+    GetInventoryReportAsync(ReportFilterRequest request)
+    {
+        IQueryable<Product> query = _context.Products
+            .Include(x => x.Category)
+            .Include(x => x.Supplier);
+
+        // Search
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            query = query.Where(x =>
+                x.Name.Contains(request.Search) ||
+                x.SKU.Contains(request.Search));
+        }
+
+        // Category Filter
+        if (request.CategoryId.HasValue)
+        {
+            query = query.Where(x =>
+                x.CategoryId == request.CategoryId.Value);
+        }
+
+        // Supplier Filter
+        if (request.SupplierId.HasValue)
+        {
+            query = query.Where(x =>
+                x.SupplierId == request.SupplierId.Value);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(x => x.Name)
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .Select(x => new InventoryReportResponse
+            {
+                ProductId = x.Id,
+                ProductName = x.Name,
+                SKU = x.SKU,
+                CategoryName = x.Category.Name,
+                SupplierName = x.Supplier.CompanyName,
+                CurrentStock = x.StockQuantity,
+                MinimumStock = x.MinimumStock,
+                UnitPrice = x.UnitPrice,
+                IsActive = x.IsActive
+            })
+            .ToListAsync();
+
+        return (items, totalCount);
     }
 }

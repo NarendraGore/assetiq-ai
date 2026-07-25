@@ -39,6 +39,8 @@ public static class DependencyInjection
 
         services.AddScoped<IStockRepository, StockRepository>();
 
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
+
         // Password Hasher
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
@@ -53,6 +55,11 @@ public static class DependencyInjection
         services.AddScoped<IProductService, ProductService>();
 
         services.AddScoped<IStockService, StockService>();
+
+        services.AddScoped<IDashboardService, DashboardService>();
+
+        services.AddScoped<IReportService, ReportService>();
+
 
         return services;
      
