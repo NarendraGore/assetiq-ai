@@ -1,5 +1,6 @@
 ﻿using AssetIQAI.Infrastructure.DTOs.Stock;
 using AssetIQAI.Infrastructure.Services.Interfaces;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,13 @@ namespace AssetIQAI.API.Controllers;
 public class DashboardController : ControllerBase
 {
     private readonly IStockService _stockService;
+    private readonly IDashboardService _dashboardService;
 
-    public DashboardController(IStockService stockService)
+    public DashboardController(IStockService stockService
+        , IDashboardService dashboardService)
     {
         _stockService = stockService;
+        _dashboardService = dashboardService;
     }
 
     /// <summary>
@@ -68,5 +72,45 @@ public class DashboardController : ControllerBase
             .ToList();
 
         return Ok(result);
+    }
+
+    [HttpGet("summary")]
+    public async Task<IActionResult> GetSummary()
+    {
+        var result = await _dashboardService.GetSummaryAsync();
+
+        return Ok(result);
+    }
+
+
+    [HttpGet("category-chart")]
+    public async Task<IActionResult> GetCategoryChart()
+    {
+        var result = await _dashboardService.GetCategoryChartsAsync();
+        return Ok(result);
+    }
+
+    [HttpGet("stock-chart")]
+
+    public async Task<IActionResult> GetStockChart() 
+    {
+
+        var result = await _dashboardService.GetStockChartsAsync();
+        return Ok(result);
+    }
+
+    [HttpGet("supplier-chart")]
+    public async Task<IActionResult> GetSupplierChart()
+    {
+        var result = await _dashboardService.GetSupplierChartsAsync();
+        return Ok(result);
+    }
+
+    [HttpGet("inventory-chart")]
+    public async Task<IActionResult> GetInventoryChart()
+    {
+        var result = await _dashboardService.GetInventoryChartsAsync();
+        return Ok(result);
+        
     }
 }

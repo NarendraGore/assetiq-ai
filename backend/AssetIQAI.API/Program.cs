@@ -1,8 +1,12 @@
 using AssetIQAI.API.Extensions;
 using AssetIQAI.API.Services;
+using AssetIQAI.API.Validators.File;
+using AssetIQAI.API.Validators.Reports;
 using AssetIQAI.API.Validators.Stock;
 using AssetIQAI.Infrastructure;
 using AssetIQAI.Infrastructure.Data;
+using AssetIQAI.Infrastructure.DTOs.File;
+using AssetIQAI.Infrastructure.DTOs.Reports;
 using AssetIQAI.Infrastructure.DTOs.Stock;
 using AssetIQAI.Infrastructure.Mapping;
 using AssetIQAI.Infrastructure.Mappings;
@@ -48,7 +52,18 @@ builder.Services.AddScoped<IValidator<StockOutRequest>, CreateStockOutValidator>
 
 builder.Services.AddScoped<IValidator<StockAdjustmentRequest>, StockAdjustmentValidator>();
 
+builder.Services.AddScoped<IValidator<ReportFilterRequest>, ReportFilterValidator>();
+
+builder.Services.AddScoped<IValidator<FileUploadRequest>, FileUploadValidator>();
+
 builder.Services.AddValidationServices();
+
+var uploadPath = Path.Combine(
+    builder.Environment.ContentRootPath,
+    "wwwroot",
+    "uploads");
+builder.Services.AddScoped<IFileService>(_ =>
+    new FileService(uploadPath));
 
 ProductMapping.Register();
 StockMapping.Register();
@@ -81,6 +96,8 @@ app.UseGlobalExceptionMiddleware();
 app.UseHttpsRedirection();
 
 app.UseCors("FrontendPolicy");
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 
