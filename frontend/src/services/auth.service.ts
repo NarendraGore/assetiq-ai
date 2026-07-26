@@ -1,17 +1,60 @@
 import api from "./api";
 
 export interface LoginRequest {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
-export const authService = {
-  login: (data: LoginRequest) =>
-    api.post("/auth/login", data),
+export interface LoginResponse {
+    accessToken: string;
+    refreshToken: string;
+    expiresAt: string;
 
-  refreshToken: () =>
-    api.post("/auth/refresh-token"),
+    user: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        role: string;
+    };
+}
 
-  logout: () =>
-    api.post("/auth/logout"),
+const authService = {
+
+    login: async (
+        request: LoginRequest
+    ) => {
+
+        const response =
+            await api.post<LoginResponse>(
+                "/auth/login",
+                request
+            );
+
+        return response.data;
+    },
+
+    refreshToken: async (
+        refreshToken: string
+    ) => {
+
+        const response =
+            await api.post(
+                "/auth/refresh-token",
+                {
+                    refreshToken,
+                }
+            );
+
+        return response.data;
+    },
+
+    logout: async () => {
+
+        await api.post("/auth/logout");
+
+    },
+
 };
+
+export default authService;
