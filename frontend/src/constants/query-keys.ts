@@ -20,4 +20,13 @@ export const QUERY_KEYS = {
   OUT_OF_STOCK: ["out-of-stock"],
 
   REPORTS: ["reports"],
+
+  categories: ["categories"] ,
+
+  category: (id: string) => ["category", id] ,
+
+   suppliers: ["suppliers"],
+  supplier: (id: string) => ["supplier", id],
+
 } as const;
+

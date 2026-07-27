@@ -1,27 +1,40 @@
 import api from "./api";
 
-export const dashboardService = {
-  getSummary: () =>
-    api.get("/dashboard/summary"),
+const dashboardService = {
+  getSummary: async () => {
+    const { data } = await api.get("/Dashboard/summary");
+    return data;
+  },
 
-  getRecentTransactions: () =>
-    api.get("/dashboard/recent-transactions"),
+  getInventoryChart: async () => {
+    const { data } = await api.get("/Dashboard/inventory-chart");
+    return data;
+  },
 
-  getLowStock: () =>
-    api.get("/dashboard/low-stock"),
+  getStockChart: async () => {
+    const { data } = await api.get("/Dashboard/stock-chart");
+    return data;
+  },
 
-  getOutOfStock: () =>
-    api.get("/dashboard/out-of-stock"),
+  getCategoryChart: async () => {
+    const { data } = await api.get("/Dashboard/category-chart");
+    return data;
+  },
 
-  getCategoryChart: () =>
-    api.get("/dashboard/category-chart"),
+  getSupplierChart: async () => {
+    const { data } = await api.get("/Dashboard/supplier-chart");
+    return data;
+  },
 
-  getSupplierChart: () =>
-    api.get("/dashboard/supplier-chart"),
+  getRecentTransactions: async () => {
+    const { data } = await api.get("/Dashboard/recent-transactions");
+    return data;
+  },
 
-  getInventoryChart: () =>
-    api.get("/dashboard/inventory-chart"),
-
-  getStockChart: () =>
-    api.get("/dashboard/stock-chart"),
+  getLowStock: async () => {
+    const { data } = await api.get("/Dashboard/low-stock");
+    return data;
+  },
 };
+
+export default dashboardService;
