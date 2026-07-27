@@ -1,25 +1,103 @@
 import api from "./api";
 
-export const productService = {
-  getAll: (params?: unknown) =>
-    api.get("/products", { params }),
+import {
+  Product,
+  ProductListResponse,
+  CreateProductDto,
+  UpdateProductDto,
+} from "@/types/product";
 
-  getById: (id: string) =>
-    api.get(`/products/${id}`),
+const productService = {
+  getProducts: async (
+    page = 1,
+    pageSize = 10,
+    search = "",
+    categoryId = "",
+    supplierId = "",
+    minPrice?: number,
+    maxPrice?: number
+  ) => {
+    const response =
+      await api.get<ProductListResponse>(
+        "/products",
+        {
+          params: {
+            Page: page,
+            PageSize: pageSize,
+            Search: search?.trim() || undefined,
+            CategoryId:
+              categoryId && categoryId !== "all"
+                ? categoryId
+                : undefined,
+            SupplierId:
+              supplierId && supplierId !== "all"
+                ? supplierId
+                : undefined,
+            MinPrice:
+              typeof minPrice === "number" &&
+              !Number.isNaN(minPrice)
+                ? minPrice
+                : undefined,
+            MaxPrice:
+              typeof maxPrice === "number" &&
+              !Number.isNaN(maxPrice)
+                ? maxPrice
+                : undefined,
+          },
+        }
+      );
 
-  create: (data: unknown) =>
-    api.post("/products", data),
+    return response.data;
+  },
 
-  update: (id: string, data: unknown) =>
-    api.put(`/products/${id}`, data),
+  getProduct: async (id: string) => {
+    const response =
+      await api.get<Product>(
+        `/products/${id}`
+      );
 
-  delete: (id: string) =>
-    api.delete(`/products/${id}`),
+    return response.data;
+  },
 
-  uploadImage: (formData: FormData) =>
-    api.post("/files/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }),
+  createProduct: async (
+    data: CreateProductDto
+  ) => {
+    const response =
+      await api.post<Product>(
+        "/products",
+        data
+      );
+
+    return response.data;
+  },
+
+  updateProduct: async (
+    id: string,
+    data: UpdateProductDto
+  ) => {
+    const response =
+      await api.put<Product>(
+        `/products/${id}`,
+        data
+      );
+
+    return response.data;
+  },
+
+  deleteProduct: async (
+    id: string
+  ) => {
+    await api.delete(`/products/${id}`);
+  },
+
+  getLowStockProducts: async () => {
+    const response =
+      await api.get<Product[]>(
+        "/products/low-stock"
+      );
+
+    return response.data;
+  },
 };
+
+export default productService;

@@ -28,5 +28,16 @@ export const QUERY_KEYS = {
    suppliers: ["suppliers"],
   supplier: (id: string) => ["supplier", id],
 
+   products: ["products"],
+
+  product: (id: string) => ["product", id],
+
+  lowStockProducts: ["low-stock-products"],
+
+  inventory: ["inventory"],
+
+stockHistory: ["stock-history"],
+
+lowStock: ["low-stock"],
 } as const;
 
