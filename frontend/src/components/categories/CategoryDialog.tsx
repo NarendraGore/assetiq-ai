@@ -53,6 +53,7 @@ export default function CategoryDialog({
         </DialogHeader>
 
         <CategoryForm
+          key={category?.id ?? "new"}
           initialData={category}
           loading={loading}
           onSubmit={onSubmit}
