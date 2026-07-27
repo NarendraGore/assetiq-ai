@@ -1,18 +1,69 @@
 import api from "./api";
 
-export const categoryService = {
-  getAll: (params?: unknown) =>
-    api.get("/categories", { params }),
+import {
+  Category,
+  CategoryListResponse,
+  CategoryQueryParams,
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from "@/types/category";
 
-  getById: (id: string) =>
-    api.get(`/categories/${id}`),
+const BASE_URL = "/categories";
 
-  create: (data: unknown) =>
-    api.post("/categories", data),
+const categoryService = {
+  getCategories: async (
+    params: CategoryQueryParams
+  ): Promise<CategoryListResponse> => {
+    const { data } = await api.get(BASE_URL, {
+      params: {
+        Page: params.page,
+        PageSize: params.pageSize,
+        Search: params.search,
+      },
+    });
 
-  update: (id: string, data: unknown) =>
-    api.put(`/categories/${id}`, data),
+    console.log(data)
+    return data;
+  },
 
-  delete: (id: string) =>
-    api.delete(`/categories/${id}`),
+  getCategory: async (
+    id: string
+  ): Promise<Category> => {
+    const { data } = await api.get(
+      `${BASE_URL}/${id}`
+    );
+
+    return data;
+  },
+
+  createCategory: async (
+    payload: CreateCategoryDto
+  ): Promise<Category> => {
+    const { data } = await api.post(
+      BASE_URL,
+      payload
+    );
+
+    return data;
+  },
+
+  updateCategory: async (
+    id: string,
+    payload: UpdateCategoryDto
+  ): Promise<Category> => {
+    const { data } = await api.put(
+      `${BASE_URL}/${id}`,
+      payload
+    );
+
+    return data;
+  },
+
+  deleteCategory: async (
+    id: string
+  ): Promise<void> => {
+    await api.delete(`${BASE_URL}/${id}`);
+  },
 };
+
+export default categoryService;

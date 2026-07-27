@@ -27,6 +27,7 @@ export const navigation = [
     icon: Boxes,
     roles: [
       ROLES.ADMIN,
+      ROLES.EMPLOYEE,
     ],
   },
 
@@ -36,6 +37,7 @@ export const navigation = [
     icon: Building2,
     roles: [
       ROLES.ADMIN,
+      ROLES.EMPLOYEE,
     ],
   },
 
@@ -46,6 +48,7 @@ export const navigation = [
     roles: [
       ROLES.ADMIN,
       ROLES.MANAGER,
+      ROLES.EMPLOYEE,
     ],
   },
 
@@ -77,6 +80,7 @@ export const navigation = [
     icon: Settings,
     roles: [
       ROLES.ADMIN,
+      ROLES.EMPLOYEE,
     ],
   },
 ];

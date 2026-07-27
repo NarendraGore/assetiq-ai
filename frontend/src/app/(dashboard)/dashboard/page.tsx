@@ -1,14 +1,38 @@
+"use client";
+
+import { useState } from "react";
+
+import {
+  DashboardHeader,
+  DashboardFilters,
+  DashboardCards,
+  DashboardCharts,
+  DashboardTables,
+} from "@/components/dashboard";
+
 export default function DashboardPage() {
+  const [range, setRange] =
+    useState("today");
+
   return (
-    <div>
+    <div className="space-y-6">
 
-      <h1 className="text-3xl font-bold">
-        Dashboard
-      </h1>
+      <div className="flex items-center justify-between">
 
-      <p className="mt-2 text-muted-foreground">
-        Welcome to AssetIQAI
-      </p>
+        <DashboardHeader />
+
+        <DashboardFilters
+          value={range}
+          onChange={setRange}
+        />
+
+      </div>
+
+      <DashboardCards />
+
+      <DashboardCharts />
+
+      <DashboardTables />
 
     </div>
   );
