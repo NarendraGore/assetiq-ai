@@ -8,36 +8,29 @@ const api = axios.create({
   },
 });
 
-// Request Interceptor
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("accessToken");
+      const authStorage =
+        localStorage.getItem("auth-storage");
 
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      if (authStorage) {
+        try {
+          const { state } = JSON.parse(authStorage);
+
+          if (state?.accessToken) {
+            config.headers.Authorization =
+              `Bearer ${state.accessToken}`;
+          }
+        } catch (error) {
+          console.error("Auth Storage Error", error);
+        }
       }
     }
 
     return config;
   },
   (error) => Promise.reject(error)
-);
-
-// Response Interceptor
-api.interceptors.response.use(
-  (response) => response,
-
-  async (error) => {
-    if (error.response?.status === 401) {
-      // TODO:
-      // Refresh Token Logic
-      // Redirect to Login
-      console.warn("Unauthorized");
-    }
-
-    return Promise.reject(error);
-  }
 );
 
 export default api;
