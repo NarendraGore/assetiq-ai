@@ -1,44 +1,74 @@
-import api from "@/src/lib/axios";
+import api from "@/lib/axios";
 
-// Register a new user
-export const register = async (data: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phoneNumber: string;
-}) => {
-  const res = await api.post("/api/auth/register", data);
-  return res.data;
+import {
+  LoginDto,
+  RegisterDto,
+  RefreshTokenDto,
+  LogoutDto,
+  AuthResponse,
+  ProfileResponse,
+} from "../types/auth.types";
+
+/**
+ * Register
+ */
+export const register = async (
+  data: RegisterDto
+): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>("/auth/register", data);
+
+  return response.data;
 };
 
-// Login
-export const login = async (data: { email: string; password: string }) => {
-  const res = await api.post("/api/auth/login", data);
-  return res.data;
+/**
+ * Login
+ */
+export const login = async (
+  data: LoginDto
+): Promise<AuthResponse> => {
+  console.log(data)
+  const response = await api.post<AuthResponse>("/auth/login", data);
+
+  return response.data;
 };
 
-// Refresh token
-export const refreshToken = async (refreshToken: string) => {
-  const res = await api.post("/api/auth/refresh-token", { refreshToken });
-  return res.data;
+/**
+ * Refresh Token
+ */
+export const refreshToken = async (
+  data: RefreshTokenDto
+): Promise<AuthResponse> => {
+  const response = await api.post<AuthResponse>(
+    "/auth/refresh-token",
+    data
+  );
+
+  return response.data;
 };
 
-// Logout
-export const logout = async (refreshToken: string) => {
-  const res = await api.post("/api/auth/logout", { refreshToken });
-  return res.data;
+/**
+ * Logout
+ */
+export const logout = async (
+  data: LogoutDto
+): Promise<void> => {
+  await api.post("/auth/logout", data);
 };
 
-// Get profile
-export const getProfile = async () => {
-  const res = await api.get("/api/auth/profile");
-  return res.data;
+/**
+ * Get Profile
+ */
+export const getProfile = async (): Promise<ProfileResponse> => {
+  const response = await api.get<ProfileResponse>("/auth/profile");
+
+  return response.data;
 };
 
-// Role-based endpoints
-export const getAdminData = async () => api.get("/api/auth/admin").then(res => res.data);
-export const getManagerData = async () => api.get("/api/auth/manager").then(res => res.data);
-export const getEmployeeData = async () => api.get("/api/auth/employee").then(res => res.data);
-export const getReportsData = async () => api.get("/api/auth/reports").then(res => res.data);
+/**
+ * Public Endpoint (optional, useful for testing)
+ */
+export const getPublicMessage = async (): Promise<string> => {
+  const response = await api.get("/auth/public");
+
+  return response.data;
+};
