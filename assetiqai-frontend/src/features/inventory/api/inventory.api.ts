@@ -1,4 +1,4 @@
-import api from "@/src/lib/axios";
+import api from "@/lib/axios";
 
 export const getInventory = async () => {
   const res = await api.get("/api/v1/stock/inventory");
