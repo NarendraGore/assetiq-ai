@@ -1,32 +1,27 @@
 import api from "@/lib/axios";
 
-export const getSuppliers = async () => {
-  const res = await api.get("/api/v1/suppliers");
-  return res.data;
-};
-
-export const getSupplierById = async (id: string) => {
-  const res = await api.get(`/api/v1/suppliers/${id}`);
-  return res.data;
-};
-
-export const createSupplier = async (data: {
+export interface SupplierDto {
+  id: string;
   companyName: string;
-  contactPerson?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-}) => {
-  const res = await api.post("/api/v1/suppliers", data);
-  return res.data;
-};
+  contactPerson: string;
+  email: string;
+  phone: string;
+  address: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
-export const updateSupplier = async (id: string, data: any) => {
-  const res = await api.put(`/api/v1/suppliers/${id}`, data);
-  return res.data;
-};
+export interface SupplierListResponse {
+  items: SupplierDto[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
 
-export const deleteSupplier = async (id: string) => {
-  const res = await api.delete(`/api/v1/suppliers/${id}`);
-  return res.data;
-};
+export async function getSuppliers(): Promise<SupplierListResponse> {
+  const { data } =
+    await api.get<SupplierListResponse>("/v1/suppliers");
+
+  return data;
+}

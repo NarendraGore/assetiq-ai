@@ -24,9 +24,9 @@ export const sidebarItems: Record<UserRole, SidebarItem[]> = {
       icon: LayoutDashboard,
     },
     {
-      title: "Users",
-      href: "/users",
-      icon: Users,
+      title: "Reports",
+      href: "/reports",
+      icon: FileBarChart,
     },
     {
       title: "Products",
@@ -34,9 +34,9 @@ export const sidebarItems: Record<UserRole, SidebarItem[]> = {
       icon: Package,
     },
     {
-      title: "Reports",
-      href: "/reports",
-      icon: FileBarChart,
+      title: "Users",
+      href: "/users",
+      icon: Users,
     },
   ],
 
@@ -45,6 +45,11 @@ export const sidebarItems: Record<UserRole, SidebarItem[]> = {
       title: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      title: "Reports",
+      href: "/reports",
+      icon: FileBarChart,
     },
     {
       title: "Products",
@@ -63,6 +68,11 @@ export const sidebarItems: Record<UserRole, SidebarItem[]> = {
       title: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      title: "Reports",
+      href: "/reports",
+      icon: FileBarChart,
     },
     {
       title: "Profile",
