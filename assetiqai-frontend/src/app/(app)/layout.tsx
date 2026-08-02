@@ -2,7 +2,9 @@ import type { ReactNode } from "react";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/layout/Navbar";
-import Sidebar from "@/components/layout/Sidebar";
+import AppSidebar from "@/components/layout/AppSidebar";
+
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -11,16 +13,12 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <ProtectedRoute>
-      <div className="flex h-screen overflow-hidden bg-background">
-        {/* Sidebar */}
-        <Sidebar />
+      <SidebarProvider defaultOpen>
+        <AppSidebar />
 
-        {/* Main Content */}
-        <div className="flex min-w-0 flex-1 flex-col">
-          {/* Top Navigation */}
+        <SidebarInset>
           <Navbar />
 
-          {/* Page Content */}
           <main className="flex-1 overflow-y-auto bg-background">
             <div
               className="
@@ -39,8 +37,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
               {children}
             </div>
           </main>
-        </div>
-      </div>
+        </SidebarInset>
+      </SidebarProvider>
     </ProtectedRoute>
   );
 }

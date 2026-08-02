@@ -16,25 +16,53 @@ interface UseInventoryReportOptions {
 export function useInventoryReport({
   filters,
 }: UseInventoryReportOptions) {
+  const {
+    page,
+    pageSize,
+    search,
+    categoryId,
+    supplierId,
+    transactionType,
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
+  } = filters;
+
   return useQuery<InventoryReportResponse>({
-    queryKey: ["reports", "inventory", filters],
+    queryKey: [
+      "reports",
+      "inventory",
+      page,
+      pageSize,
+      search,
+      categoryId,
+      supplierId,
+      transactionType,
+      startDate,
+      endDate,
+      sortBy,
+      sortOrder,
+    ],
 
     queryFn: () =>
       getInventoryReport({
         filters,
-        pageIndex: filters.page,
-        pageSize: filters.pageSize,
-        sortBy: filters.sortBy,
-        sortDirection: filters.sortOrder,
+        pageIndex: page,
+        pageSize,
+        sortBy,
+        sortDirection: sortOrder,
       }),
 
-    placeholderData: (previous) => previous,
+    placeholderData: (previousData) => previousData,
 
     staleTime: 1000 * 60 * 5,
 
     gcTime: 1000 * 60 * 10,
 
     retry: 1,
+
+    refetchOnMount: false,
 
     refetchOnWindowFocus: false,
 

@@ -15,16 +15,15 @@ import {
 
 import type { StockReport } from "../../types";
 
-function SortableHeader({
-  column,
-  title,
-}: {
+interface SortableHeaderProps {
   column: {
     toggleSorting: (desc?: boolean) => void;
     getIsSorted: () => false | "asc" | "desc";
   };
   title: string;
-}) {
+}
+
+function SortableHeader({ column, title }: SortableHeaderProps) {
   return (
     <Button
       variant="ghost"
@@ -35,31 +34,44 @@ function SortableHeader({
         h-8
         px-2
         text-muted-foreground
+        transition-colors
+        duration-200
         hover:bg-muted
         hover:text-foreground
+        focus-visible:ring-2
+        focus-visible:ring-blue-500
       "
     >
       {title}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
+
+      <ArrowUpDown className="ml-2 h-4 w-4 shrink-0" />
     </Button>
   );
 }
 
-function Ellipsis({
-  value,
-  width = "max-w-[180px]",
-}: {
+interface EllipsisProps {
   value: string;
   width?: string;
-}) {
+}
+
+function Ellipsis({ value, width = "max-w-[180px]" }: EllipsisProps) {
   return (
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className={`block truncate ${width}`}>{value}</span>
+          <span
+            aria-label={value}
+            className={`
+              block
+              truncate
+              ${width}
+            `}
+          >
+            {value}
+          </span>
         </TooltipTrigger>
 
-        <TooltipContent>
+        <TooltipContent side="top">
           <p>{value}</p>
         </TooltipContent>
       </Tooltip>
@@ -70,19 +82,19 @@ function Ellipsis({
 function getTransactionLabel(type: number): string {
   switch (type) {
     case 1:
-      return "IN";
+      return "Stock In";
 
     case 2:
-      return "OUT";
+      return "Stock Out";
 
     case 3:
-      return "TRANSFER";
+      return "Transfer";
 
     case 4:
-      return "ADJUSTMENT";
+      return "Adjustment";
 
     default:
-      return "UNKNOWN";
+      return "Unknown";
   }
 }
 
@@ -108,7 +120,10 @@ function getTransactionClass(type: number): string {
 export const stockColumns: ColumnDef<StockReport>[] = [
   {
     accessorKey: "productName",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Product" />,
+
     cell: ({ row }) => (
       <div className="font-medium text-foreground">
         <Ellipsis value={row.original.productName} width="max-w-[220px]" />
@@ -117,19 +132,45 @@ export const stockColumns: ColumnDef<StockReport>[] = [
   },
 
   {
-    accessorKey: "transactionType",
-    header: ({ column }) => (
-      <SortableHeader column={column} title="Transaction Type" />
+    accessorKey: "sku",
+    enableSorting: true,
+
+    header: ({ column }) => <SortableHeader column={column} title="SKU" />,
+
+    cell: ({ row }) => (
+      <Badge
+        variant="outline"
+        className="
+          whitespace-nowrap
+          font-mono
+          text-xs
+        "
+      >
+        {row.original.sku}
+      </Badge>
     ),
+  },
+
+  {
+    accessorKey: "transactionType",
+    enableSorting: true,
+
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Transaction" />
+    ),
+
     cell: ({ row }) => (
       <Badge
         variant="secondary"
         className={`
+          whitespace-nowrap
           rounded-full
+          border-0
           px-2.5
           py-0.5
-          border-0
           font-medium
+          transition-colors
+          duration-200
           ${getTransactionClass(row.original.transactionType)}
         `}
       >
@@ -140,37 +181,106 @@ export const stockColumns: ColumnDef<StockReport>[] = [
 
   {
     accessorKey: "quantity",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Quantity" />,
+
+    cell: ({ row }) => {
+      const isStockOut = row.original.transactionType === 2;
+
+      return (
+        <div
+          className={`
+            text-right
+            font-medium
+            tabular-nums
+            whitespace-nowrap
+            transition-colors
+            duration-200
+            ${
+              isStockOut
+                ? "text-red-600 dark:text-red-400"
+                : "text-emerald-600 dark:text-emerald-400"
+            }
+          `}
+        >
+          {row.original.quantity.toLocaleString()}
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "previousQuantity",
+    enableSorting: true,
+
+    header: ({ column }) => <SortableHeader column={column} title="Previous" />,
+
     cell: ({ row }) => (
-      <div className="text-right font-medium tabular-nums">
-        {row.original.quantity.toLocaleString()}
+      <div
+        className="
+          text-right
+          tabular-nums
+          whitespace-nowrap
+          text-muted-foreground
+        "
+      >
+        {row.original.previousQuantity.toLocaleString()}
+      </div>
+    ),
+  },
+
+  {
+    accessorKey: "newQuantity",
+    enableSorting: true,
+
+    header: ({ column }) => <SortableHeader column={column} title="New" />,
+
+    cell: ({ row }) => (
+      <div
+        className="
+          text-right
+          font-semibold
+          tabular-nums
+          whitespace-nowrap
+          text-foreground
+        "
+      >
+        {row.original.newQuantity.toLocaleString()}
       </div>
     ),
   },
 
   {
     accessorKey: "remarks",
-    header: ({ column }) => (
-      <SortableHeader column={column} title="Reference" />
-    ),
+    enableSorting: true,
+
+    header: ({ column }) => <SortableHeader column={column} title="Remarks" />,
+
     cell: ({ row }) => (
-      <Ellipsis value={row.original.remarks ?? "-"} width="max-w-[220px]" />
+      <Ellipsis value={row.original.remarks || "—"} width="max-w-[240px]" />
     ),
   },
 
   {
     accessorKey: "createdBy",
+    enableSorting: true,
+
     header: ({ column }) => (
       <SortableHeader column={column} title="Created By" />
     ),
+
     cell: ({ row }) => (
-      <Ellipsis value={row.original.createdBy} width="max-w-[150px]" />
+      <Ellipsis value={row.original.createdBy} width="max-w-[160px]" />
     ),
   },
 
   {
     accessorKey: "createdAt",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Date" />,
+
     cell: ({ row }) => (
       <span className="whitespace-nowrap text-muted-foreground">
         {format(new Date(row.original.createdAt), "dd MMM yyyy")}

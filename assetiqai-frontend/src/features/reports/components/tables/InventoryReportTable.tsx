@@ -7,9 +7,9 @@ import ReportSkeleton from "./ReportSkeleton";
 import ReportEmpty from "./ReportEmpty";
 import { inventoryColumns } from "./InventoryColumns";
 
-import { inventoryExportColumns } from "../../constants/inventoryExportColumns";
-import { useReportFilter } from "../../hooks/useReportFilter";
+import { inventoryExportColumns } from "../../constants";
 import { useInventoryReport } from "../../hooks/useInventoryReport";
+import { useReportFilter } from "../../hooks/useReportFilter";
 
 export default function InventoryReportTable() {
   const { filter } = useReportFilter();
@@ -28,26 +28,17 @@ export default function InventoryReportTable() {
     return (
       <ReportEmpty
         title="Unable to load inventory report"
-        description="Something went wrong while loading the report."
+        description="Something went wrong while loading the inventory report."
         onRetry={refetch}
       />
     );
   }
 
-  if (!rows.length) {
-    return (
-      <ReportEmpty
-        title="No inventory records found"
-        description="Try adjusting the filters."
-      />
-    );
-  }
-
   return (
-    <section className="space-y-4">
+    <section className="space-y-6">
       <ReportToolbar
         title="Inventory Report"
-        total={data?.totalCount ?? rows.length}
+        total={data?.totalCount ?? 0}
         loading={isLoading}
         onRefresh={refetch}
         exportFilename="inventory-report"
@@ -55,12 +46,19 @@ export default function InventoryReportTable() {
         exportData={rows}
       />
 
-      <DataTable
-        columns={inventoryColumns}
-        data={rows}
-        enableSorting
-        enablePagination={false}
-      />
+      {rows.length === 0 ? (
+        <ReportEmpty
+          title="No inventory records found"
+          description="Try adjusting your filters or refresh the report."
+        />
+      ) : (
+        <DataTable
+          columns={inventoryColumns}
+          data={rows}
+          enableSorting
+          enablePagination={false}
+        />
+      )}
     </section>
   );
 }

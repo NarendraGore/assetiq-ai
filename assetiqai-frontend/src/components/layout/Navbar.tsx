@@ -1,63 +1,140 @@
 "use client";
 
-import { Bell, Sun, Moon } from "lucide-react";
-import { Button } from "../ui/button";
+import { useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Bell, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
+function getBreadcrumbs(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean);
 
-import { Avatar, AvatarFallback, AvatarImage } from "radix-ui/avatar";
-
+  return segments.map((segment, index) => ({
+    label:
+      segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
+    href: "/" + segments.slice(0, index + 1).join("/"),
+  }));
+}
 
 export default function Navbar() {
-  const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
+
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const breadcrumbs = useMemo(() => getBreadcrumbs(pathname), [pathname]);
 
   return (
-    <header className="flex items-center justify-between bg-white dark:bg-gray-800 shadow px-6 py-3">
-      <h1 className="text-lg font-bold text-gray-900 dark:text-white">
-        AssetIQAI
-      </h1>
+    <header
+      className="
+        sticky
+        top-0
+        z-40
+        flex
+        h-16
+        shrink-0
+        items-center
+        justify-between
+        border-b
+        border-border
+        bg-background/95
+        px-6
+        backdrop-blur
+      "
+    >
+      {/* Left */}
+      <div className="flex min-w-0 items-center gap-3">
+        <SidebarTrigger className="-ml-2" />
 
-      <div className="flex items-center gap-4">
-        {/* Theme Toggle */}
+        <Separator orientation="vertical" className="h-5" />
+
+        <Breadcrumb>
+          <BreadcrumbList>
+            {breadcrumbs.map((item, index) => {
+              const isLast = index === breadcrumbs.length - 1;
+
+              return (
+                <div key={item.href} className="flex items-center">
+                  <BreadcrumbItem>
+                    {isLast ? (
+                      <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link href={item.href}>{item.label}</Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+
+                  {!isLast && <BreadcrumbSeparator />}
+                </div>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
+      {/* Right */}
+      <div
+        className="
+          flex
+          items-center
+          gap-2
+          rounded-2xl
+          border
+          border-border
+          bg-card
+          p-1
+          shadow-sm
+        "
+      >
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label="Notifications"
+          className="
+            rounded-xl
+            transition-all
+            duration-200
+            hover:bg-muted
+            focus-visible:ring-2
+            focus-visible:ring-blue-500
+          "
         >
-          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <Bell className="h-5 w-5 text-muted-foreground" />
         </Button>
 
-        {/* Notifications */}
-        <Button variant="ghost" size="icon">
-          <Bell className="h-5 w-5" />
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Toggle Theme"
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          className="
+            rounded-xl
+            transition-all
+            duration-200
+            hover:bg-muted
+            focus-visible:ring-2
+            focus-visible:ring-blue-500
+          "
+        >
+          {resolvedTheme === "dark" ? (
+            <Sun className="h-5 w-5 text-amber-500" />
+          ) : (
+            <Moon className="h-5 w-5 text-muted-foreground" />
+          )}
         </Button>
-
-        {/* Profile Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar className="cursor-pointer h-9 w-9">
-              <AvatarImage src="/avatar.png" alt="Profile" />
-              <AvatarFallback>NA</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>
   );

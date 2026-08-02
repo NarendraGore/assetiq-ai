@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import Sidebar from "./Sidebar";
+import Sidebar from "./AppSidebar";
 import Navbar from "./Navbar";
 
 export default function ProtectedLayout({

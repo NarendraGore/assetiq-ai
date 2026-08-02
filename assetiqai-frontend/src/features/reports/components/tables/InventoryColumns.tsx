@@ -16,16 +16,15 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 import type { InventoryReport } from "../../types";
 
-function SortableHeader({
-  column,
-  title,
-}: {
+interface SortableHeaderProps {
   column: {
     toggleSorting: (desc?: boolean) => void;
     getIsSorted: () => false | "asc" | "desc";
   };
   title: string;
-}) {
+}
+
+function SortableHeader({ column, title }: SortableHeaderProps) {
   return (
     <Button
       variant="ghost"
@@ -36,31 +35,44 @@ function SortableHeader({
         h-8
         px-2
         text-muted-foreground
+        transition-colors
+        duration-200
         hover:bg-muted
         hover:text-foreground
+        focus-visible:ring-2
+        focus-visible:ring-blue-500
       "
     >
       {title}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
+
+      <ArrowUpDown className="ml-2 h-4 w-4 shrink-0" />
     </Button>
   );
 }
 
-function TruncatedCell({
-  value,
-  width = "max-w-[180px]",
-}: {
+interface TruncatedCellProps {
   value: string;
   width?: string;
-}) {
+}
+
+function TruncatedCell({ value, width = "max-w-[180px]" }: TruncatedCellProps) {
   return (
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className={`block truncate ${width}`}>{value}</span>
+          <span
+            aria-label={value}
+            className={`
+              block
+              truncate
+              ${width}
+            `}
+          >
+            {value}
+          </span>
         </TooltipTrigger>
 
-        <TooltipContent>
+        <TooltipContent side="top">
           <p>{value}</p>
         </TooltipContent>
       </Tooltip>
@@ -71,19 +83,32 @@ function TruncatedCell({
 export const inventoryColumns: ColumnDef<InventoryReport>[] = [
   {
     accessorKey: "productName",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Product" />,
+
     cell: ({ row }) => (
       <div className="font-medium text-foreground">
-        <TruncatedCell value={row.original.productName} />
+        <TruncatedCell value={row.original.productName} width="max-w-[220px]" />
       </div>
     ),
   },
 
   {
     accessorKey: "sku",
-    header: "SKU",
+    enableSorting: true,
+
+    header: ({ column }) => <SortableHeader column={column} title="SKU" />,
+
     cell: ({ row }) => (
-      <Badge variant="outline" className="font-mono text-xs">
+      <Badge
+        variant="outline"
+        className="
+          whitespace-nowrap
+          font-mono
+          text-xs
+        "
+      >
         {row.original.sku}
       </Badge>
     ),
@@ -91,47 +116,96 @@ export const inventoryColumns: ColumnDef<InventoryReport>[] = [
 
   {
     accessorKey: "categoryName",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Category" />,
+
     cell: ({ row }) => <TruncatedCell value={row.original.categoryName} />,
   },
 
   {
     accessorKey: "supplierName",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Supplier" />,
+
     cell: ({ row }) => <TruncatedCell value={row.original.supplierName} />,
   },
 
   {
     accessorKey: "currentStock",
+    enableSorting: true,
+
     header: ({ column }) => <SortableHeader column={column} title="Quantity" />,
-    cell: ({ row }) => (
-      <div className="text-right font-medium tabular-nums">
-        {row.original.currentStock.toLocaleString()}
-      </div>
-    ),
+
+    cell: ({ row }) => {
+      const { currentStock, isLowStock, isOutOfStock } = row.original;
+
+      return (
+        <div
+          className={`
+            text-right
+            font-medium
+            tabular-nums
+            transition-colors
+            duration-200
+            ${
+              isOutOfStock
+                ? "text-destructive"
+                : isLowStock
+                  ? "text-amber-600 dark:text-amber-400"
+                  : "text-foreground"
+            }
+          `}
+        >
+          {currentStock.toLocaleString()}
+        </div>
+      );
+    },
   },
 
   {
     accessorKey: "minimumStock",
+    enableSorting: true,
+
     header: ({ column }) => (
       <SortableHeader column={column} title="Minimum Stock" />
     ),
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Badge variant={row.original.isLowStock ? "destructive" : "secondary"}>
-          {row.original.minimumStock}
-        </Badge>
-      </div>
-    ),
+
+    cell: ({ row }) => {
+      const { minimumStock, isLowStock, isOutOfStock } = row.original;
+
+      return (
+        <div className="flex justify-end">
+          {isOutOfStock ? (
+            <Badge variant="destructive">Out of Stock</Badge>
+          ) : (
+            <Badge variant={isLowStock ? "destructive" : "secondary"}>
+              {minimumStock}
+            </Badge>
+          )}
+        </div>
+      );
+    },
   },
 
   {
     accessorKey: "unitPrice",
+    enableSorting: true,
+
     header: ({ column }) => (
       <SortableHeader column={column} title="Unit Price" />
     ),
+
     cell: ({ row }) => (
-      <div className="text-right font-medium tabular-nums">
+      <div
+        className="
+          text-right
+          font-medium
+          tabular-nums
+          whitespace-nowrap
+        "
+      >
         {formatCurrency(row.original.unitPrice)}
       </div>
     ),
@@ -139,23 +213,84 @@ export const inventoryColumns: ColumnDef<InventoryReport>[] = [
 
   {
     accessorKey: "stockValue",
+    enableSorting: true,
+
     header: ({ column }) => (
       <SortableHeader column={column} title="Total Value" />
     ),
+
     cell: ({ row }) => (
-      <div className="text-right font-semibold tabular-nums">
+      <div
+        className="
+          text-right
+          font-semibold
+          tabular-nums
+          whitespace-nowrap
+          text-foreground
+        "
+      >
         {formatCurrency(row.original.stockValue)}
       </div>
     ),
   },
 
   {
-    id: "updatedAt",
-    header: ({ column }) => (
-      <SortableHeader column={column} title="Last Updated" />
-    ),
-    cell: () => (
-      <span className="whitespace-nowrap text-muted-foreground">—</span>
-    ),
+    id: "status",
+
+    header: "Status",
+
+    enableSorting: false,
+
+    cell: ({ row }) => {
+      const { isActive, isOutOfStock, isLowStock } = row.original;
+
+      if (!isActive) {
+        return (
+          <Badge variant="secondary" className="whitespace-nowrap">
+            Inactive
+          </Badge>
+        );
+      }
+
+      if (isOutOfStock) {
+        return (
+          <Badge variant="destructive" className="whitespace-nowrap">
+            Out of Stock
+          </Badge>
+        );
+      }
+
+      if (isLowStock) {
+        return (
+          <Badge
+            className="
+              whitespace-nowrap
+              bg-amber-100
+              text-amber-700
+              hover:bg-amber-100
+              dark:bg-amber-900/30
+              dark:text-amber-400
+            "
+          >
+            Low Stock
+          </Badge>
+        );
+      }
+
+      return (
+        <Badge
+          className="
+            whitespace-nowrap
+            bg-emerald-100
+            text-emerald-700
+            hover:bg-emerald-100
+            dark:bg-emerald-900/30
+            dark:text-emerald-400
+          "
+        >
+          In Stock
+        </Badge>
+      );
+    },
   },
 ];

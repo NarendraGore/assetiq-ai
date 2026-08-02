@@ -5,9 +5,9 @@ import DataTable from "@/components/tables/DataTable";
 import ReportToolbar from "./ReportToolbar";
 import ReportSkeleton from "./ReportSkeleton";
 import ReportEmpty from "./ReportEmpty";
-
 import { stockColumns } from "./StockColumns";
 
+import { stockExportColumns } from "../../constants";
 import { useReportFilter } from "../../hooks/useReportFilter";
 import { useStockReport } from "../../hooks/useStockReport";
 
@@ -18,6 +18,8 @@ export default function StockReportTable() {
     filters: filter,
   });
 
+  const rows = data?.items ?? [];
+
   if (isLoading) {
     return <ReportSkeleton />;
   }
@@ -26,23 +28,17 @@ export default function StockReportTable() {
     return (
       <ReportEmpty
         title="Unable to load stock report"
-        description="Please try again."
-        onRetry={() => refetch()}
+        description="Something went wrong while loading the stock report."
+        onRetry={refetch}
       />
     );
   }
 
-  const rows = data?.items ?? [];
-
-  if (!rows.length) {
-    return <ReportEmpty />;
-  }
-
   return (
-    <section className="space-y-4">
+    <section className="space-y-6">
       <ReportToolbar
         title="Stock Report"
-        total={data?.totalCount}
+        total={data?.totalCount ?? 0}
         loading={isLoading}
         onRefresh={refetch}
         exportFilename="stock-report"
@@ -50,13 +46,20 @@ export default function StockReportTable() {
         exportData={rows}
       />
 
-      <DataTable
-        columns={stockColumns}
-        data={rows}
-        enableSorting
-        enablePagination
-        pageSize={filter.pageSize}
-      />
+      {rows.length === 0 ? (
+        <ReportEmpty
+          title="No stock transactions found"
+          description="Try adjusting your filters or refresh the report."
+        />
+      ) : (
+        <DataTable
+          columns={stockColumns}
+          data={rows}
+          enableSorting
+          enablePagination
+          pageSize={filter.pageSize}
+        />
+      )}
     </section>
   );
 }

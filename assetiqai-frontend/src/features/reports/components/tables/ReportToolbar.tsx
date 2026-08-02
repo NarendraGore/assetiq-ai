@@ -11,7 +11,6 @@ import type { ExportColumn } from "@/shared/export";
 
 interface ReportToolbarProps<T extends object> {
   title?: string;
-
   total?: number;
 
   loading?: boolean;
@@ -19,13 +18,10 @@ interface ReportToolbarProps<T extends object> {
   onRefresh?: () => void;
 
   exportFilename?: string;
-
-  exportColumns?: ExportColumn<T>[];
-
-  exportData?: readonly T[];
+  exportColumns?: ReadonlyArray<ExportColumn<T>>;
+  exportData?: ReadonlyArray<T>;
 
   actions?: ReactNode;
-
   children?: ReactNode;
 }
 
@@ -35,11 +31,17 @@ export default function ReportToolbar<T extends object>({
   loading = false,
   onRefresh,
   exportFilename,
-  exportColumns,
-  exportData,
+  exportColumns = [],
+  exportData = [],
   actions,
   children,
 }: ReportToolbarProps<T>) {
+  const canExport =
+    !loading &&
+    exportFilename &&
+    exportColumns.length > 0 &&
+    exportData.length > 0;
+
   return (
     <div
       className="
@@ -84,6 +86,7 @@ export default function ReportToolbar<T extends object>({
       <div className="flex flex-wrap items-center justify-end gap-2">
         {onRefresh && (
           <Button
+            type="button"
             variant="outline"
             size="sm"
             onClick={onRefresh}
@@ -103,16 +106,14 @@ export default function ReportToolbar<T extends object>({
           </Button>
         )}
 
-        {exportColumns &&
-          exportColumns.length > 0 &&
-          exportData &&
-          exportFilename && (
-            <ExportButton
-              filename={exportFilename}
-              columns={exportColumns}
-              data={exportData}
-            />
-          )}
+        {canExport && (
+          <ExportButton
+            filename={exportFilename}
+            columns={exportColumns}
+            data={exportData}
+            disabled={loading}
+          />
+        )}
 
         {actions}
       </div>

@@ -16,51 +16,70 @@ export interface SupplierOption {
 }
 
 interface SupplierFilterProps {
-  options?: SupplierOption[];
+  options: readonly SupplierOption[];
   loading?: boolean;
   disabled?: boolean;
   className?: string;
 }
 
 export default function SupplierFilter({
-  options = [],
+  options,
   loading = false,
   disabled = false,
   className,
 }: SupplierFilterProps) {
   const { filter, updateFilter } = useReportFilter();
 
+  const handleValueChange = (value: string) => {
+    updateFilter("supplierId", value === "all" ? undefined : value);
+
+    updateFilter("page", 1);
+  };
+
   return (
     <div className={className}>
       <Select
         value={filter.supplierId ?? "all"}
+        onValueChange={handleValueChange}
         disabled={disabled || loading}
-        onValueChange={(value) => {
-          updateFilter("supplierId", value === "all" ? undefined : value);
-
-          updateFilter("page", 1);
-        }}
       >
         <SelectTrigger
           aria-label="Filter by supplier"
           className="
+            h-10
             w-full
             min-w-[180px]
-            bg-background
+            rounded-xl
             border-border
+            bg-background
             shadow-sm
             transition-all
             duration-200
+            focus-visible:border-blue-500
             focus-visible:ring-2
             focus-visible:ring-blue-500/20
-            focus-visible:border-blue-500
           "
         >
-          <SelectValue placeholder="Supplier" />
+          <SelectValue
+            placeholder={loading ? "Loading suppliers..." : "Supplier"}
+          />
         </SelectTrigger>
 
-        <SelectContent>
+        <SelectContent
+          align="start"
+          className="
+            rounded-xl
+            border-border
+            bg-popover
+          "
+        >
           <SelectItem value="all">All Suppliers</SelectItem>
+
+          {!loading && options.length === 0 && (
+            <SelectItem value="no-suppliers" disabled>
+              No suppliers found
+            </SelectItem>
+          )}
 
           {options.map((supplier) => (
             <SelectItem key={supplier.id} value={supplier.id}>
