@@ -4,6 +4,7 @@ import {
   Package,
   ShoppingCart,
   Users,
+  FolderTree,
   type LucideIcon,
 } from "lucide-react";
 
@@ -101,6 +102,11 @@ export const sidebarItems: Record<UserRole, SidebarGroup[]> = {
           href: "/reports",
           icon: FileBarChart,
         },
+        {
+      title: "Categories",
+      href: "/categories",
+      icon: FolderTree,
+    },
       ],
     },
   ],
