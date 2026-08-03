@@ -97,7 +97,11 @@ export default function CategoriesPage() {
         }}
         mode="create"
         loading={isCreating}
-        onSubmit={createCategory}
+        onSubmit={async (values) => {
+          await createCategory(values);
+
+          closeCreate();
+        }}
       />
 
       <CategoryDialog
@@ -108,10 +112,12 @@ export default function CategoriesPage() {
         mode="edit"
         defaultValues={selectedCategory}
         loading={isUpdating}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (!selectedCategory) return;
 
-          return updateCategory(selectedCategory.id, values);
+          await updateCategory(selectedCategory.id, values);
+
+          closeEdit();
         }}
       />
 

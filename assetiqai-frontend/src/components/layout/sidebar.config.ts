@@ -107,6 +107,11 @@ export const sidebarItems: Record<UserRole, SidebarGroup[]> = {
       href: "/categories",
       icon: FolderTree,
     },
+    {
+      title: "Suppliers",
+      href: "/suppliers",
+      icon: FolderTree,
+    },
       ],
     },
   ],
