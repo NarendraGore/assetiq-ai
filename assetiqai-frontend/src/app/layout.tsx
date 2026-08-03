@@ -1,12 +1,15 @@
 import "./globals.css";
 
-import { ThemeProvider } from "next-themes";
 import { Geist } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 import { AuthProvider } from "@/features/auth/context/AuthProvider";
-import { cn } from "@/lib/utils";
 import QueryProvider from "@/providers/QueryProvider";
+
+import { cn } from "@/lib/utils";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -15,23 +18,36 @@ const geist = Geist({
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={cn("font-sans", geist.variable)}
     >
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <QueryProvider>
-            <AuthProvider>
-              {children}
-              <Toaster richColors position="top-right" />
-            </AuthProvider>
-          </QueryProvider>
+      <body className="min-h-screen bg-background text-foreground antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider delayDuration={0}>
+            <QueryProvider>
+              <AuthProvider>
+                {children}
+
+                <Toaster
+                  richColors
+                  position="top-right"
+                  closeButton
+                  expand={false}
+                />
+              </AuthProvider>
+            </QueryProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
