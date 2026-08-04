@@ -67,7 +67,7 @@ export default function TablePagination<TData>({
                 <SelectItem
                   key={size}
                   value={String(size)}
-                  className="hover:bg-muted cursor-pointer focus:bg-blue-50 dark:focus:bg-blue-950/20"
+                  className="hover:bg-muted cursor-pointer focus:bg-accent"
                 >
                   {size}
                 </SelectItem>
@@ -88,7 +88,7 @@ export default function TablePagination<TData>({
             size="icon"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="border-border hover:border-blue-200 hover:bg-muted transition-all duration-200 dark:hover:border-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
             aria-label="Go to first page"
           >
             <ChevronsLeft className="h-4 w-4" />
@@ -99,7 +99,7 @@ export default function TablePagination<TData>({
             size="icon"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="border-border hover:border-blue-200 hover:bg-muted transition-all duration-200 dark:hover:border-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
             aria-label="Go to previous page"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -110,7 +110,7 @@ export default function TablePagination<TData>({
             size="icon"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="border-border hover:border-blue-200 hover:bg-muted transition-all duration-200 dark:hover:border-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
             aria-label="Go to next page"
           >
             <ChevronRight className="h-4 w-4" />
@@ -121,7 +121,7 @@ export default function TablePagination<TData>({
             size="icon"
             onClick={() => table.setPageIndex(totalPages - 1)}
             disabled={!table.getCanNextPage()}
-            className="border-border hover:border-blue-200 hover:bg-muted transition-all duration-200 dark:hover:border-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
             aria-label="Go to last page"
           >
             <ChevronsRight className="h-4 w-4" />

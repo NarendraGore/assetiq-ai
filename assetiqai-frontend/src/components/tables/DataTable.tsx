@@ -33,6 +33,12 @@ export interface DataTableProps<TData, TValue> {
 
   pageSize?: number;
 
+  /**
+   * Dims the table and blocks interaction while a refetch is in flight.
+   * Several call sites already passed this; the prop simply did not exist.
+   */
+  loading?: boolean;
+
   onRowClick?: (row: TData) => void;
 }
 
@@ -42,6 +48,7 @@ export default function DataTable<TData, TValue>({
   enableSorting = true,
   enablePagination = true,
   pageSize = 5,
+  loading = false,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -73,10 +80,17 @@ export default function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="overflow-hidden rounded-2xl border bg-white shadow-sm dark:bg-background">
-      <div className="overflow-x-auto">
+    <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+      <div
+        className={
+          loading
+            ? "overflow-x-auto pointer-events-none opacity-60 transition-opacity"
+            : "overflow-x-auto transition-opacity"
+        }
+        aria-busy={loading}
+      >
         <Table>
-          <TableHeader className="bg-slate-50 dark:bg-muted">
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -103,7 +117,7 @@ export default function DataTable<TData, TValue>({
                 onClick={() => onRowClick?.(row.original)}
                 className={
                   onRowClick
-                    ? "cursor-pointer hover:bg-slate-50 dark:hover:bg-muted"
+                    ? "cursor-pointer hover:bg-muted"
                     : ""
                 }
               >

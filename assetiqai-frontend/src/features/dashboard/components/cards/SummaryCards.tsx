@@ -15,10 +15,12 @@ import DashboardSkeleton from "../skeleton/DashboardSkeleton";
 import EmptyState from "../EmptyState";
 import { DataTableError } from "@/components/tables";
 
-import { useDashboardSummary } from "../../hooks";
+import { useDashboardFilter, useDashboardSummary } from "../../hooks";
 
 export default function SummaryCards() {
-  const { data, isLoading, isError, refetch } = useDashboardSummary();
+  const { filter } = useDashboardFilter();
+
+  const { data, isLoading, isError, refetch } = useDashboardSummary(filter);
 
   if (isLoading) {
     return <DashboardSkeleton />;

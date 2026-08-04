@@ -14,12 +14,14 @@ import {
 import EmptyState from "../components/EmptyState";
 import ChartSkeleton from "./ChartSkeleton";
 
-import { useInventoryChart } from "../hooks";
+import { useDashboardFilter, useInventoryChart } from "../hooks";
 
 const COLORS = ["#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#1d4ed8"];
 
 export default function InventoryTrendChart() {
-  const { data = [], isLoading, isError, error } = useInventoryChart();
+  const { filter } = useDashboardFilter();
+
+  const { data = [], isLoading, isError, error } = useInventoryChart(filter);
 
   if (isLoading) {
     return <ChartSkeleton />;
@@ -57,27 +59,27 @@ export default function InventoryTrendChart() {
         >
           <CartesianGrid
             strokeDasharray="4 4"
-            className="stroke-slate-200 dark:stroke-slate-700"
+            className="stroke-border"
           />
 
           <XAxis
             dataKey="productName"
             tickLine={false}
             axisLine={false}
-            className="fill-slate-500 dark:fill-slate-400"
+            className="fill-muted-foreground"
           />
 
           <YAxis
             tickFormatter={(value) => `₹${value}`}
             tickLine={false}
             axisLine={false}
-            className="fill-slate-500 dark:fill-slate-400"
+            className="fill-muted-foreground"
           />
 
           <Tooltip
             cursor={{ fill: "rgba(59,130,246,.08)" }}
-            formatter={(value: number) => [
-              `₹${value.toLocaleString("en-IN")}`,
+            formatter={(value) => [
+              `₹${(Number(value) || 0).toLocaleString("en-IN")}`,
               "Inventory Value",
             ]}
             labelFormatter={(label) => `Product : ${label}`}

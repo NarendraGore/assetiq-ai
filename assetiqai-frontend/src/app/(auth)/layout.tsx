@@ -3,9 +3,9 @@ import { PackageCheck, ShieldCheck, ChartColumnBig } from "lucide-react";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-muted/40">
       <div className="grid min-h-screen lg:grid-cols-2">
-        {/* Left Panel */}
+        {/* Left Panel — brand gradient is intentional and identical in both themes */}
         <section className="relative hidden overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-700 lg:flex">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_45%)]" />
 

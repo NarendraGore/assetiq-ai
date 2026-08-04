@@ -1,10 +1,8 @@
 import {
   FileBarChart,
-  LayoutDashboard,
-  Package,
-  ShoppingCart,
-  Users,
   FolderTree,
+  LayoutDashboard,
+  Truck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,88 +19,38 @@ export interface SidebarGroup {
   items: SidebarItem[];
 }
 
-export const sidebarItems: Record<UserRole, SidebarGroup[]> = {
-  Admin: [
+/**
+ * Every `href` below must resolve to a page under `app/(app)`.
+ *
+ * The previous config linked Admin to `/users`, Manager to `/orders` and both
+ * to `/products` — none of which exist, so those entries rendered a live link
+ * straight to a 404. They were also the only entries in the "Management"
+ * group, and Categories/Suppliers were listed for Employee only, meaning an
+ * Admin had no way to reach two of the app's five screens.
+ *
+ * Role-based menus are kept, but until the missing pages ship every role sees
+ * the same real routes. Re-introduce the differences alongside the routes.
+ */
+const generalGroup: SidebarGroup = {
+  label: "General",
+  items: [
     {
-      label: "General",
-      items: [
-        {
-          title: "Dashboard",
-          href: "/dashboard",
-          icon: LayoutDashboard,
-        },
-        {
-          title: "Reports",
-          href: "/reports",
-          icon: FileBarChart,
-        },
-      ],
+      title: "Dashboard",
+      href: "/dashboard",
+      icon: LayoutDashboard,
     },
     {
-      label: "Management",
-      items: [
-        {
-          title: "Products",
-          href: "/products",
-          icon: Package,
-        },
-        {
-          title: "Users",
-          href: "/users",
-          icon: Users,
-        },
-      ],
+      title: "Reports",
+      href: "/reports",
+      icon: FileBarChart,
     },
   ],
+};
 
-  Manager: [
+const managementGroup: SidebarGroup = {
+  label: "Management",
+  items: [
     {
-      label: "General",
-      items: [
-        {
-          title: "Dashboard",
-          href: "/dashboard",
-          icon: LayoutDashboard,
-        },
-        {
-          title: "Reports",
-          href: "/reports",
-          icon: FileBarChart,
-        },
-      ],
-    },
-    {
-      label: "Management",
-      items: [
-        {
-          title: "Products",
-          href: "/products",
-          icon: Package,
-        },
-        {
-          title: "Orders",
-          href: "/orders",
-          icon: ShoppingCart,
-        },
-      ],
-    },
-  ],
-
-  Employee: [
-    {
-      label: "General",
-      items: [
-        {
-          title: "Dashboard",
-          href: "/dashboard",
-          icon: LayoutDashboard,
-        },
-        {
-          title: "Reports",
-          href: "/reports",
-          icon: FileBarChart,
-        },
-        {
       title: "Categories",
       href: "/categories",
       icon: FolderTree,
@@ -110,9 +58,13 @@ export const sidebarItems: Record<UserRole, SidebarGroup[]> = {
     {
       title: "Suppliers",
       href: "/suppliers",
-      icon: FolderTree,
-    },
-      ],
+      icon: Truck,
     },
   ],
+};
+
+export const sidebarItems: Record<UserRole, SidebarGroup[]> = {
+  Admin: [generalGroup, managementGroup],
+  Manager: [generalGroup, managementGroup],
+  Employee: [generalGroup, managementGroup],
 };

@@ -39,7 +39,7 @@ export default function ExportDropdown({
           focus:bg-muted
         "
       >
-        <FileText className="mr-2 h-4 w-4 text-blue-600" />
+        <FileText className="mr-2 h-4 w-4 text-primary" />
         Export as CSV
       </DropdownMenuItem>
 

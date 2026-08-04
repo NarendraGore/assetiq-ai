@@ -1,9 +1,7 @@
 import api from "@/lib/axios";
 
-import type {
-  ReportFilters,
-  ReportResponse,
-} from "../types";
+import type { ReportFilters, ReportResponse, SortDirection } from "../types";
+import { normalizeFilters } from "../utils/report.helpers";
 
 export const reportEndpoints = {
   inventory: "/reports/inventory",
@@ -11,66 +9,59 @@ export const reportEndpoints = {
 } as const;
 
 /**
- * Builds URLSearchParams from report filters.
+ * Builds the query string for a report request.
+ *
+ * `filters` is authoritative; the trailing arguments are only fallbacks for
+ * callers that page/sort outside the filter object.
  */
 export function buildReportQueryParams(
   filters: ReportFilters,
   pageIndex = 1,
   pageSize = 10,
   sortBy?: string,
-  sortDirection?: "asc" | "desc",
+  sortDirection?: SortDirection,
 ): URLSearchParams {
   const params = new URLSearchParams();
 
-  params.set(
-  "page",
-  String(filters.page ?? pageIndex),
-);
+  const normalized = normalizeFilters(filters);
 
-params.set(
-  "pageSize",
-  String(filters.pageSize ?? pageSize),
-);
+  params.set("page", String(normalized.page ?? pageIndex));
+  params.set("pageSize", String(normalized.pageSize ?? pageSize));
 
-  if (filters.search.trim()) {
-    params.set("search", filters.search);
+  if (normalized.search) {
+    params.set("search", normalized.search);
   }
 
-  if (filters.categoryId) {
-    params.set("categoryId", filters.categoryId);
+  if (normalized.categoryId) {
+    params.set("categoryId", normalized.categoryId);
   }
 
-  if (filters.supplierId) {
-    params.set("supplierId", filters.supplierId);
+  if (normalized.supplierId) {
+    params.set("supplierId", normalized.supplierId);
   }
 
-  if (filters.transactionType !== undefined) {
-    params.set(
-      "transactionType",
-      filters.transactionType.toString(),
-    );
+  if (normalized.transactionType !== undefined) {
+    params.set("transactionType", String(normalized.transactionType));
   }
 
-  if (filters.dateRange.from) {
-    params.set(
-      "fromDate",
-      filters.dateRange.from.toISOString(),
-    );
+  if (normalized.dateRange.from) {
+    params.set("fromDate", normalized.dateRange.from.toISOString());
   }
 
-  if (filters.dateRange.to) {
-    params.set(
-      "toDate",
-      filters.dateRange.to.toISOString(),
-    );
+  if (normalized.dateRange.to) {
+    params.set("toDate", normalized.dateRange.to.toISOString());
   }
 
-  if (sortBy) {
-    params.set("sortBy", sortBy);
+  const effectiveSortBy = sortBy ?? normalized.sortBy;
+
+  if (effectiveSortBy) {
+    params.set("sortBy", effectiveSortBy);
   }
 
-  if (sortDirection) {
-    params.set("sortDirection", sortDirection);
+  const effectiveSortDirection = sortDirection ?? normalized.sortDirection;
+
+  if (effectiveSortDirection) {
+    params.set("sortDirection", effectiveSortDirection);
   }
 
   return params;
@@ -80,13 +71,9 @@ export async function getReport<T>(
   endpoint: string,
   params: URLSearchParams,
 ): Promise<ReportResponse<T>> {
-  try {
-    const { data } = await api.get<ReportResponse<T>>(
-      `${endpoint}?${params.toString()}`,
-    );
-    
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  const { data } = await api.get<ReportResponse<T>>(
+    `${endpoint}?${params.toString()}`,
+  );
+
+  return data;
 }

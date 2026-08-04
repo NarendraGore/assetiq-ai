@@ -96,7 +96,7 @@ export default function ReportToolbar<T extends object>({
               transition-all
               duration-200
               focus-visible:ring-2
-              focus-visible:ring-blue-500
+              focus-visible:ring-ring
             "
           >
             <RefreshCw

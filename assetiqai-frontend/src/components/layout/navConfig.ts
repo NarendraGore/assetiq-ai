@@ -1,20 +1,12 @@
-// src/components/layout/navConfig.ts
-import { Home, Package, Users, BarChart, FileText } from "lucide-react";
+/**
+ * DEAD CODE — intentionally emptied.
+ *
+ * Superseded by `components/layout/sidebar.config.ts`, which is the config
+ * `AppSidebar` actually reads. This copy still listed routes that were removed.
+ *
+ * The file is kept as an empty module rather than deleted so that any stray
+ * import fails loudly at the import site instead of resolving to stale UI.
+ * Safe to delete outright once you have confirmed nothing references it.
+ */
 
-export const navConfig = {
-  admin: [
-    { href: "/dashboard", label: "Dashboard", icon: Home },
-    { href: "/products", label: "Products", icon: Package },
-    { href: "/suppliers", label: "Suppliers", icon: Users },
-    { href: "/reports", label: "Reports", icon: BarChart },
-  ],
-  manager: [
-    { href: "/dashboard", label: "Dashboard", icon: Home },
-    { href: "/products", label: "Products", icon: Package },
-    { href: "/reports", label: "Reports", icon: FileText },
-  ],
-  employee: [
-    { href: "/dashboard", label: "Dashboard", icon: Home },
-    { href: "/products", label: "Products", icon: Package },
-  ],
-};
+export {};

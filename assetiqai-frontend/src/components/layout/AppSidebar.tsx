@@ -56,9 +56,9 @@ export default function AppSidebar() {
                     items-center
                     justify-center
                     rounded-xl
-                    bg-blue-600
+                    bg-primary
                     font-bold
-                    text-white
+                    text-primary-foreground
                     shadow-sm
                   "
                 >

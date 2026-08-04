@@ -18,7 +18,7 @@ export default function StockReportTable() {
     filters: filter,
   });
 
-  const rows = data?.items ?? [];
+  const rows = data?.data ?? [];
 
   if (isLoading) {
     return <ReportSkeleton />;
@@ -38,7 +38,7 @@ export default function StockReportTable() {
     <section className="space-y-6">
       <ReportToolbar
         title="Stock Report"
-        total={data?.totalCount ?? 0}
+        total={data?.pagination.totalRecords ?? 0}
         loading={isLoading}
         onRefresh={refetch}
         exportFilename="stock-report"

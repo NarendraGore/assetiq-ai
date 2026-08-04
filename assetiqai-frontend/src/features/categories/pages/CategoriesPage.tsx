@@ -110,7 +110,7 @@ export default function CategoriesPage() {
           if (!open) closeEdit();
         }}
         mode="edit"
-        defaultValues={selectedCategory}
+        defaultValues={selectedCategory ?? undefined}
         loading={isUpdating}
         onSubmit={async (values) => {
           if (!selectedCategory) return;
@@ -129,7 +129,7 @@ export default function CategoriesPage() {
         categoryName={selectedCategory?.name}
         loading={isDeleting}
         onDelete={() => {
-          if (!selectedCategory) return;
+          if (!selectedCategory) return Promise.resolve();
 
           return deleteCategory(selectedCategory.id);
         }}

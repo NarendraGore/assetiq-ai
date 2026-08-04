@@ -1,6 +1,7 @@
 import type {
   ReportFilters,
   ReportResponse,
+  SortDirection,
   StockReport,
 } from "../types";
 
@@ -15,7 +16,7 @@ interface StockReportParams {
   pageIndex: number;
   pageSize: number;
   sortBy?: string;
-  sortDirection?: "asc" | "desc";
+  sortDirection?: SortDirection;
 }
 
 export async function getStockReport({

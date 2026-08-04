@@ -18,7 +18,7 @@ export interface ExportColumn<T> {
 export interface ExportOptions<T> {
   filename: string;
 
-  columns: ExportColumn<T>[];
+  columns: ReadonlyArray<ExportColumn<T>>;
 
   data: readonly T[];
 }

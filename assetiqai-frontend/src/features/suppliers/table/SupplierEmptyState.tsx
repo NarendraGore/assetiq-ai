@@ -59,10 +59,10 @@ export function SupplierEmptyState({
             items-center
             justify-center
             rounded-full
-            bg-blue-50
-            text-blue-600
-            dark:bg-blue-950/20
-            dark:text-blue-400
+            bg-primary/10
+            text-primary
+           
+           
           "
         >
           <Truck className="h-8 w-8" />
@@ -80,7 +80,7 @@ export function SupplierEmptyState({
         {!isSearchResult && onAction && (
           <Button
             type="button"
-            className="mt-8 bg-blue-600 hover:bg-blue-700"
+            className="mt-8 bg-primary hover:bg-primary/90"
             onClick={onAction}
           >
             <Plus className="mr-2 h-4 w-4" />

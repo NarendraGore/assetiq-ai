@@ -107,15 +107,15 @@ export function supplierColumns({
             href={`mailto:${email}`}
             onClick={(event) => event.stopPropagation()}
             className="
-              text-blue-600
+              text-primary
               transition-colors
               duration-200
-              hover:text-blue-700
+              hover:text-primary
               hover:underline
               focus-visible:outline-none
               focus-visible:ring-2
-              focus-visible:ring-blue-500
-              dark:text-blue-400
+              focus-visible:ring-ring
+             
             "
           >
             {email}
@@ -147,10 +147,10 @@ export function supplierColumns({
               text-muted-foreground
               transition-colors
               duration-200
-              hover:text-blue-600
+              hover:text-primary
               focus-visible:outline-none
               focus-visible:ring-2
-              focus-visible:ring-blue-500
+              focus-visible:ring-ring
             "
           >
             {phone}

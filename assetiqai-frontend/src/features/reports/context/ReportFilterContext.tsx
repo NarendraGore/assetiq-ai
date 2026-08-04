@@ -2,13 +2,16 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
-import type { ReportFilters } from "../types";
+import type { DateRangePreset, ReportFilters } from "../types";
+import { resolveDateRangePreset } from "../types";
+import { createDefaultReportFilters } from "../constants/report.constants";
 
 export interface ReportFilterContextValue {
   filter: ReportFilters;
@@ -18,33 +21,13 @@ export interface ReportFilterContextValue {
     value: ReportFilters[K],
   ) => void;
 
+  /** Apply a named window and keep the matching button highlighted. */
+  setDateRangePreset: (preset: DateRangePreset) => void;
+
   applyFilters: () => void;
 
   resetFilters: () => void;
 }
-
-export const defaultFilters: ReportFilters = {
-  search: "",
-
-  categoryId: undefined,
-
-  supplierId: undefined,
-
-  transactionType: undefined,
-
-  dateRange: {
-    from: undefined,
-    to: undefined,
-  },
-
-  page: 1,
-
-  pageSize: 10,
-
-  sortBy: undefined,
-
-  sortOrder: "desc",
-};
 
 export const ReportFilterContext =
   createContext<ReportFilterContextValue | null>(null);
@@ -54,34 +37,49 @@ interface Props {
 }
 
 export function ReportFilterProvider({ children }: Props) {
-  const [filter, setFilter] = useState<ReportFilters>(defaultFilters);
+  const [filter, setFilter] = useState<ReportFilters>(
+    createDefaultReportFilters,
+  );
 
-  const updateFilter = <K extends keyof ReportFilters>(
-    key: K,
-    value: ReportFilters[K],
-  ) => {
+  const updateFilter = useCallback(
+    <K extends keyof ReportFilters>(key: K, value: ReportFilters[K]) => {
+      setFilter((prev) => ({
+        ...prev,
+        [key]: value,
+        // Any filter change invalidates the current page — otherwise the user
+        // can land on page 7 of a 2-page result and see an empty table.
+        ...(key === "page" ? null : { page: 1 }),
+      }));
+    },
+    [],
+  );
+
+  const setDateRangePreset = useCallback((preset: DateRangePreset) => {
     setFilter((prev) => ({
       ...prev,
-      [key]: value,
+      dateRange: resolveDateRangePreset(preset),
+      dateRangePreset: preset,
+      page: 1,
     }));
-  };
+  }, []);
 
-  const resetFilters = () => {
-    setFilter(defaultFilters);
-  };
+  const resetFilters = useCallback(() => {
+    setFilter(createDefaultReportFilters());
+  }, []);
 
-  const applyFilters = () => {
-    // React Query will refetch automatically
-  };
+  const applyFilters = useCallback(() => {
+    // React Query refetches from the changed query key; nothing to do here.
+  }, []);
 
   const value = useMemo(
     () => ({
       filter,
       updateFilter,
+      setDateRangePreset,
       applyFilters,
       resetFilters,
     }),
-    [filter],
+    [filter, updateFilter, setDateRangePreset, applyFilters, resetFilters],
   );
 
   return (

@@ -24,7 +24,7 @@ const getTransactionBadge = (type: number) => {
       return (
         <Badge
           variant="outline"
-          className="border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300"
+          className="border-destructive/30 bg-destructive/10 text-destructive"
         >
           <ArrowDownCircle className="mr-1 h-3.5 w-3.5" />
           Stock Out
@@ -53,7 +53,7 @@ export const recentTransactionsColumns: ColumnDef<RecentTransaction>[] = [
     header: "Product",
     cell: ({ row }) => (
       <div className="min-w-[180px]">
-        <p className="font-medium text-slate-900 dark:text-slate-100">
+        <p className="font-medium text-foreground">
           {row.original.productName}
         </p>
       </div>
@@ -84,7 +84,7 @@ export const recentTransactionsColumns: ColumnDef<RecentTransaction>[] = [
     accessorKey: "newQuantity",
     header: "New",
     cell: ({ row }) => (
-      <span className="font-semibold text-blue-600 dark:text-blue-400">
+      <span className="font-semibold text-primary">
         {row.original.newQuantity}
       </span>
     ),

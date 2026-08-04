@@ -20,7 +20,7 @@ export const lowStockColumns: ColumnDef<LowStockProduct>[] = [
     header: "Product",
     cell: ({ row }) => (
       <div className="min-w-[180px]">
-        <p className="font-medium text-slate-900 dark:text-slate-100">
+        <p className="font-medium text-foreground">
           {row.original.productName}
         </p>
       </div>
@@ -55,7 +55,7 @@ export const lowStockColumns: ColumnDef<LowStockProduct>[] = [
     accessorKey: "currentStock",
     header: "Current",
     cell: ({ row }) => (
-      <span className="font-semibold text-red-600 dark:text-red-400">
+      <span className="font-semibold text-destructive">
         {row.original.currentStock}
       </span>
     ),

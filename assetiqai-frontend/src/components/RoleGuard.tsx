@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { ShieldAlert } from "lucide-react";
 
-import { useAuth } from "@//features/auth/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 interface RoleGuardProps {
   roles: string[];
@@ -34,12 +34,12 @@ export default function RoleGuard({
     }
 
     return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
-        <ShieldAlert className="mb-4 h-12 w-12 text-red-500" />
+      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-destructive/30 bg-destructive/10 p-8 text-center">
+        <ShieldAlert className="mb-4 h-12 w-12 text-destructive" />
 
-        <h2 className="text-xl font-semibold text-slate-900">Access Denied</h2>
+        <h2 className="text-xl font-semibold text-foreground">Access Denied</h2>
 
-        <p className="mt-2 max-w-md text-slate-600">
+        <p className="mt-2 max-w-md text-muted-foreground">
           You dont have permission to view this page.
         </p>
       </div>

@@ -1,51 +1,58 @@
 "use client";
 
 import { ReactNode, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Loader2 } from "lucide-react";
 
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { buildLoginUrl } from "@/features/auth/utils/token";
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
+/**
+ * Client-side companion to `middleware.ts`. Middleware gates on the cookie;
+ * this gates on the decoded session, so a tampered or expired token still
+ * cannot render protected UI.
+ */
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const { loading, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.replace("/login");
-    }
-  }, [loading, isAuthenticated, router]);
+    if (loading || isAuthenticated) return;
 
-  /**
-   * Checking authentication...
-   */
+    const query = searchParams.toString();
+
+    // Remember the destination so login can return the user here.
+    router.replace(buildLoginUrl(`${pathname}${query ? `?${query}` : ""}`));
+  }, [loading, isAuthenticated, router, pathname, searchParams]);
+
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <div
+        className="flex min-h-screen items-center justify-center bg-background"
+        role="status"
+        aria-live="polite"
+      >
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
 
-          <p className="text-sm text-slate-500">Loading...</p>
+          <p className="text-sm text-muted-foreground">Loading...</p>
         </div>
+
+        <span className="sr-only">Checking your session</span>
       </div>
     );
   }
 
-  /**
-   * Redirecting...
-   */
-  if (!isAuthenticated) {
-    return null;
-  }
+  // Redirect is in flight; render nothing rather than flashing the app shell.
+  if (!isAuthenticated) return null;
 
-  /**
-   * Authenticated
-   */
   return <>{children}</>;
 }

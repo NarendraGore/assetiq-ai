@@ -40,7 +40,7 @@ export function SupplierActions({
             duration-200
             hover:bg-muted
             focus-visible:ring-2
-            focus-visible:ring-blue-500
+            focus-visible:ring-ring
           "
         >
           <MoreHorizontal className="h-4 w-4" />
@@ -55,7 +55,7 @@ export function SupplierActions({
           }}
           className="cursor-pointer"
         >
-          <Pencil className="mr-2 h-4 w-4 text-blue-600" />
+          <Pencil className="mr-2 h-4 w-4 text-primary" />
           Edit
         </DropdownMenuItem>
 

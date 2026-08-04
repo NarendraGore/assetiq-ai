@@ -68,10 +68,10 @@ export default function ProfilePage() {
             <Avatar className="h-24 w-24 shadow-sm">
               <AvatarFallback
                 className="
-                  bg-blue-600
+                  bg-primary
                   text-3xl
                   font-semibold
-                  text-white
+                  text-primary-foreground
                 "
               >
                 {initials}
@@ -86,13 +86,13 @@ export default function ProfilePage() {
               <Badge
                 className="
                   rounded-full
-                  bg-blue-100
+                  bg-primary/10
                   px-4
                   py-1
-                  text-blue-700
-                  hover:bg-blue-100
-                  dark:bg-blue-950/30
-                  dark:text-blue-400
+                  text-primary
+                  hover:bg-primary/10
+                 
+                 
                 "
               >
                 {user.role}
@@ -131,7 +131,7 @@ export default function ProfilePage() {
                   transition-all
                   duration-200
                   focus-visible:ring-2
-                  focus-visible:ring-red-500
+                  focus-visible:ring-destructive
                 "
               >
                 <LogOut className="mr-2 h-4 w-4" />

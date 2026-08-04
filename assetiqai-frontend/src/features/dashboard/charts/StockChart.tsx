@@ -13,10 +13,12 @@ import {
 
 import ChartSkeleton from "./ChartSkeleton";
 import EmptyState from "../components/EmptyState";
-import { useStockChart } from "../hooks";
+import { useDashboardFilter, useStockChart } from "../hooks";
 
 export default function StockChart() {
-  const { data = [], isLoading, isError, error } = useStockChart();
+  const { filter } = useDashboardFilter();
+
+  const { data = [], isLoading, isError, error } = useStockChart(filter);
 
   if (isLoading) {
     return <ChartSkeleton />;
@@ -54,7 +56,7 @@ export default function StockChart() {
         >
           <CartesianGrid
             strokeDasharray="4 4"
-            className="stroke-slate-200 dark:stroke-slate-700"
+            className="stroke-border"
           />
 
           <XAxis dataKey="month" tick={{ fontSize: 12 }} />

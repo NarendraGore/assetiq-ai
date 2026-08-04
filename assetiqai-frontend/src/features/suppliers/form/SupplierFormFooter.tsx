@@ -37,7 +37,7 @@ export function SupplierFormFooter({
       <Button
         type="submit"
         disabled={loading || disabled}
-        className="w-full bg-blue-600 text-white transition-colors duration-200 hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 sm:w-auto"
+        className="w-full bg-primary text-primary-foreground transition-colors duration-200 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring sm:w-auto"
       >
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 

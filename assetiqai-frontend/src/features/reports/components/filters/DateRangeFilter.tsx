@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 
 import { useReportFilter } from "../../hooks/useReportFilter";
 
-import type { DateRange } from "../../types";
+import type { DateRangePreset } from "../../types";
 
 interface DateRangeOption {
   label: string;
-  value: DateRange;
+  value: DateRangePreset;
 }
 
 interface DateRangeFilterProps {
@@ -18,47 +18,34 @@ interface DateRangeFilterProps {
   className?: string;
 }
 
+/**
+ * These are presets, not date ranges. The previous version typed `value` as
+ * `DateRange` while assigning bare strings to it, then compared that string
+ * against `filter.dateRange` (an object) — so no button ever rendered as
+ * active and the chosen window never reached the API.
+ */
 const DEFAULT_OPTIONS: DateRangeOption[] = [
-  {
-    label: "Today",
-    value: "today",
-  },
-  {
-    label: "Last 7 Days",
-    value: "last7Days",
-  },
-  {
-    label: "Last 30 Days",
-    value: "last30Days",
-  },
-  {
-    label: "This Month",
-    value: "thisMonth",
-  },
-  {
-    label: "This Year",
-    value: "thisYear",
-  },
+  { label: "Today", value: "today" },
+  { label: "Last 7 Days", value: "last7Days" },
+  { label: "Last 30 Days", value: "last30Days" },
+  { label: "This Month", value: "thisMonth" },
+  { label: "This Year", value: "thisYear" },
 ];
 
 export default function DateRangeFilter({
   options = DEFAULT_OPTIONS,
   className,
 }: DateRangeFilterProps) {
-  const { filter, updateFilter } = useReportFilter();
+  const { filter, setDateRangePreset } = useReportFilter();
 
   return (
     <div
-      className={`
-        flex
-        flex-wrap
-        items-center
-        gap-2
-        ${className ?? ""}
-      `}
+      className={`flex flex-wrap items-center gap-2 ${className ?? ""}`}
+      role="group"
+      aria-label="Date range"
     >
       {options.map((option) => {
-        const active = filter.dateRange === option.value;
+        const active = filter.dateRangePreset === option.value;
 
         return (
           <Button
@@ -66,17 +53,9 @@ export default function DateRangeFilter({
             type="button"
             variant={active ? "default" : "outline"}
             size="sm"
-            onClick={() => {
-              updateFilter("dateRange", option.value);
-              updateFilter("page", 1);
-            }}
+            onClick={() => setDateRangePreset(option.value)}
             aria-pressed={active}
-            className={`
-    transition-all
-    duration-200
-
-    ${active ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
-  `}
+            className="transition-all duration-200"
           >
             <Calendar className="mr-2 h-4 w-4" />
 

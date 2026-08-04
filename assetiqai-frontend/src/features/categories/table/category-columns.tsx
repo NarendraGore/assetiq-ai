@@ -87,7 +87,7 @@ export function categoryColumns({
       cell: ({ row }) => (
         <p
           className="max-w-sm truncate text-muted-foreground"
-          title={row.original.description}
+          title={row.original.description ?? undefined}
         >
           {row.original.description || "—"}
         </p>

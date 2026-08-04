@@ -6,6 +6,8 @@ import { Eye, EyeOff, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { getErrorMessage } from "@/lib/getErrorMessage";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -46,7 +48,11 @@ export default function ResetPasswordForm() {
     },
   });
 
-  const password = watch("password");
+  /**
+   * `watch` returns undefined on the very first render before defaultValues
+   * are applied in some RHF paths, and `password.length` below would throw.
+   */
+  const password = watch("password") ?? "";
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     try {
@@ -63,10 +69,8 @@ export default function ResetPasswordForm() {
       toast.success("Password reset successfully.");
 
       router.replace("/login");
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ?? "Unable to reset password.",
-      );
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Unable to reset password."));
     }
   };
 
@@ -94,9 +98,9 @@ export default function ResetPasswordForm() {
   ];
 
   return (
-    <Card className="w-full max-w-md rounded-3xl border border-slate-200 shadow-xl">
+    <Card className="w-full max-w-md rounded-3xl border border-border shadow-xl">
       <CardHeader className="text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
           <Lock className="h-6 w-6" />
         </div>
 
@@ -127,20 +131,20 @@ export default function ResetPasswordForm() {
             </div>
 
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.password.message}
               </p>
             )}
           </div>
 
-          <div className="rounded-xl bg-slate-50 p-4">
+          <div className="rounded-xl bg-muted p-4">
             <p className="mb-2 text-sm font-medium">Password Requirements</p>
 
             <ul className="space-y-1 text-sm">
               {rules.map((rule) => (
                 <li
                   key={rule.label}
-                  className={rule.valid ? "text-green-600" : "text-slate-500"}
+                  className={rule.valid ? "text-success" : "text-muted-foreground"}
                 >
                   • {rule.label}
                 </li>
@@ -168,7 +172,7 @@ export default function ResetPasswordForm() {
             </div>
 
             {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -177,13 +181,13 @@ export default function ResetPasswordForm() {
           <Button
             type="submit"
             disabled={isSubmitting || !isValid}
-            className="h-11 w-full rounded-xl bg-blue-600 hover:bg-blue-700"
+            className="h-11 w-full rounded-xl bg-primary hover:bg-primary/90"
           >
             {isSubmitting ? "Updating..." : "Update Password"}
           </Button>
 
           <div className="text-center text-sm">
-            <Link href="/login" className="text-blue-600 hover:underline">
+            <Link href="/login" className="text-primary hover:underline">
               Back to Login
             </Link>
           </div>

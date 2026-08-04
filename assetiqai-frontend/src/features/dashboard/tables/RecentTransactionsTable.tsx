@@ -83,12 +83,10 @@ export default function RecentTransactionsTable() {
           overflow-hidden
           rounded-2xl
           border
-          border-slate-200
-          bg-white
+          border-border
+          bg-card
           shadow-sm
           transition-colors
-          dark:border-slate-800
-          dark:bg-slate-950
         "
       >
         <DataTable

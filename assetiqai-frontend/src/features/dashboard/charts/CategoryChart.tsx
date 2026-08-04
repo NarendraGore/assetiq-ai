@@ -1,99 +1,3 @@
-// "use client";
-
-// import {
-//   Cell,
-//   Legend,
-//   Pie,
-//   PieChart,
-//   ResponsiveContainer,
-//   Tooltip,
-// } from "recharts";
-
-// import ChartSkeleton from "./ChartSkeleton";
-// import EmptyState from "../components/EmptyState";
-
-// import { useCategoryChart, useDashboardFilter } from "../hooks";
-
-// const COLORS = [
-//   "#2563eb",
-//   "#16a34a",
-//   "#f59e0b",
-//   "#dc2626",
-//   "#7c3aed",
-//   "#0891b2",
-//   "#db2777",
-//   "#4f46e5",
-// ];
-
-// export default function CategoryChart() {
-//   const { filter } = useDashboardFilter();
-//   const { data = [], isLoading, isError, error } = useCategoryChart(filter);
-
-//   if (isLoading) {
-//     return <ChartSkeleton />;
-//   }
-
-//   if (isError) {
-//     return (
-//       <EmptyState
-//         title="Failed to load categories"
-//         description={error?.message ?? "Something went wrong."}
-//       />
-//     );
-//   }
-
-//   if (!data.length) {
-//     return (
-//       <EmptyState
-//         title="No Category Data"
-//         description="Category distribution is unavailable."
-//       />
-//     );
-//   }
-
-//   return (
-//     <div className="h-[340px] w-full">
-//       <ResponsiveContainer width="100%" height="100%">
-//         <PieChart>
-//           <Pie
-//             data={data}
-//             dataKey="productCount"
-//             nameKey="categoryName"
-//             cx="50%"
-//             cy="50%"
-//             innerRadius={55}
-//             outerRadius={110}
-//             paddingAngle={3}
-//             animationDuration={700}
-//             label={({ categoryName, percent }) =>
-//               `${categoryName} (${((percent ?? 0) * 100).toFixed(0)}%)`
-//             }
-//           >
-//             {data.map((_, index) => (
-//               <Cell key={index} fill={COLORS[index % COLORS.length]} />
-//             ))}
-//           </Pie>
-
-//           <Tooltip
-//             formatter={(value: number) => [value, "Products"]}
-//             contentStyle={{
-//               borderRadius: 12,
-//             }}
-//           />
-
-//           <Legend
-//             verticalAlign="bottom"
-//             height={36}
-//             wrapperStyle={{
-//               fontSize: 13,
-//             }}
-//           />
-//         </PieChart>
-//       </ResponsiveContainer>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import {
@@ -173,7 +77,7 @@ export default function CategoryChart() {
             outerRadius={110}
             paddingAngle={2}
             cornerRadius={8}
-            stroke="hsl(var(--background))"
+            stroke="var(--background)"
             strokeWidth={2}
             label={false}
             labelLine={false}
@@ -190,7 +94,7 @@ export default function CategoryChart() {
             textAnchor="middle"
             dominantBaseline="middle"
             style={{
-              fill: "hsl(var(--foreground))",
+              fill: "var(--foreground)",
               fontSize: 28,
               fontWeight: 700,
             }}
@@ -205,7 +109,7 @@ export default function CategoryChart() {
             textAnchor="middle"
             dominantBaseline="middle"
             style={{
-              fill: "hsl(var(--muted-foreground))",
+              fill: "var(--muted-foreground)",
               fontSize: 13,
               fontWeight: 500,
             }}
@@ -214,23 +118,23 @@ export default function CategoryChart() {
           </text>
 
           <Tooltip
-            formatter={(value: number, _, item) => [
-              `${value} Products`,
-              item.payload.categoryName,
+            formatter={(value, _name, item) => [
+              `${Number(value) || 0} Products`,
+              String(item?.payload?.categoryName ?? ""),
             ]}
             contentStyle={{
               borderRadius: 12,
-              border: "1px solid hsl(var(--border))",
-              backgroundColor: "hsl(var(--background))",
-              color: "hsl(var(--foreground))",
+              border: "1px solid var(--border)",
+              backgroundColor: "var(--background)",
+              color: "var(--foreground)",
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
             }}
             labelStyle={{
-              color: "hsl(var(--foreground))",
+              color: "var(--foreground)",
               fontWeight: 600,
             }}
             itemStyle={{
-              color: "hsl(var(--foreground))",
+              color: "var(--foreground)",
             }}
           />
 
@@ -245,7 +149,7 @@ export default function CategoryChart() {
               formatter={(value) => (
                 <span
                   style={{
-                    color: "hsl(var(--foreground))",
+                    color: "var(--foreground)",
                     fontSize: 13,
                     fontWeight: 500,
                   }}
