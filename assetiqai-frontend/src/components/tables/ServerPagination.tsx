@@ -1,6 +1,5 @@
 "use client";
 
-import { Table as TanstackTable } from "@tanstack/react-table";
 import {
   ChevronLeft,
   ChevronRight,
@@ -19,10 +18,7 @@ import {
 
 const PAGE_SIZES = [5, 10, 20, 50, 100];
 
-interface ProductServerPaginationProps<TData> {
-  /** Present only to keep the table generic — not used for row counts. */
-  table?: TanstackTable<TData>;
-
+interface ServerPaginationProps {
   page: number;
   pageSize: number;
   totalCount: number;
@@ -33,20 +29,19 @@ interface ProductServerPaginationProps<TData> {
 }
 
 /**
- * Server-driven pagination bar.
+ * Pagination bar for lists paged by the API.
  *
- * Unlike the shared client-side {@link TablePagination}, this reads page state
- * from the API response (the product list is paged on the server) rather than
- * from the TanStack row model.
+ * Unlike {@link TablePagination}, page state comes from the API response rather
+ * than the TanStack row model — the row model only ever holds the current page.
  */
-export default function ProductServerPagination<TData>({
+export default function ServerPagination({
   page,
   pageSize,
   totalCount,
   totalPages,
   onPageChange,
   onPageSizeChange,
-}: ProductServerPaginationProps<TData>) {
+}: ServerPaginationProps) {
   const safeTotalPages = Math.max(totalPages, 1);
 
   const from = totalCount === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -57,18 +52,13 @@ export default function ProductServerPagination<TData>({
 
   return (
     <div className="flex flex-col gap-4 border-t border-border bg-card px-6 py-4 transition-colors duration-200 md:flex-row md:items-center md:justify-between">
-      {/* Left - Records Info */}
       <div className="text-sm text-muted-foreground">
-        Showing{" "}
-        <span className="font-medium text-foreground">{from}</span> -
+        Showing <span className="font-medium text-foreground">{from}</span> -
         <span className="font-medium text-foreground"> {to}</span> of{" "}
-        <span className="font-medium text-foreground">{totalCount}</span>{" "}
-        records
+        <span className="font-medium text-foreground">{totalCount}</span> records
       </div>
 
-      {/* Right - Controls */}
       <div className="flex flex-wrap items-center gap-4">
-        {/* Rows per page selector */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Rows per page</span>
 
@@ -76,16 +66,16 @@ export default function ProductServerPagination<TData>({
             value={String(pageSize)}
             onValueChange={(value) => onPageSizeChange(Number(value))}
           >
-            <SelectTrigger className="h-9 w-20 border-border bg-background hover:bg-muted transition-colors duration-200">
+            <SelectTrigger className="h-9 w-20 border-border bg-background transition-colors duration-200 hover:bg-muted">
               <SelectValue />
             </SelectTrigger>
 
-            <SelectContent className="bg-popover border-border">
+            <SelectContent className="border-border bg-popover">
               {PAGE_SIZES.map((size) => (
                 <SelectItem
                   key={size}
                   value={String(size)}
-                  className="hover:bg-muted cursor-pointer focus:bg-accent"
+                  className="cursor-pointer hover:bg-muted focus:bg-accent"
                 >
                   {size}
                 </SelectItem>
@@ -94,19 +84,17 @@ export default function ProductServerPagination<TData>({
           </Select>
         </div>
 
-        {/* Page info */}
         <div className="text-sm font-medium text-foreground">
           Page {page} of {safeTotalPages}
         </div>
 
-        {/* Navigation buttons */}
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="icon"
             onClick={() => onPageChange(1)}
             disabled={!canPrevious}
-            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border transition-all duration-200 hover:border-primary/40 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-border disabled:hover:bg-transparent"
             aria-label="Go to first page"
           >
             <ChevronsLeft className="h-4 w-4" />
@@ -117,7 +105,7 @@ export default function ProductServerPagination<TData>({
             size="icon"
             onClick={() => onPageChange(page - 1)}
             disabled={!canPrevious}
-            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border transition-all duration-200 hover:border-primary/40 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-border disabled:hover:bg-transparent"
             aria-label="Go to previous page"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -128,7 +116,7 @@ export default function ProductServerPagination<TData>({
             size="icon"
             onClick={() => onPageChange(page + 1)}
             disabled={!canNext}
-            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border transition-all duration-200 hover:border-primary/40 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-border disabled:hover:bg-transparent"
             aria-label="Go to next page"
           >
             <ChevronRight className="h-4 w-4" />
@@ -139,7 +127,7 @@ export default function ProductServerPagination<TData>({
             size="icon"
             onClick={() => onPageChange(safeTotalPages)}
             disabled={!canNext}
-            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border transition-all duration-200 hover:border-primary/40 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-border disabled:hover:bg-transparent"
             aria-label="Go to last page"
           >
             <ChevronsRight className="h-4 w-4" />

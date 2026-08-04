@@ -26,6 +26,9 @@ interface StockTransactionDialogProps {
 
   loading?: boolean;
 
+  /** Filters inactive products out of the free-choice picker. */
+  isProductInactive?: (productId: string) => boolean;
+
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: StockFormValues) => Promise<void> | void;
 }
@@ -52,6 +55,7 @@ export default function StockTransactionDialog({
   action,
   item = null,
   loading = false,
+  isProductInactive,
   onOpenChange,
   onSubmit,
 }: StockTransactionDialogProps) {
@@ -98,6 +102,7 @@ export default function StockTransactionDialog({
           lockedProduct={lockedProduct}
           resetKey={open ? `${action}-${item?.productId ?? "none"}` : "closed"}
           loading={loading}
+          isProductInactive={isProductInactive}
           onSubmit={onSubmit}
           onCancel={() => onOpenChange(false)}
         />

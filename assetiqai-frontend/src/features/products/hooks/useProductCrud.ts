@@ -2,6 +2,9 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
+
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 import {
   CreateProductRequest,
@@ -23,9 +26,12 @@ export function useProductCrud() {
         await createMutation.mutateAsync(values);
 
         toast.success("Product created successfully.");
-      } catch {
-        toast.error("Failed to create product.");
-        throw new Error();
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Failed to create product."));
+        // Rethrow the original error so the caller can keep the dialog open and
+        // callers/reporting still see the real cause. `throw new Error()` here
+        // replaced it with an empty, untraceable error.
+        throw error;
       }
     },
     [createMutation]
@@ -43,9 +49,9 @@ export function useProductCrud() {
         });
 
         toast.success("Product updated successfully.");
-      } catch {
-        toast.error("Failed to update product.");
-        throw new Error();
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Failed to update product."));
+        throw error;
       }
     },
     [updateMutation]
@@ -57,9 +63,16 @@ export function useProductCrud() {
         await deleteMutation.mutateAsync(id);
 
         toast.success("Product deleted successfully.");
-      } catch {
-        toast.error("Failed to delete product.");
-        throw new Error();
+      } catch (error) {
+        // A 409 means the product is still referenced (e.g. stock transactions);
+        // surface the backend's explanation rather than a generic failure.
+        const fallback =
+          error instanceof AxiosError && error.response?.status === 409
+            ? "This product has related records and cannot be deleted."
+            : "Failed to delete product.";
+
+        toast.error(getErrorMessage(error, fallback));
+        throw error;
       }
     },
     [deleteMutation]

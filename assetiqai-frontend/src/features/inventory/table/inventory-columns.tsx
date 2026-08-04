@@ -15,6 +15,8 @@ interface InventoryColumnsProps {
   onStockIn: (item: InventoryItem) => void;
   onStockOut: (item: InventoryItem) => void;
   onAdjust: (item: InventoryItem) => void;
+  /** Returns true when the product is inactive and stock ops must be blocked. */
+  isProductInactive?: (productId: string) => boolean;
 }
 
 interface SortableHeaderProps<TData, TValue> {
@@ -80,21 +82,31 @@ export function inventoryColumns({
   onStockIn,
   onStockOut,
   onAdjust,
+  isProductInactive,
 }: InventoryColumnsProps): ColumnDef<InventoryItem>[] {
   return [
     {
       accessorKey: "productName",
       header: ({ column }) => <SortableHeader column={column} title="Product" />,
-      cell: ({ row }) => (
-        <div className="flex flex-col">
-          <span className="font-medium text-foreground">
-            {row.original.productName}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {row.original.sku}
-          </span>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const inactive = isProductInactive?.(row.original.productId) ?? false;
+
+        return (
+          <div className="flex flex-col">
+            <span className="flex items-center gap-2 font-medium text-foreground">
+              {row.original.productName}
+              {inactive && (
+                <Badge variant="secondary" className="text-[10px] uppercase">
+                  Inactive
+                </Badge>
+              )}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {row.original.sku}
+            </span>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "categoryName",
@@ -168,6 +180,7 @@ export function inventoryColumns({
             onStockIn={onStockIn}
             onStockOut={onStockOut}
             onAdjust={onAdjust}
+            disabled={isProductInactive?.(row.original.productId) ?? false}
           />
         </div>
       ),

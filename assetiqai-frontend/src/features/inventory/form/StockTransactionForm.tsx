@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -21,6 +23,9 @@ interface StockTransactionFormProps {
 
   loading?: boolean;
 
+  /** Removes inactive products from the free-choice picker. */
+  isProductInactive?: (productId: string) => boolean;
+
   onSubmit: (values: StockFormValues) => void | Promise<void>;
   onCancel: () => void;
 }
@@ -36,6 +41,7 @@ export default function StockTransactionForm({
   lockedProduct = null,
   resetKey,
   loading = false,
+  isProductInactive,
   onSubmit,
   onCancel,
 }: StockTransactionFormProps) {
@@ -47,6 +53,19 @@ export default function StockTransactionForm({
 
   const { options, isLoading: isLoadingOptions } = useProductOptions();
 
+  /**
+   * Only active products are selectable in the free-choice picker. A locked
+   * product (row-launched) bypasses this list entirely, and its own active
+   * check is enforced upstream.
+   */
+  const selectableOptions = useMemo(
+    () =>
+      isProductInactive
+        ? options.filter((option) => !isProductInactive(option.productId))
+        : options,
+    [options, isProductInactive],
+  );
+
   return (
     <form
       noValidate
@@ -56,7 +75,7 @@ export default function StockTransactionForm({
       <StockTransactionFields
         action={action}
         form={form}
-        options={options}
+        options={selectableOptions}
         isLoadingOptions={isLoadingOptions}
         lockedProduct={lockedProduct}
       />

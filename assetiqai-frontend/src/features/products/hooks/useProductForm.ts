@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import {
   useForm,
   UseFormReturn,
+  type Resolver,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -27,7 +28,10 @@ export function useProductForm({
   defaultValues,
 }: UseProductFormProps = {}): UseFormReturn<ProductFormValues> {
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    // `z.coerce.number()` widens the schema's *input* type to `unknown` under
+    // Zod v4, which no longer matches `ProductFormValues`. The cast realigns
+    // the resolver with the form's value shape; validation is unaffected.
+    resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
 
     defaultValues: productDefaultValues,
 
@@ -36,15 +40,16 @@ export function useProductForm({
   });
 
   /**
-   * Prevent unnecessary resets: only reset when the underlying product id
-   * changes (e.g. switching which product is being edited).
+   * Prevent unnecessary resets: reset when the product being edited changes, or
+   * when its category/supplier ids arrive (the detail response can land after
+   * the first render, so keying on id alone would leave the selects empty).
    */
-  const previousId = useRef<string | null>(null);
+  const previousKey = useRef<string | null>(null);
 
   useEffect(() => {
     if (mode === "create") {
-      if (previousId.current !== null) {
-        previousId.current = null;
+      if (previousKey.current !== null) {
+        previousKey.current = null;
         form.reset(productDefaultValues);
       }
 
@@ -53,11 +58,19 @@ export function useProductForm({
 
     const currentId = defaultValues?.id ?? null;
 
-    if (currentId === previousId.current) {
+    if (!currentId) {
       return;
     }
 
-    previousId.current = currentId;
+    const currentKey = `${currentId}|${defaultValues?.categoryId ?? ""}|${
+      defaultValues?.supplierId ?? ""
+    }`;
+
+    if (currentKey === previousKey.current) {
+      return;
+    }
+
+    previousKey.current = currentKey;
 
     form.reset({
       name: defaultValues?.name ?? "",

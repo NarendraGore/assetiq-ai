@@ -23,7 +23,7 @@ import type { InventoryItem } from "../types";
 
 import InventorySkeleton from "./InventorySkeleton";
 import InventoryEmptyState from "./InventoryEmptyState";
-import ServerPagination from "./ServerPagination";
+import ServerPagination from "@/components/tables/ServerPagination";
 
 interface InventoryTableProps {
   columns: ColumnDef<InventoryItem>[];

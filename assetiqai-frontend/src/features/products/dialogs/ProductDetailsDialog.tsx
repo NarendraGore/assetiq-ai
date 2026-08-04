@@ -15,12 +15,21 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 import { useProduct } from "../hooks/useProduct";
+import { useProductLookups } from "../hooks/useProductLookups";
+import type { ProductListItem } from "../types";
 
 interface ProductDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 
   productId?: string;
+
+  /**
+   * The list row the user clicked. The detail endpoint doesn't always return
+   * category/supplier names, but the list projection does — so we fall back to
+   * it (and to a lookup-by-id below) to guarantee the names always render.
+   */
+  fallback?: ProductListItem | null;
 
   onEdit?: () => void;
 }
@@ -59,6 +68,7 @@ export default function ProductDetailsDialog({
   open,
   onOpenChange,
   productId,
+  fallback,
   onEdit,
 }: ProductDetailsDialogProps) {
   const shouldFetch = open && !!productId;
@@ -68,6 +78,25 @@ export default function ProductDetailsDialog({
     isLoading,
     isError,
   } = useProduct(shouldFetch ? (productId as string) : "");
+
+  const { categoryOptions, supplierOptions } = useProductLookups();
+
+  /**
+   * Resolve the category/supplier name from the most reliable source available,
+   * in priority order: the detail response, the clicked list row, then a
+   * lookup by id against the loaded reference lists.
+   */
+  const categoryName =
+    product?.categoryName ||
+    fallback?.categoryName ||
+    categoryOptions.find((option) => option.id === product?.categoryId)?.name ||
+    null;
+
+  const supplierName =
+    product?.supplierName ||
+    fallback?.supplierName ||
+    supplierOptions.find((option) => option.id === product?.supplierId)?.name ||
+    null;
 
   const stock = product?.stockQuantity ?? 0;
 
@@ -115,11 +144,11 @@ export default function ProductDetailsDialog({
             {/* Details */}
             <div className="rounded-xl border border-border px-4">
               <DetailRow label="Category">
-                {product.categoryName || "—"}
+                {categoryName || "—"}
               </DetailRow>
 
               <DetailRow label="Supplier">
-                {product.supplierName || "—"}
+                {supplierName || "—"}
               </DetailRow>
 
               <DetailRow label="Unit Price">

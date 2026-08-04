@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   usePathname,
   useRouter,
@@ -137,7 +137,19 @@ export function useProductFilters(): ProductFiltersState {
 
   /* ---------- Reset to page 1 when any filter changes ---------- */
 
+  /**
+   * Skipped on mount: the effect would otherwise clobber a `?page=3` deep link
+   * back to page 1 on first render, since it runs once with the URL's own
+   * initial filter values.
+   */
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch, categoryId, supplierId, minPrice, maxPrice]);
 

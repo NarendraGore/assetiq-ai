@@ -4,6 +4,8 @@ export { default as TableToolbar } from "./TableToolbar";
 
 export { default as TablePagination } from "./TablePagination";
 
+export { default as ServerPagination } from "./ServerPagination";
+
 export { default as TableSkeleton } from "./TableSkeleton";
 
 export { default as EmptyTable } from "./EmptyTable";

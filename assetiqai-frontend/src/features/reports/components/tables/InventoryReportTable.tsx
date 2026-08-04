@@ -1,6 +1,7 @@
 "use client";
 
 import DataTable from "@/components/tables/DataTable";
+import ServerPagination from "@/components/tables/ServerPagination";
 
 import ReportToolbar from "./ReportToolbar";
 import ReportSkeleton from "./ReportSkeleton";
@@ -12,13 +13,14 @@ import { useInventoryReport } from "../../hooks/useInventoryReport";
 import { useReportFilter } from "../../hooks/useReportFilter";
 
 export default function InventoryReportTable() {
-  const { filter } = useReportFilter();
+  const { filter, updateFilter } = useReportFilter();
 
-  const { data, isLoading, isError, refetch } = useInventoryReport({
+  const { data, isLoading, isFetching, isError, refetch } = useInventoryReport({
     filters: filter,
   });
 
   const rows = data?.data ?? [];
+  const pagination = data?.pagination;
 
   if (isLoading) {
     return <ReportSkeleton />;
@@ -52,12 +54,28 @@ export default function InventoryReportTable() {
           description="Try adjusting your filters or refresh the report."
         />
       ) : (
-        <DataTable
-          columns={inventoryColumns}
-          data={rows}
-          enableSorting
-          enablePagination={false}
-        />
+        <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+          <DataTable
+            columns={inventoryColumns}
+            data={rows}
+            enableSorting
+            enablePagination={false}
+            loading={isFetching}
+          />
+
+          {pagination && (
+            <ServerPagination
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              totalCount={pagination.totalRecords}
+              totalPages={pagination.totalPages}
+              onPageChange={(page) => updateFilter("page", page)}
+              onPageSizeChange={(pageSize) =>
+                updateFilter("pageSize", pageSize)
+              }
+            />
+          )}
+        </div>
       )}
     </section>
   );

@@ -3,7 +3,6 @@
 import {
   createContext,
   useCallback,
-  useContext,
   useMemo,
   useState,
   type ReactNode,
@@ -23,8 +22,6 @@ export interface ReportFilterContextValue {
 
   /** Apply a named window and keep the matching button highlighted. */
   setDateRangePreset: (preset: DateRangePreset) => void;
-
-  applyFilters: () => void;
 
   resetFilters: () => void;
 }
@@ -67,19 +64,12 @@ export function ReportFilterProvider({ children }: Props) {
     setFilter(createDefaultReportFilters());
   }, []);
 
-  const applyFilters = useCallback(() => {
-    // React Query refetches from the changed query key; nothing to do here.
-  }, []);
-
+  // No `applyFilters`: every filter is part of the query key, so React Query
+  // refetches the moment state changes. An explicit apply step would only be
+  // needed if the filters were staged separately from the key.
   const value = useMemo(
-    () => ({
-      filter,
-      updateFilter,
-      setDateRangePreset,
-      applyFilters,
-      resetFilters,
-    }),
-    [filter, updateFilter, setDateRangePreset, applyFilters, resetFilters],
+    () => ({ filter, updateFilter, setDateRangePreset, resetFilters }),
+    [filter, updateFilter, setDateRangePreset, resetFilters],
   );
 
   return (
@@ -89,14 +79,3 @@ export function ReportFilterProvider({ children }: Props) {
   );
 }
 
-export function useReportFilterContext() {
-  const context = useContext(ReportFilterContext);
-
-  if (!context) {
-    throw new Error(
-      "useReportFilterContext must be used inside ReportFilterProvider",
-    );
-  }
-
-  return context;
-}

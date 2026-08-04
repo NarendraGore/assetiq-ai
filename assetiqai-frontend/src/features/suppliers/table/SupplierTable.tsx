@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Supplier } from "../types";
 
 import DataTable from "@/components/tables/DataTable";
+import ServerPagination from "@/components/tables/ServerPagination";
 
 import SupplierSkeleton from "./SupplierSkeleton";
 import SupplierEmptyState from "./SupplierEmptyState";
@@ -30,6 +31,15 @@ interface SupplierTableProps {
   onAddSupplier?: () => void;
 
   onRowClick?: (supplier: Supplier) => void;
+
+  /* Server pagination — the API returns one page at a time, so paging must be
+     driven by the response rather than the TanStack row model. */
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 }
 
 export default function SupplierTable({
@@ -49,6 +59,13 @@ export default function SupplierTable({
   onAddSupplier,
 
   onRowClick,
+
+  page,
+  pageSize,
+  totalCount,
+  totalPages,
+  onPageChange,
+  onPageSizeChange,
 }: SupplierTableProps) {
   if (isLoading) {
     return <SupplierSkeleton />;
@@ -91,9 +108,17 @@ export default function SupplierTable({
         columns={columns}
         data={data}
         enableSorting
-        enablePagination
-        pageSize={10}
+        enablePagination={false}
         onRowClick={onRowClick}
+      />
+
+      <ServerPagination
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </section>
   );

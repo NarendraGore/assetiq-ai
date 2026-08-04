@@ -1,6 +1,7 @@
 "use client";
 
 import DataTable from "@/components/tables/DataTable";
+import ServerPagination from "@/components/tables/ServerPagination";
 
 import ReportToolbar from "./ReportToolbar";
 import ReportSkeleton from "./ReportSkeleton";
@@ -12,13 +13,14 @@ import { useReportFilter } from "../../hooks/useReportFilter";
 import { useStockReport } from "../../hooks/useStockReport";
 
 export default function StockReportTable() {
-  const { filter } = useReportFilter();
+  const { filter, updateFilter } = useReportFilter();
 
-  const { data, isLoading, isError, refetch } = useStockReport({
+  const { data, isLoading, isFetching, isError, refetch } = useStockReport({
     filters: filter,
   });
 
   const rows = data?.data ?? [];
+  const pagination = data?.pagination;
 
   if (isLoading) {
     return <ReportSkeleton />;
@@ -52,13 +54,28 @@ export default function StockReportTable() {
           description="Try adjusting your filters or refresh the report."
         />
       ) : (
-        <DataTable
-          columns={stockColumns}
-          data={rows}
-          enableSorting
-          enablePagination
-          pageSize={filter.pageSize}
-        />
+        <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+          <DataTable
+            columns={stockColumns}
+            data={rows}
+            enableSorting
+            enablePagination={false}
+            loading={isFetching}
+          />
+
+          {pagination && (
+            <ServerPagination
+              page={pagination.page}
+              pageSize={pagination.pageSize}
+              totalCount={pagination.totalRecords}
+              totalPages={pagination.totalPages}
+              onPageChange={(page) => updateFilter("page", page)}
+              onPageSizeChange={(pageSize) =>
+                updateFilter("pageSize", pageSize)
+              }
+            />
+          )}
+        </div>
       )}
     </section>
   );

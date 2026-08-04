@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { toast } from "sonner";
 
 import {
   Tabs,
@@ -28,6 +29,7 @@ import {
   useHistoryFilters,
   useStockDialogs,
   useStockMutations,
+  useProductActiveStatus,
   type StockFormValues,
 } from "../hooks";
 
@@ -57,6 +59,9 @@ export default function InventoryPage() {
     PageSize: pageSize,
     Search: debouncedSearch,
   });
+
+  /* ---------- Product active status cross-reference ---------- */
+  const { isProductInactive } = useProductActiveStatus();
 
   /* ---------- History tab ---------- */
   const history = useHistoryFilters();
@@ -91,6 +96,16 @@ export default function InventoryPage() {
   const isMutating = isStockingIn || isStockingOut || isAdjusting;
 
   const handleSubmit = async (values: StockFormValues) => {
+    // Final guard: inactive products cannot receive stock movements. The UI
+    // already disables the entry points, but this covers any edge (e.g. a
+    // product deactivated while the dialog was open).
+    if (isProductInactive(values.productId)) {
+      toast.error(
+        "This product is inactive. Reactivate it before recording stock movements.",
+      );
+      return;
+    }
+
     const payload = {
       productId: values.productId,
       quantity: values.quantity,
@@ -114,8 +129,9 @@ export default function InventoryPage() {
         onStockIn: (item: InventoryItem) => open("in", item),
         onStockOut: (item: InventoryItem) => open("out", item),
         onAdjust: (item: InventoryItem) => open("adjust", item),
+        isProductInactive,
       }),
-    [open],
+    [open, isProductInactive],
   );
 
   const inventoryItems = inventoryData?.items ?? [];
@@ -205,6 +221,7 @@ export default function InventoryPage() {
         action={action}
         item={selectedItem}
         loading={isMutating}
+        isProductInactive={isProductInactive}
         onOpenChange={(next) => {
           if (!next) close();
         }}

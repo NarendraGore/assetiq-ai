@@ -7,3 +7,4 @@ export * from "./useHistoryFilters";
 export * from "./useStockDialogs";
 export * from "./useStockForm";
 export * from "./useProductOptions";
+export * from "./useProductActiveStatus";

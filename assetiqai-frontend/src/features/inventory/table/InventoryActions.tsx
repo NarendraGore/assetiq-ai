@@ -23,6 +23,8 @@ interface InventoryActionsProps {
   onStockIn: (item: InventoryItem) => void;
   onStockOut: (item: InventoryItem) => void;
   onAdjust: (item: InventoryItem) => void;
+  /** Inactive products cannot receive stock movements. */
+  disabled?: boolean;
 }
 
 export default function InventoryActions({
@@ -30,6 +32,7 @@ export default function InventoryActions({
   onStockIn,
   onStockOut,
   onAdjust,
+  disabled = false,
 }: InventoryActionsProps) {
   return (
     <DropdownMenu>
@@ -45,8 +48,18 @@ export default function InventoryActions({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-44">
+      <DropdownMenuContent align="end" className="w-52">
+        {disabled && (
+          <>
+            <div className="px-2 py-1.5 text-xs text-muted-foreground">
+              Product is inactive — reactivate it to record stock movements.
+            </div>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
         <DropdownMenuItem
+          disabled={disabled}
           onClick={(event) => {
             event.stopPropagation();
             onStockIn(item);
@@ -58,6 +71,7 @@ export default function InventoryActions({
         </DropdownMenuItem>
 
         <DropdownMenuItem
+          disabled={disabled}
           onClick={(event) => {
             event.stopPropagation();
             onStockOut(item);
@@ -71,6 +85,7 @@ export default function InventoryActions({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
+          disabled={disabled}
           onClick={(event) => {
             event.stopPropagation();
             onAdjust(item);

@@ -15,8 +15,15 @@ import { useCategoryDialogs } from "../hooks/useCategoryDialogs";
 import { useCategoryFilters } from "../hooks/useCategoryFilters";
 
 export default function CategoriesPage() {
-  const { search, setSearch, debouncedSearch, page, pageSize } =
-    useCategoryFilters();
+  const {
+    search,
+    setSearch,
+    debouncedSearch,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+  } = useCategoryFilters();
 
   const { data, isLoading, isFetching, isError, refetch } = useCategories({
     search: debouncedSearch,
@@ -88,6 +95,12 @@ export default function CategoriesPage() {
         isError={isError}
         onRetry={refetch}
         onAddCategory={openCreate}
+        page={data?.page ?? page}
+        pageSize={data?.pageSize ?? pageSize}
+        totalCount={data?.totalCount ?? 0}
+        totalPages={data?.totalPages ?? 0}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
       />
 
       <CategoryDialog
