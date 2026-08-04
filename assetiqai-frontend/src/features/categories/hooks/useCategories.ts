@@ -2,21 +2,35 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  getCategories,
-  CategoryListResponse,
-} from "../api/category.api";
+import { categoryApi } from "../api";
+import { categoryKeys } from "../constants";
+import type { CategoryQueryParams } from "../types";
 
-export function useCategories() {
-  return useQuery<CategoryListResponse>({
-    queryKey: ["categories"],
+export function useCategories(
+  params: CategoryQueryParams = {}
+) {
+  const {
+    page = 1,
+    pageSize = 10,
+    search = "",
+  } = params;
 
-    queryFn: getCategories,
+  return useQuery({
+    queryKey: categoryKeys.list({
+      page,
+      pageSize,
+      search,
+    }),
 
-    staleTime: 1000 * 60 * 10,
+    queryFn: () =>
+      categoryApi.getCategories({
+        page,
+        pageSize,
+        search,
+      }),
 
-    gcTime: 1000 * 60 * 30,
+    placeholderData: (previousData) => previousData,
 
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

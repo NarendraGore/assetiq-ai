@@ -1,0 +1,38 @@
+import { z } from "zod";
+
+/**
+ * Category Form Validation Schema
+ */
+export const categorySchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Category name must be at least 2 characters.")
+    .max(100, "Category name cannot exceed 100 characters."),
+
+  description: z
+    .string()
+    .trim()
+    .max(500, "Description cannot exceed 500 characters.")
+    .optional()
+    .or(z.literal("")),
+});
+
+/**
+ * React Hook Form Values
+ */
+export type CategoryFormValues = z.infer<typeof categorySchema>;
+
+/**
+ * Backward-compatible alias
+ * (used by useCategoryForm)
+ */
+export type CategorySchema = CategoryFormValues;
+
+/**
+ * Default Form Values
+ */
+export const categoryDefaultValues: CategoryFormValues = {
+  name: "",
+  description: "",
+};
