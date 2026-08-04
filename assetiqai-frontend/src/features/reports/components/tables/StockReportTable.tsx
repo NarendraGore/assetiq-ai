@@ -38,7 +38,7 @@ export default function StockReportTable() {
     <section className="space-y-6">
       <ReportToolbar
         title="Stock Report"
-        total={data?.pagination.totalRecords ?? 0}
+        total={data?.pagination?.totalRecords ?? 0}
         loading={isLoading}
         onRefresh={refetch}
         exportFilename="stock-report"

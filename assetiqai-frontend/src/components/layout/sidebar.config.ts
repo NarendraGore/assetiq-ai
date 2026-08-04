@@ -3,6 +3,7 @@ import {
   FolderTree,
   LayoutDashboard,
   Package,
+  Warehouse,
   Truck,
   type LucideIcon,
 } from "lucide-react";
@@ -44,6 +45,11 @@ const managementGroup: SidebarGroup = {
       title: "Products",
       href: "/products",
       icon: Package,
+    },
+    {
+      title: "Inventory",
+      href: "/inventory",
+      icon: Warehouse,
     },
     {
       title: "Categories",

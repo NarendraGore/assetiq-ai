@@ -38,7 +38,7 @@ export default function InventoryReportTable() {
     <section className="space-y-6">
       <ReportToolbar
         title="Inventory Report"
-        total={data?.pagination.totalRecords ?? 0}
+        total={data?.pagination?.totalRecords ?? 0}
         loading={isLoading}
         onRefresh={refetch}
         exportFilename="inventory-report"
