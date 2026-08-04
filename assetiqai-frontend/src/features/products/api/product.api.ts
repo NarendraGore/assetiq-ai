@@ -1,15 +1,79 @@
-/**
- * DEAD CODE — intentionally emptied.
- *
- * Never imported, and would not have worked: it prefixed every path with
- * `/api/products` while the axios baseURL already ends in `/api`, producing
- * `/api/api/products`. It also typed two payloads as `any`. There is no
- * products page in this app yet — rewrite this against the real endpoint when
- * one is added rather than reviving it as-is.
- *
- * The file is kept as an empty module rather than deleted so that any stray
- * import fails loudly at the import site instead of resolving to stale UI.
- * Safe to delete outright once you have confirmed nothing references it.
- */
+import axios from "@/lib/axios";
 
-export {};
+import type {
+  CreateProductRequest,
+  Product,
+  ProductListResponse,
+  ProductQueryParams,
+  UpdateProductRequest,
+} from "../types";
+
+const BASE_URL = "/products";
+
+/**
+ * The API treats empty strings and nulls interchangeably for optional fields,
+ * so an untouched optional input is normalised to `undefined` before it goes
+ * over the wire. Numeric and boolean values are left untouched.
+ */
+function normalizePayload<
+  T extends CreateProductRequest | UpdateProductRequest,
+>(payload: T): T {
+  const entries = Object.entries(payload).map(([key, value]) => [
+    key,
+    typeof value === "string" && value.trim() === ""
+      ? undefined
+      : value,
+  ]);
+
+  return Object.fromEntries(entries) as T;
+}
+
+export const productApi = {
+  async getProducts(
+    params: ProductQueryParams = {}
+  ): Promise<ProductListResponse> {
+    const { data } = await axios.get<ProductListResponse>(
+      BASE_URL,
+      {
+        params,
+      }
+    );
+
+    return data;
+  },
+
+  async getProduct(id: string): Promise<Product> {
+    const { data } = await axios.get<Product>(
+      `${BASE_URL}/${id}`
+    );
+
+    return data;
+  },
+
+  async createProduct(
+    payload: CreateProductRequest
+  ): Promise<Product> {
+    const { data } = await axios.post<Product>(
+      BASE_URL,
+      normalizePayload(payload)
+    );
+
+    return data;
+  },
+
+  async updateProduct(
+    id: string,
+    payload: UpdateProductRequest
+  ): Promise<Product> {
+    const { data } = await axios.put<Product>(
+      `${BASE_URL}/${id}`,
+      normalizePayload(payload)
+    );
+
+    return data;
+  },
+
+  async deleteProduct(id: string): Promise<void> {
+    await axios.delete(`${BASE_URL}/${id}`);
+  },
+};
