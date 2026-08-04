@@ -8,7 +8,7 @@ import DateRangeFilter from "./DateRangeFilter";
 import FilterActions from "./FilterActions";
 
 import { useCategories } from "@/features/categories/hooks/useCategories";
-import { useSuppliers } from "@/features/suppliers/hooks/useSUpplier";
+import { useSuppliers } from "@/features/suppliers/hooks";
 
 export default function ReportFilterBar() {
   const { data: categoriesData, isLoading: categoriesLoading } =

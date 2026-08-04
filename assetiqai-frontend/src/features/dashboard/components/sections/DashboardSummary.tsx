@@ -18,15 +18,18 @@ import { DataTableError } from "@/components/tables";
 
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
 import { useInventorySummary } from "../../hooks/useInventorySummary";
+import { useDashboardFilter } from "../../hooks/useDashboardFilter";
 
 export default function DashboardSummary() {
+  const { filter } = useDashboardFilter();
+
   const {
     data: summary,
     isLoading: summaryLoading,
     isError: summaryError,
     error: summaryErrorMessage,
     refetch: refetchSummary,
-  } = useDashboardSummary();
+  } = useDashboardSummary(filter);
 
   const {
     data: inventory,
@@ -34,7 +37,7 @@ export default function DashboardSummary() {
     isError: inventoryError,
     error: inventoryErrorMessage,
     refetch: refetchInventory,
-  } = useInventorySummary();
+  } = useInventorySummary(filter);
 
   const isLoading = summaryLoading || inventoryLoading;
   const isError = summaryError || inventoryError;

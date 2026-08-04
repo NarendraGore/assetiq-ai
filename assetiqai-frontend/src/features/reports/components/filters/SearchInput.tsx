@@ -55,9 +55,9 @@ export default function SearchInput({
           transition-all
           duration-200
 
-          focus-visible:border-blue-500
+          focus-visible:border-ring
           focus-visible:ring-2
-          focus-visible:ring-blue-500/20
+          focus-visible:ring-ring/20
         "
       />
     </div>

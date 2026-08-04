@@ -12,7 +12,7 @@ export default function TableSkeleton({
   columns = 6,
 }: TableSkeletonProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border bg-white shadow-sm dark:bg-background">
+    <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
       {/* Toolbar */}
       <div className="flex flex-col gap-4 border-b p-4 md:flex-row md:items-center md:justify-between">
         <Skeleton className="h-10 w-full max-w-sm" />
@@ -26,7 +26,7 @@ export default function TableSkeleton({
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
-          <thead className="bg-slate-50 dark:bg-muted">
+          <thead className="bg-muted">
             <tr>
               {Array.from({ length: columns }).map((_, index) => (
                 <th key={index} className="px-4 py-3 text-left">

@@ -24,8 +24,8 @@ export default function ReportSection() {
               rounded-lg
               transition-all
               duration-200
-              data-[state=active]:bg-blue-600
-              data-[state=active]:text-white
+              data-[state=active]:bg-primary
+              data-[state=active]:text-primary-foreground
             "
           >
             Inventory Report
@@ -37,8 +37,8 @@ export default function ReportSection() {
               rounded-lg
               transition-all
               duration-200
-              data-[state=active]:bg-blue-600
-              data-[state=active]:text-white
+              data-[state=active]:bg-primary
+              data-[state=active]:text-primary-foreground
             "
           >
             Stock Report

@@ -2,6 +2,7 @@ import type {
   InventoryReport,
   ReportFilters,
   ReportResponse,
+  SortDirection,
 } from "../types";
 
 import {
@@ -15,7 +16,7 @@ interface InventoryReportParams {
   pageIndex: number;
   pageSize: number;
   sortBy?: string;
-  sortDirection?: "asc" | "desc";
+  sortDirection?: SortDirection;
 }
 
 export async function getInventoryReport({

@@ -47,7 +47,7 @@ export default function FilterActions({ loading = false }: FilterActionsProps) {
           duration-200
           hover:bg-muted
           focus-visible:ring-2
-          focus-visible:ring-blue-500
+          focus-visible:ring-ring
           disabled:pointer-events-none
           disabled:opacity-50
         "

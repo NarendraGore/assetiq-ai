@@ -68,7 +68,7 @@ export default function CategoryToolbar({
             transition-all
             duration-200
             focus-visible:ring-2
-            focus-visible:ring-blue-500
+            focus-visible:ring-ring
           "
         />
       </div>
@@ -96,9 +96,9 @@ export default function CategoryToolbar({
         <Button
           onClick={onAddCategory}
           className="
-            bg-blue-600
-            hover:bg-blue-700
-            text-white
+            bg-primary
+            hover:bg-primary/90
+            text-primary-foreground
             gap-2
           "
         >

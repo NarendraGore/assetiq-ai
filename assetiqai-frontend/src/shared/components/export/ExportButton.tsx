@@ -16,7 +16,7 @@ import ExportDropdown from "./ExportDropdown";
 interface ExportButtonProps<T> {
   filename: string;
 
-  columns: ExportColumn<T>[];
+  columns: ReadonlyArray<ExportColumn<T>>;
 
   data: readonly T[];
 
@@ -51,7 +51,7 @@ export default function ExportButton<T>({
             hover:bg-muted
             hover:shadow-md
             focus-visible:ring-2
-            focus-visible:ring-blue-500
+            focus-visible:ring-ring
             ${className ?? ""}
           `}
         >

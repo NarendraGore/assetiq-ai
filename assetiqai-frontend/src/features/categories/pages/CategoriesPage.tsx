@@ -97,7 +97,11 @@ export default function CategoriesPage() {
         }}
         mode="create"
         loading={isCreating}
-        onSubmit={createCategory}
+        onSubmit={async (values) => {
+          await createCategory(values);
+
+          closeCreate();
+        }}
       />
 
       <CategoryDialog
@@ -106,12 +110,14 @@ export default function CategoriesPage() {
           if (!open) closeEdit();
         }}
         mode="edit"
-        defaultValues={selectedCategory}
+        defaultValues={selectedCategory ?? undefined}
         loading={isUpdating}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (!selectedCategory) return;
 
-          return updateCategory(selectedCategory.id, values);
+          await updateCategory(selectedCategory.id, values);
+
+          closeEdit();
         }}
       />
 
@@ -123,7 +129,7 @@ export default function CategoriesPage() {
         categoryName={selectedCategory?.name}
         loading={isDeleting}
         onDelete={() => {
-          if (!selectedCategory) return;
+          if (!selectedCategory) return Promise.resolve();
 
           return deleteCategory(selectedCategory.id);
         }}

@@ -1,42 +1,12 @@
-import type { ExportColumn } from "@/shared/export";
-import type { InventoryReport } from "../types";
+/**
+ * DEAD CODE — intentionally emptied.
+ *
+ * Duplicate of `features/reports/constants/inventoryExportColumns.ts`, which is
+ * the copy `InventoryReportTable` imports.
+ *
+ * The file is kept as an empty module rather than deleted so that any stray
+ * import fails loudly at the import site instead of resolving to stale UI.
+ * Safe to delete outright once you have confirmed nothing references it.
+ */
 
-export const inventoryExportColumns: ExportColumn<InventoryReport>[] = [
-  {
-    header: "Product",
-    key: "productName",
-  },
-  {
-    header: "SKU",
-    key: "sku",
-  },
-  {
-    header: "Category",
-    key: "categoryName",
-  },
-  {
-    header: "Supplier",
-    key: "supplierName",
-  },
-  {
-    header: "Current Stock",
-    key: "currentStock",
-  },
-  {
-    header: "Minimum Stock",
-    key: "minimumStock",
-  },
-  {
-    header: "Unit Price",
-    key: "unitPrice",
-  },
-  {
-    header: "Stock Value",
-    key: "stockValue",
-  },
-  {
-    header: "Active",
-    key: "isActive",
-    formatter: (value) => (value ? "Yes" : "No"),
-  },
-];
+export {};

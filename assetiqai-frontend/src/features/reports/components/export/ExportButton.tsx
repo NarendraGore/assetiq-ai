@@ -42,12 +42,12 @@ export default function ExportButton({
         transition-all
         duration-200
 
-        hover:border-blue-300
+        hover:border-primary/40
         hover:bg-muted
         hover:shadow-md
 
         focus-visible:ring-2
-        focus-visible:ring-blue-500/20
+        focus-visible:ring-ring/20
       "
     >
       {loading ? (
@@ -57,7 +57,7 @@ export default function ExportButton({
         </>
       ) : (
         <>
-          <Icon className="mr-2 h-4 w-4 text-blue-600" />
+          <Icon className="mr-2 h-4 w-4 text-primary" />
           {label}
         </>
       )}

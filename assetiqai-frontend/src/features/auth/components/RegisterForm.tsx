@@ -6,6 +6,8 @@ import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { getErrorMessage } from "@/lib/getErrorMessage";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -57,15 +59,15 @@ export default function RegisterForm() {
       toast.success("Account created successfully.");
 
       router.replace("/login");
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message ?? "Registration failed.");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Registration failed."));
     }
   };
 
   return (
-    <Card className="w-full max-w-lg rounded-3xl border border-slate-200 shadow-xl">
+    <Card className="w-full max-w-lg rounded-3xl border border-border shadow-xl">
       <CardHeader className="space-y-3 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
           <UserPlus className="h-6 w-6" />
         </div>
 
@@ -87,7 +89,7 @@ export default function RegisterForm() {
               <Label htmlFor="firstName">First Name</Label>
               <Input id="firstName" autoFocus {...register("firstName")} />
               {errors.firstName && (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-destructive">
                   {errors.firstName.message}
                 </p>
               )}
@@ -97,7 +99,7 @@ export default function RegisterForm() {
               <Label htmlFor="lastName">Last Name</Label>
               <Input id="lastName" {...register("lastName")} />
               {errors.lastName && (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-destructive">
                   {errors.lastName.message}
                 </p>
               )}
@@ -113,7 +115,7 @@ export default function RegisterForm() {
               {...register("email")}
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.email.message}
               </p>
             )}
@@ -127,7 +129,7 @@ export default function RegisterForm() {
               {...register("phoneNumber")}
             />
             {errors.phoneNumber && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.phoneNumber.message}
               </p>
             )}
@@ -154,7 +156,7 @@ export default function RegisterForm() {
             </div>
 
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.password.message}
               </p>
             )}
@@ -181,7 +183,7 @@ export default function RegisterForm() {
             </div>
 
             {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-500">
+              <p className="mt-1 text-sm text-destructive">
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -190,16 +192,16 @@ export default function RegisterForm() {
           <Button
             type="submit"
             disabled={isSubmitting || !isValid}
-            className="h-11 w-full rounded-xl bg-blue-600 hover:bg-blue-700"
+            className="h-11 w-full rounded-xl bg-primary hover:bg-primary/90"
           >
             {isSubmitting ? "Creating Account..." : "Create Account"}
           </Button>
 
-          <div className="text-center text-sm text-slate-600">
+          <div className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-medium text-blue-600 hover:text-blue-700"
+              className="font-medium text-primary hover:text-primary/80"
             >
               Sign In
             </Link>

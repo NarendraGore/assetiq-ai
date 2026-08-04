@@ -11,7 +11,13 @@ interface SummaryCardProps {
   title: string;
   value: string | number;
   icon: LucideIcon;
-  color: string;
+  /**
+   * Background utility for the icon tile. These stay fixed saturated hues in
+   * both themes on purpose — they are categorical accents (like chart series),
+   * not surfaces, so flipping them with the theme would lose the colour coding.
+   * The white glyph keeps AA contrast against every value used.
+   */
+  color?: string;
   subtitle?: string;
 }
 
@@ -19,15 +25,15 @@ function SummaryCard({
   title,
   value,
   icon: Icon,
-  color,
+  color = "bg-blue-600",
   subtitle = "Inventory Overview",
 }: SummaryCardProps) {
   return (
     <Card
       className={cn(
         "group overflow-hidden rounded-2xl",
-        "border border-slate-200 dark:border-slate-800",
-        "bg-white dark:bg-slate-900",
+        "border border-border",
+        "bg-card",
         "shadow-sm transition-all duration-300",
         "hover:-translate-y-1 hover:shadow-lg",
       )}
@@ -35,11 +41,11 @@ function SummaryCard({
       <CardContent className="p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-3">
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            <p className="text-sm font-medium text-muted-foreground">
               {title}
             </p>
 
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               {value}
             </h2>
 

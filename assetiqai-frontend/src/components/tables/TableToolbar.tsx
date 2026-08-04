@@ -37,7 +37,7 @@ export default function TableToolbar({
               value={search}
               placeholder="Search..."
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-9 bg-background border-border focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+              className="pl-9 bg-background border-border focus:ring-2 focus:ring-ring/30 focus:border-ring transition-all duration-200"
               aria-label="Search records"
             />
           </div>
@@ -66,7 +66,7 @@ export default function TableToolbar({
             size="icon"
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="border-border hover:border-blue-200 hover:bg-muted transition-all duration-200 dark:hover:border-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
+            className="border-border hover:border-primary/40 hover:bg-muted transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-border"
             aria-label={isRefreshing ? "Refreshing..." : "Refresh data"}
           >
             <RefreshCw

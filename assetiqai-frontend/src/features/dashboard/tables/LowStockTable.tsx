@@ -11,9 +11,12 @@ import {
 } from "@/components/tables";
 
 import { useLowStock } from "../hooks/useLowStock";
+import { useDashboardFilter } from "../hooks/useDashboardFilter";
 import { lowStockColumns } from "./columns/lowStockColumns";
 
 export default function LowStockTable() {
+  const { filter } = useDashboardFilter();
+
   const [search, setSearch] = useState("");
 
   const {
@@ -23,7 +26,7 @@ export default function LowStockTable() {
     error,
     refetch,
     isRefetching,
-  } = useLowStock();
+  } = useLowStock(filter);
 
   const filteredData = useMemo(() => {
     if (!search.trim()) return data;
@@ -75,12 +78,10 @@ export default function LowStockTable() {
             overflow-hidden
             rounded-2xl
             border
-            border-slate-200
-            bg-white
+            border-border
+            bg-card
             shadow-sm
             transition-all
-            dark:border-slate-800
-            dark:bg-slate-950
           "
         >
           <DataTable

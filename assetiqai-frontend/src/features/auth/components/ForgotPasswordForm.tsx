@@ -5,6 +5,8 @@ import { Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -53,17 +55,15 @@ export default function ForgotPasswordForm() {
       );
 
       reset();
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ?? "Unable to process your request.",
-      );
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Unable to process your request."));
     }
   };
 
   return (
-    <Card className="w-full max-w-md rounded-3xl border border-slate-200 shadow-xl">
+    <Card className="w-full max-w-md rounded-3xl border border-border shadow-xl">
       <CardHeader className="space-y-3 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
           <Mail className="h-6 w-6" />
         </div>
 
@@ -93,23 +93,23 @@ export default function ForgotPasswordForm() {
             />
 
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
+              <p className="text-sm text-destructive">{errors.email.message}</p>
             )}
           </div>
 
           <Button
             type="submit"
             disabled={isSubmitting || !isValid}
-            className="h-11 w-full rounded-xl bg-blue-600 hover:bg-blue-700"
+            className="h-11 w-full rounded-xl bg-primary hover:bg-primary/90"
           >
             {isSubmitting ? "Sending..." : "Send Reset Link"}
           </Button>
 
-          <div className="text-center text-sm text-slate-600">
+          <div className="text-center text-sm text-muted-foreground">
             Remember your password?{" "}
             <Link
               href="/login"
-              className="font-medium text-blue-600 hover:text-blue-700"
+              className="font-medium text-primary hover:text-primary/80"
             >
               Back to Login
             </Link>

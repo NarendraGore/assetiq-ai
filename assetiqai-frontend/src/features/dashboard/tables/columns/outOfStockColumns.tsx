@@ -20,7 +20,7 @@ export const outOfStockColumns: ColumnDef<OutOfStockProduct>[] = [
     header: "Product",
     cell: ({ row }) => (
       <div className="min-w-[180px]">
-        <p className="font-medium text-slate-900 dark:text-slate-100">
+        <p className="font-medium text-foreground">
           {row.original.productName}
         </p>
       </div>
@@ -83,13 +83,13 @@ export const outOfStockColumns: ColumnDef<OutOfStockProduct>[] = [
         variant="destructive"
         className="
           gap-1
-          border-red-200
-          bg-red-50
-          text-red-700
-          hover:bg-red-100
-          dark:border-red-800
-          dark:bg-red-950/40
-          dark:text-red-300
+          border-destructive/30
+          bg-destructive/10
+          text-destructive
+          hover:bg-destructive/10
+         
+         
+         
         "
       >
         <PackageX className="h-3.5 w-3.5" />

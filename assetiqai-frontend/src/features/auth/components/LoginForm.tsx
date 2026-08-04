@@ -1,15 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginSchema, type LoginFormData } from "../schemas/login.schema";
 import { useAuth } from "../hooks/useAuth";
+import { sanitizeReturnUrl } from "../utils/token";
+import { SESSION_END_MESSAGE } from "../constants/session";
+
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 import { toast } from "sonner";
 
@@ -25,11 +29,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginForm() {
+function LoginFormInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
+
+  /**
+   * Where to go after signing in. Set by middleware when a deep link was
+   * opened without a session — this is what makes a copied URL resume
+   * correctly in a different browser.
+   */
+  const returnUrl = sanitizeReturnUrl(searchParams.get("returnUrl"));
+
+  const reason = searchParams.get("reason");
+
+  /** Explain an involuntary sign-out instead of silently showing the form. */
+  useEffect(() => {
+    if (reason === "expired" || reason === "idle") {
+      toast.info(SESSION_END_MESSAGE[reason]);
+    }
+  }, [reason]);
 
   const {
     register,
@@ -50,34 +72,29 @@ export default function LoginForm() {
 
       toast.success("Welcome back!");
 
-      router.replace("/dashboard");
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ?? "Invalid email or password.",
-      );
+      router.replace(returnUrl);
+
+      // Ensure server components re-read the new session cookie.
+      router.refresh();
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Invalid email or password."));
     }
   };
 
   return (
-    <Card className="w-full max-w-md rounded-3xl border border-slate-200 bg-white shadow-xl">
+    <Card className="w-full max-w-md rounded-3xl border-border shadow-xl">
       <CardHeader className="space-y-3 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
           <ArrowRight className="h-6 w-6" />
         </div>
 
         <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
 
-        <CardDescription className="text-slate-500">
-          Sign in to continue to your dashboard.
-        </CardDescription>
+        <CardDescription>Sign in to continue to your dashboard.</CardDescription>
       </CardHeader>
 
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5"
-          noValidate
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
@@ -88,12 +105,16 @@ export default function LoginForm() {
               autoFocus
               autoComplete="email"
               placeholder="Enter your email"
-              className="h-11 rounded-xl border-slate-300 focus-visible:border-blue-500 focus-visible:ring-blue-500"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "email-error" : undefined}
+              className="h-11 rounded-xl"
               {...register("email")}
             />
 
             {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
+              <p id="email-error" role="alert" className="text-sm text-destructive">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -104,7 +125,7 @@ export default function LoginForm() {
 
               <Link
                 href="/forgot-password"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 Forgot password?
               </Link>
@@ -116,29 +137,39 @@ export default function LoginForm() {
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 placeholder="Enter your password"
-                className="h-11 rounded-xl border-slate-300 pr-11 focus-visible:border-blue-500 focus-visible:ring-blue-500"
+                aria-invalid={!!errors.password}
+                aria-describedby={
+                  errors.password ? "password-error" : undefined
+                }
+                className="h-11 rounded-xl pr-11"
                 {...register("password")}
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
+              <p
+                id="password-error"
+                role="alert"
+                className="text-sm text-destructive"
+              >
+                {errors.password.message}
+              </p>
             )}
           </div>
 
-          {/* Submit */}
           <Button
             type="submit"
             disabled={!isValid || isSubmitting}
-            className="h-11 w-full rounded-xl bg-blue-600 font-medium hover:bg-blue-700"
+            className="h-11 w-full rounded-xl font-medium"
           >
             {isSubmitting ? (
               <>
@@ -150,12 +181,11 @@ export default function LoginForm() {
             )}
           </Button>
 
-          {/* Register */}
-          <p className="text-center text-sm text-slate-600">
-            Dont have an account?{" "}
+          <p className="text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
-              className="font-semibold text-blue-600 hover:text-blue-700"
+              className="font-semibold text-primary hover:underline"
             >
               Create Account
             </Link>
@@ -163,5 +193,23 @@ export default function LoginForm() {
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+/**
+ * `useSearchParams` requires a Suspense boundary, otherwise the whole route
+ * opts out of static rendering and the build warns.
+ */
+export default function LoginForm() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[400px] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <LoginFormInner />
+    </Suspense>
   );
 }

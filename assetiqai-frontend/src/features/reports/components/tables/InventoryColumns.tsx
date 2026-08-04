@@ -40,7 +40,7 @@ function SortableHeader({ column, title }: SortableHeaderProps) {
         hover:bg-muted
         hover:text-foreground
         focus-visible:ring-2
-        focus-visible:ring-blue-500
+        focus-visible:ring-ring
       "
     >
       {title}

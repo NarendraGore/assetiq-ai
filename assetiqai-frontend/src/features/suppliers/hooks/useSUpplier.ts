@@ -1,22 +1,14 @@
-"use client";
-
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  getSuppliers,
-  SupplierListResponse,
-} from "../api/supplier.api";
+import { supplierApi } from "../api";
+import { supplierKeys } from "../constants";
 
-export function useSuppliers() {
-  return useQuery<SupplierListResponse>({
-    queryKey: ["suppliers"],
+export function useSupplier(id: string) {
+  return useQuery({
+    queryKey: supplierKeys.detail(id),
 
-    queryFn: getSuppliers,
+    queryFn: () => supplierApi.getSupplier(id),
 
-    staleTime: 1000 * 60 * 10,
-
-    gcTime: 1000 * 60 * 30,
-
-    refetchOnWindowFocus: false,
+    enabled: !!id,
   });
 }

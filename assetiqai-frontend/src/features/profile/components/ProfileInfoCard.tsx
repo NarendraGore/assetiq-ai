@@ -27,9 +27,9 @@ export default function ProfileInfoCard({
         shadow-sm
         transition-all
         duration-200
-        hover:border-blue-200
+        hover:border-primary/40
         hover:shadow-md
-        dark:hover:border-blue-800
+       
       "
     >
       <div
@@ -41,10 +41,10 @@ export default function ProfileInfoCard({
           items-center
           justify-center
           rounded-xl
-          bg-blue-50
-          text-blue-600
-          dark:bg-blue-950/30
-          dark:text-blue-400
+          bg-primary/10
+          text-primary
+         
+         
         "
       >
         <Icon className="h-5 w-5" />

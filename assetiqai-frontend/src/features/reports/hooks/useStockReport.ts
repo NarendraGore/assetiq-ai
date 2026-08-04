@@ -3,55 +3,31 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getStockReport } from "../api/stock-report.api";
+import { buildReportQueryParams } from "../api/report.api";
 
-import type {
-  ReportFilters,
-  StockReportResponse,
-} from "../types";
+import type { ReportFilters, StockReportResponse } from "../types";
 
 interface UseStockReportOptions {
   filters: ReportFilters;
 }
 
-export function useStockReport({
-  filters,
-}: UseStockReportOptions) {
-  const {
-    page,
-    pageSize,
-    search,
-    categoryId,
-    supplierId,
-    transactionType,
-    startDate,
-    endDate,
-    sortBy,
-    sortOrder,
-  } = filters;
+export function useStockReport({ filters }: UseStockReportOptions) {
+  /**
+   * Key off the exact query string that will be sent — see the note in
+   * `useInventoryReport` for why the hand-listed key was wrong.
+   */
+  const queryString = buildReportQueryParams(filters).toString();
 
   return useQuery<StockReportResponse>({
-    queryKey: [
-      "reports",
-      "stock",
-      page,
-      pageSize,
-      search,
-      categoryId,
-      supplierId,
-      transactionType,
-      startDate,
-      endDate,
-      sortBy,
-      sortOrder,
-    ],
+    queryKey: ["reports", "stock", queryString],
 
     queryFn: () =>
       getStockReport({
         filters,
-        pageIndex: page,
-        pageSize,
-        sortBy,
-        sortDirection: sortOrder,
+        pageIndex: filters.page,
+        pageSize: filters.pageSize,
+        sortBy: filters.sortBy,
+        sortDirection: filters.sortDirection,
       }),
 
     placeholderData: (previousData) => previousData,

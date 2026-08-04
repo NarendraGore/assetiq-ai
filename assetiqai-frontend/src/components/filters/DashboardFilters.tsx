@@ -1,34 +1,12 @@
-"use client";
+/**
+ * DEAD CODE — intentionally emptied.
+ *
+ * Superseded by `features/dashboard/components/filters/FilterTabs.tsx`, which
+ * is what `app/(app)/dashboard/page.tsx` renders.
+ *
+ * The file is kept as an empty module rather than deleted so that any stray
+ * import fails loudly at the import site instead of resolving to stale UI.
+ * Safe to delete outright once you have confirmed nothing references it.
+ */
 
-import { Button } from "@/components/ui/button";
-
-import {
-  DashboardFilter,
-  dashboardFilterOptions,
-} from "./dashboard-filter-options";
-
-interface DashboardFiltersProps {
-  value: DashboardFilter;
-
-  onChange: (value: DashboardFilter) => void;
-}
-
-export default function DashboardFilters({
-  value,
-  onChange,
-}: DashboardFiltersProps) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {dashboardFilterOptions.map((filter) => (
-        <Button
-          key={filter.value}
-          variant={value === filter.value ? "default" : "outline"}
-          onClick={() => onChange(filter.value)}
-          className="rounded-xl"
-        >
-          {filter.label}
-        </Button>
-      ))}
-    </div>
-  );
-}
+export {};

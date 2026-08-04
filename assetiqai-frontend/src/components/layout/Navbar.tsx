@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, Moon, Sun } from "lucide-react";
@@ -33,6 +33,17 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const { resolvedTheme, setTheme } = useTheme();
+
+  /**
+   * The server has no idea which theme will resolve, so the icon must not be
+   * rendered until after hydration — otherwise React logs a mismatch and the
+   * wrong icon flashes on first paint.
+   */
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const isDark = resolvedTheme === "dark";
 
   const breadcrumbs = useMemo(() => getBreadcrumbs(pathname), [pathname]);
 
@@ -109,7 +120,7 @@ export default function Navbar() {
             duration-200
             hover:bg-muted
             focus-visible:ring-2
-            focus-visible:ring-blue-500
+            focus-visible:ring-ring
           "
         >
           <Bell className="h-5 w-5 text-muted-foreground" />
@@ -118,18 +129,21 @@ export default function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Toggle Theme"
-          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+          onClick={() => setTheme(isDark ? "light" : "dark")}
           className="
             rounded-xl
             transition-all
             duration-200
             hover:bg-muted
             focus-visible:ring-2
-            focus-visible:ring-blue-500
+            focus-visible:ring-ring
           "
         >
-          {resolvedTheme === "dark" ? (
+          {/* Placeholder keeps layout stable until the theme is known. */}
+          {!mounted ? (
+            <span className="h-5 w-5" />
+          ) : isDark ? (
             <Sun className="h-5 w-5 text-amber-500" />
           ) : (
             <Moon className="h-5 w-5 text-muted-foreground" />

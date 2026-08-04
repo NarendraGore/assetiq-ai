@@ -47,7 +47,7 @@ export default function SidebarProfile() {
               className="cursor-pointer"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarFallback className="rounded-lg bg-blue-600 text-white font-semibold">
+                <AvatarFallback className="rounded-lg bg-primary text-primary-foreground font-semibold">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -78,7 +78,7 @@ export default function SidebarProfile() {
 
             <DropdownMenuItem
               onClick={handleLogout}
-              className="text-red-600 focus:text-red-600"
+              className="text-destructive focus:text-destructive"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
