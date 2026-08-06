@@ -16,16 +16,12 @@ public class JwtTokenService : IJwtTokenService
     public JwtTokenService(IConfiguration configuration)
     {
         _configuration = configuration;
-        Console.WriteLine("JwtTokenService Constructor Called");
     }
 
     public string GenerateAccessToken(User user)
     {
         var jwtSettings = _configuration.GetSection("Jwt");
         var secret = _configuration["Jwt:Secret"];
-
-
-        Console.WriteLine($"JWT Secret = '{secret}'");
 
         if (string.IsNullOrWhiteSpace(secret))
         {
