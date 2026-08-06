@@ -16,21 +16,21 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // Database
+
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(
                 configuration.GetConnectionString("DefaultConnection")));
 
-        // HttpContextAccessor for CurrentUserService
+
         services.AddHttpContextAccessor();
 
-        // Current user extraction from JWT claims
+
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        // Services
+
         RegisterServices(services);
 
-        // Repositories
+
         RegisterRepositories(services);
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -47,7 +47,7 @@ public static class DependencyInjection
 
         services.AddScoped<IDashboardRepository, DashboardRepository>();
 
-        // Password Hasher
+
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -72,18 +72,18 @@ public static class DependencyInjection
 
 
         return services;
-     
+
     }
 
     private static void RegisterServices(IServiceCollection services)
     {
-        // Register services here
+
     }
 
     private static void RegisterRepositories(IServiceCollection services)
     {
-        // Register repositories here
+
     }
 
-   
+
 }

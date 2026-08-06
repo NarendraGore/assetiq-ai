@@ -16,7 +16,7 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            // JwtTokenService stamps the user id into NameIdentifier (and Sub).
+
             var value = _httpContextAccessor.HttpContext?.User?
                 .FindFirstValue(ClaimTypes.NameIdentifier);
 

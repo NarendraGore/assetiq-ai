@@ -18,8 +18,6 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Configure Serilog
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
@@ -27,7 +25,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// Register Services
+
 builder.Services.AddControllers();
 
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -65,7 +63,7 @@ CategoryMapping.Register();
 SupplierMapping.Register();
 StockMapping.Register();
 
-// Build Application
+
 var app = builder.Build();
 
 if (app.Environment.IsProduction())
@@ -95,7 +93,7 @@ using (var scope = app.Services.CreateScope())
     await DbSeeder.SeedAsync(context);
 }
 
-// Configure HTTP Request Pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

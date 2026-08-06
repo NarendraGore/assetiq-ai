@@ -18,9 +18,6 @@ public class StockController : ControllerBase
         _stockService = stockService;
     }
 
-    /// <summary>
-    /// Get inventory with pagination.
-    /// </summary>
     [HttpGet("inventory")]
     public async Task<IActionResult> GetInventory(
         [FromQuery] PaginationRequest request)
@@ -30,9 +27,6 @@ public class StockController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Get stock transaction history.
-    /// </summary>
     [HttpGet("history")]
     public async Task<IActionResult> GetTransactionHistory(
         [FromQuery] StockFilterRequest request)
@@ -42,9 +36,6 @@ public class StockController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Get low stock products.
-    /// </summary>
     [HttpGet("low-stock")]
     public async Task<IActionResult> GetLowStock()
     {
@@ -53,9 +44,6 @@ public class StockController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Add stock.
-    /// </summary>
     [HttpPost("in")]
     [Authorize(Roles = "Admin,Manager,Employee")]
     public async Task<IActionResult> StockIn(
@@ -69,9 +57,6 @@ public class StockController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Remove stock.
-    /// </summary>
     [HttpPost("out")]
     [Authorize(Roles = "Admin,Manager,Employee")]
     public async Task<IActionResult> StockOut(
@@ -85,9 +70,6 @@ public class StockController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Adjust stock quantity.
-    /// </summary>
     [HttpPost("adjust")]
     [Authorize(Roles = "Admin,Manager,Employee")]
     public async Task<IActionResult> AdjustStock(

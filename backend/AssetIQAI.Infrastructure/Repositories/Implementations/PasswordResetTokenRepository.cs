@@ -20,8 +20,6 @@ public class PasswordResetTokenRepository
             .FirstOrDefaultAsync(x => x.TokenHash == tokenHash);
     }
 
-    // When a new reset is requested, any earlier unused tokens for the same
-    // user are marked used so only the most recent link can be redeemed.
     public async Task InvalidateActiveTokensForUserAsync(Guid userId)
     {
         var activeTokens = await _context.PasswordResetTokens

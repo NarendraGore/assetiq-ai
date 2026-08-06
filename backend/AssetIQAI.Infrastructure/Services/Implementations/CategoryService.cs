@@ -46,13 +46,13 @@ public class CategoryService : ICategoryService
 
     public async Task<CategoryResponse> CreateAsync(CreateCategoryRequest request)
     {
-        // Validation
+
         var existingCategory = await _categoryRepository.GetByNameAsync(request.Name);
 
         if (existingCategory != null)
             throw new Exception("Category already exists.");
 
-        // Mapping DTO -> Entity
+
         var category = request.Adapt<Category>();
 
         await _categoryRepository.AddAsync(category);
@@ -74,7 +74,7 @@ public class CategoryService : ICategoryService
         if (existingCategory != null && existingCategory.Id != id)
             throw new Exception("Category name already exists.");
 
-        // Update Entity
+
         request.Adapt(category);
 
         category.UpdatedAt = DateTime.UtcNow;
@@ -93,9 +93,6 @@ public class CategoryService : ICategoryService
         if (category == null)
             throw new Exception("Category not found.");
 
-        // Block deletion while products still reference this category. The FK is
-        // set to Restrict, so this would otherwise fail with an opaque DB error.
-        // InvalidOperationException maps to 409 Conflict in ExceptionMiddleware.
         if (await _categoryRepository.HasProductsAsync(id))
             throw new InvalidOperationException(
                 "Cannot delete this category because it has products assigned to it. Reassign or delete those products first.");

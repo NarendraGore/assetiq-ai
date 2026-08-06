@@ -28,8 +28,8 @@ public class CategoryRepository
 
     public async Task<bool> HasProductsAsync(Guid categoryId)
     {
-        // Query filter scopes this to the current user's products, matching the
-        // scope of the category being deleted.
+
+
         return await _context.Products
             .AnyAsync(p => p.CategoryId == categoryId);
     }

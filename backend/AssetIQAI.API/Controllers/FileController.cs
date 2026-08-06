@@ -18,9 +18,6 @@ public class FileController : ControllerBase
         _fileService = fileService;
     }
 
-    /// <summary>
-    /// Upload an image
-    /// </summary>
     [HttpPost("upload")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Upload([FromForm] FileUploadRequest request)
@@ -42,9 +39,6 @@ public class FileController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Delete uploaded image
-    /// </summary>
     [HttpDelete("{fileName}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

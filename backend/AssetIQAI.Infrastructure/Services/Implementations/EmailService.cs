@@ -32,9 +32,6 @@ public class EmailService : IEmailService
             "This link expires in 1 hour. If you did not request this, " +
             "you can safely ignore this email.";
 
-        // When SMTP is disabled/misconfigured, log the reset link so the flow can
-        // still be tested on a fresh clone. That fallback context is only useful
-        // for the reset email, so pass it through to the shared sender.
         await SendMessageAsync(
             toEmail,
             recipientName,
@@ -65,14 +62,6 @@ public class EmailService : IEmailService
                 "Registration success email skipped for {Email}.");
     }
 
-    /// <summary>
-    /// Shared MailKit send routine used by every outgoing email. Reads SMTP
-    /// settings via the indexer + manual parsing so we only depend on
-    /// Microsoft.Extensions.Configuration.Abstractions (the GetValue&lt;T&gt;
-    /// extension lives in the separate Configuration.Binder package). When SMTP
-    /// is disabled or not configured it logs a warning and returns instead of
-    /// throwing, so a fresh clone can still exercise the flow.
-    /// </summary>
     private async Task SendMessageAsync(
         string toEmail,
         string recipientName,
@@ -99,9 +88,6 @@ public class EmailService : IEmailService
         var username = emailSettings["Username"];
         var password = emailSettings["Password"];
 
-        // Many providers (Gmail in particular) require the From address to match
-        // the authenticated account, so fall back to the username when FromEmail
-        // is not set explicitly.
         var fromEmail = emailSettings["FromEmail"];
         if (string.IsNullOrWhiteSpace(fromEmail))
         {
@@ -112,8 +98,8 @@ public class EmailService : IEmailService
 
         if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(fromEmail))
         {
-            // Misconfigured: don't crash the request. Log so the flow still works,
-            // matching the disabled-email fallback above.
+
+
             _logger.LogWarning(
                 "Email is enabled but Host/FromEmail are not configured. " + fallbackLogMessage,
                 toEmail);
@@ -135,10 +121,6 @@ public class EmailService : IEmailService
 
         using var client = new SmtpClient();
 
-        // Port 587 => STARTTLS (connect plain, upgrade to TLS, then authenticate).
-        // Port 465 / UseSsl => implicit TLS on connect. This is exactly the
-        // handshake the built-in System.Net.Mail.SmtpClient gets wrong with Gmail
-        // ("5.7.0 Authentication Required"); MailKit performs it correctly.
         var secureOption = (useSsl || port == 465)
             ? SecureSocketOptions.SslOnConnect
             : SecureSocketOptions.StartTls;

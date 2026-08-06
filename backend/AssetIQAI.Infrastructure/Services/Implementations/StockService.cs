@@ -35,11 +35,11 @@ public class StockService : IStockService
         if (product == null)
             throw new Exception("Product not found.");
 
-        // Business Validation
+
         if (!product.IsActive)
             throw new Exception("Cannot perform stock operation on inactive product.");
 
-        // Optional validations (safe if navigation properties are loaded)
+
         if (product.Category == null)
             throw new Exception("Category not found.");
 
@@ -48,11 +48,11 @@ public class StockService : IStockService
 
         var previousQuantity = product.StockQuantity;
 
-        // Business Logic
+
         product.StockQuantity += request.Quantity;
         product.UpdatedAt = DateTime.UtcNow;
 
-        // DTO -> Entity
+
         var transaction = request.Adapt<StockTransaction>();
 
         transaction.ProductId = product.Id;
@@ -80,8 +80,6 @@ public class StockService : IStockService
 
         var product = await _productRepository.GetByIdWithDetailsAsync(request.ProductId);
 
-
-
         if (product == null)
             throw new Exception("Product not found.");
 
@@ -99,11 +97,11 @@ public class StockService : IStockService
 
         var previousQuantity = product.StockQuantity;
 
-        // Business Logic
+
         product.StockQuantity -= request.Quantity;
         product.UpdatedAt = DateTime.UtcNow;
 
-        // DTO -> Entity
+
         var transaction = request.Adapt<StockTransaction>();
 
         transaction.ProductId = product.Id;
@@ -137,11 +135,11 @@ public class StockService : IStockService
 
         var previousQuantity = product.StockQuantity;
 
-        // Business Logic
+
         product.StockQuantity = request.NewQuantity;
         product.UpdatedAt = DateTime.UtcNow;
 
-        // DTO -> Entity
+
         var transaction = request.Adapt<StockTransaction>();
 
         transaction.ProductId = product.Id;
