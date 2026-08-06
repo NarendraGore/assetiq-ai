@@ -52,11 +52,14 @@ public class EmailService : IEmailService
             "You can now sign in and start managing your assets and inventory.\n\n" +
             "If you did not create this account, please ignore this email.";
 
+        var frontendBaseUrl =
+            _configuration["App:FrontendBaseUrl"] ?? "http://localhost:3000";
+
         await SendMessageAsync(
             toEmail,
             recipientName,
             subject: "Welcome to AssetIQ AI",
-            htmlBody: BuildWelcomeHtmlBody(recipientName),
+            htmlBody: BuildWelcomeHtmlBody(recipientName, frontendBaseUrl),
             textBody: textBody,
             fallbackLogMessage:
                 "Registration success email skipped for {Email}.");
@@ -165,8 +168,12 @@ public class EmailService : IEmailService
 </div>";
     }
 
-    private static string BuildWelcomeHtmlBody(string recipientName)
+    private static string BuildWelcomeHtmlBody(
+        string recipientName,
+        string frontendBaseUrl)
     {
+        var loginUrl = $"{frontendBaseUrl.TrimEnd('/')}/login";
+
         return $@"
 <div style=""font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;"">
   <h2 style=""color: #111827;"">Welcome to AssetIQ AI 🎉</h2>
@@ -176,7 +183,7 @@ public class EmailService : IEmailService
     managing your assets and inventory with AssetIQ AI.
   </p>
   <p style=""text-align: center; margin: 32px 0;"">
-    <a href=""http://localhost:3000/login""
+    <a href=""{loginUrl}""
        style=""background-color: #4f46e5; color: #ffffff; padding: 12px 24px;
               border-radius: 8px; text-decoration: none; display: inline-block;"">
       Sign In
