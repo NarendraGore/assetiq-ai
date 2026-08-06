@@ -28,6 +28,16 @@ public class JwtTokenService : IJwtTokenService
             throw new Exception("JWT Secret is missing or empty.");
         }
 
+        double expirationMinutes = 60;
+
+        if (double.TryParse(
+                jwtSettings["AccessTokenExpirationMinutes"],
+                out var configuredExpirationMinutes) &&
+            configuredExpirationMinutes > 0)
+        {
+            expirationMinutes = configuredExpirationMinutes;
+        }
+
         var key = new SymmetricSecurityKey(
     Encoding.UTF8.GetBytes(secret));
 
@@ -50,8 +60,7 @@ public class JwtTokenService : IJwtTokenService
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(
-                Convert.ToDouble(jwtSettings["AccessTokenExpirationMinutes"])),
+            expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
