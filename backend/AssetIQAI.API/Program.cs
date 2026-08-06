@@ -58,18 +58,34 @@ builder.Services.AddScoped<IValidator<FileUploadRequest>, FileUploadValidator>()
 
 builder.Services.AddValidationServices();
 
-var uploadPath = Path.Combine(
-    builder.Environment.ContentRootPath,
-    "wwwroot",
-    "uploads");
-builder.Services.AddScoped<IFileService>(_ =>
-    new FileService(uploadPath));
+builder.Services.AddHttpClient<IFileService, FileService>();
 
 ProductMapping.Register();
+CategoryMapping.Register();
+SupplierMapping.Register();
 StockMapping.Register();
 
 // Build Application
 var app = builder.Build();
+
+if (app.Environment.IsProduction())
+{
+    var config = app.Services.GetRequiredService<IConfiguration>();
+
+    if (string.IsNullOrWhiteSpace(config.GetConnectionString("DefaultConnection")))
+    {
+        throw new InvalidOperationException(
+            "ConnectionStrings__DefaultConnection is not configured.");
+    }
+
+    var jwtSecret = config["Jwt:Secret"];
+
+    if (string.IsNullOrWhiteSpace(jwtSecret) || jwtSecret.Length < 32)
+    {
+        throw new InvalidOperationException(
+            "Jwt__Secret is not configured (minimum 32 characters).");
+    }
+}
 
 using (var scope = app.Services.CreateScope())
 {

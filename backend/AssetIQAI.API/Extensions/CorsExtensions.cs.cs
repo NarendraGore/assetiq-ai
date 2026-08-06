@@ -6,18 +6,31 @@ public static class CorsExtensions
     this IServiceCollection services,
     IConfiguration configuration)
     {
-        var origins = configuration
-            .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>() ?? [];
+        // Allow overriding the whole origin list from a single env var so the
+        // production frontend domain works without editing appsettings.
+        var origins = configuration["CORS_ORIGINS"]
+            ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            ?? configuration
+                .GetSection("Cors:AllowedOrigins")
+                .Get<string[]>()
+            ?? [];
 
         services.AddCors(options =>
         {
             options.AddPolicy("FrontendPolicy", policy =>
             {
-                policy.WithOrigins(origins)
-                      .AllowAnyHeader()
-                      .AllowAnyMethod()
-                      .AllowCredentials();
+                policy.AllowAnyHeader()
+                      .AllowAnyMethod();
+
+                if (origins.Length == 0)
+                {
+                    policy.AllowAnyOrigin();
+                }
+                else
+                {
+                    policy.WithOrigins(origins)
+                          .AllowCredentials();
+                }
             });
         });
 

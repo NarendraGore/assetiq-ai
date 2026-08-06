@@ -93,6 +93,13 @@ public class CategoryService : ICategoryService
         if (category == null)
             throw new Exception("Category not found.");
 
+        // Block deletion while products still reference this category. The FK is
+        // set to Restrict, so this would otherwise fail with an opaque DB error.
+        // InvalidOperationException maps to 409 Conflict in ExceptionMiddleware.
+        if (await _categoryRepository.HasProductsAsync(id))
+            throw new InvalidOperationException(
+                "Cannot delete this category because it has products assigned to it. Reassign or delete those products first.");
+
         _categoryRepository.DeleteAsync(category);
 
         await _categoryRepository.SaveChangesAsync();

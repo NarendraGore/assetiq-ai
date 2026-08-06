@@ -1,10 +1,15 @@
-﻿using AssetIQAI.API.DTOs.Auth;
+﻿using System.Security.Cryptography;
+using System.Text;
+using AssetIQAI.API.DTOs.Auth;
 using AssetIQAI.Domain.Entities;
 using AssetIQAI.Infrastructure.Data;
 using AssetIQAI.Infrastructure.Repositories.Implementations;
 using AssetIQAI.Infrastructure.Repositories.Interfaces;
 using AssetIQAI.Infrastructure.Security;
+using AssetIQAI.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace AssetIQAI.API.Services;
 
@@ -14,20 +19,32 @@ public class AuthService : IAuthService
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
+    private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
+    private readonly IEmailService _emailService;
+    private readonly IConfiguration _configuration;
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(
         IUserRepository userRepository,
         IPasswordHasher passwordHasher,
         IJwtTokenService jwtTokenService,
         IRefreshTokenRepository refreshTokenRepository,
-        ApplicationDbContext context)
+        IPasswordResetTokenRepository passwordResetTokenRepository,
+        IEmailService emailService,
+        IConfiguration configuration,
+        ApplicationDbContext context,
+        ILogger<AuthService> logger)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _jwtTokenService = jwtTokenService;
         _refreshTokenRepository = refreshTokenRepository;
+        _passwordResetTokenRepository = passwordResetTokenRepository;
+        _emailService = emailService;
+        _configuration = configuration;
         _context = context;
+        _logger = logger;
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
@@ -46,13 +63,13 @@ public class AuthService : IAuthService
             throw new Exception("Email already exists.");
         }
 
-        // Get Employee role
-        var employeeRole = await _context.Roles
-            .FirstOrDefaultAsync(r => r.Name == "Employee");
+        // Get Admin role
+        var adminRole = await _context.Roles
+            .FirstOrDefaultAsync(r => r.Name == "Admin");
 
-        if (employeeRole == null)
+        if (adminRole == null)
         {
-            throw new Exception("Employee role not found. Please run the role seeder.");
+            throw new Exception("Admin role not found. Please run the role seeder.");
         }
 
         // Create user
@@ -66,12 +83,27 @@ public class AuthService : IAuthService
             PasswordHash = _passwordHasher.HashPassword(request.Password),
             IsActive = true,
             EmailVerified = false,
-            RoleId = employeeRole.Id,
-            Role = employeeRole
+            RoleId = adminRole.Id,
+            Role = adminRole
         };
 
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
+
+        // Send welcome email (non-blocking: registration must succeed even if email fails)
+        try
+        {
+            await _emailService.SendRegistrationSuccessEmailAsync(
+                user.Email,
+                $"{user.FirstName} {user.LastName}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Failed to send registration email to {Email}. Registration succeeded.",
+                user.Email);
+        }
 
         // Generate Tokens
         var accessToken = _jwtTokenService.GenerateAccessToken(user);
@@ -89,7 +121,7 @@ public class AuthService : IAuthService
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Role = employeeRole.Name
+                Role = adminRole.Name
             }
         };
     }
@@ -192,6 +224,125 @@ public class AuthService : IAuthService
                 Role = user.Role?.Name ?? "Employee"
             }
         };
+    }
+
+    public async Task ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        var user = await _userRepository.GetByEmailAsync(request.Email);
+
+        // Non-enumeration: if the email is unknown or the account is inactive
+        // we return normally without revealing that. The controller always
+        // responds with the same generic message.
+        if (user == null || !user.IsActive)
+        {
+            return;
+        }
+
+        // Invalidate any earlier unused reset tokens so only the newest link works.
+        await _passwordResetTokenRepository
+            .InvalidateActiveTokensForUserAsync(user.Id);
+
+        // Raw token goes to the user; only its hash is stored.
+        var rawToken = GenerateSecureToken();
+
+        var resetToken = new PasswordResetToken
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            TokenHash = HashToken(rawToken),
+            ExpiryDate = DateTime.UtcNow.AddHours(1),
+            IsUsed = false
+        };
+
+        await _passwordResetTokenRepository.AddAsync(resetToken);
+        await _passwordResetTokenRepository.SaveChangesAsync();
+
+        var frontendBaseUrl =
+            _configuration["App:FrontendBaseUrl"] ?? "http://localhost:3000";
+
+        var resetLink =
+            $"{frontendBaseUrl.TrimEnd('/')}/reset-password?token={Uri.EscapeDataString(rawToken)}";
+
+        await _emailService.SendPasswordResetEmailAsync(
+            user.Email,
+            $"{user.FirstName} {user.LastName}",
+            resetLink);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        if (request.Password != request.ConfirmPassword)
+        {
+            throw new Exception("Password and Confirm Password do not match.");
+        }
+
+        var tokenHash = HashToken(request.Token);
+
+        var storedToken =
+            await _passwordResetTokenRepository.GetByTokenHashAsync(tokenHash);
+
+        if (storedToken == null || storedToken.IsUsed)
+        {
+            throw new Exception("Invalid or already used reset token.");
+        }
+
+        if (storedToken.ExpiryDate < DateTime.UtcNow)
+        {
+            throw new Exception("Reset token has expired.");
+        }
+
+        var user = storedToken.User
+            ?? await _userRepository.GetByIdAsync(storedToken.UserId);
+
+        if (user == null || !user.IsActive)
+        {
+            throw new Exception("Invalid or already used reset token.");
+        }
+
+        // Update password and consume the token in a single save.
+        user.PasswordHash = _passwordHasher.HashPassword(request.Password);
+        user.UpdatedAt = DateTime.UtcNow;
+
+        storedToken.IsUsed = true;
+
+        await _userRepository.UpdateAsync(user);
+        await _passwordResetTokenRepository.UpdateAsync(storedToken);
+        await _passwordResetTokenRepository.SaveChangesAsync();
+
+        // Revoke existing refresh tokens so old sessions can't outlive a reset.
+        var activeRefreshTokens = await _context.RefreshTokens
+            .Where(x => x.UserId == user.Id && !x.IsRevoked)
+            .ToListAsync();
+
+        foreach (var token in activeRefreshTokens)
+        {
+            token.IsRevoked = true;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    // Cryptographically strong, URL-safe token handed to the user.
+    private static string GenerateSecureToken()
+    {
+        var randomBytes = new byte[32];
+
+        using var rng = RandomNumberGenerator.Create();
+
+        rng.GetBytes(randomBytes);
+
+        return Convert.ToBase64String(randomBytes)
+            .Replace("+", "-")
+            .Replace("/", "_")
+            .Replace("=", string.Empty);
+    }
+
+    // Only the SHA-256 hash is ever stored, so a DB leak cannot reset passwords.
+    private static string HashToken(string token)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+
+        return Convert.ToHexString(bytes);
     }
 
     public async Task LogoutAsync(string refreshToken)

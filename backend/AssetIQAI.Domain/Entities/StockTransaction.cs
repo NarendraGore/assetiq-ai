@@ -3,7 +3,7 @@ using AssetIQAI.Domain.Enums;
 
 namespace AssetIQAI.Domain.Entities;
 
-public class StockTransaction : BaseEntity
+public class StockTransaction : BaseEntity, IOwnedEntity
 {
     public Guid ProductId { get; set; }
 
@@ -22,4 +22,6 @@ public class StockTransaction : BaseEntity
     public int NewQuantity { get; set; }
 
     public string? Remarks { get; set; }
+
+    public Guid OwnerId { get; set; }
 }

@@ -21,6 +21,12 @@ public static class DependencyInjection
             options.UseNpgsql(
                 configuration.GetConnectionString("DefaultConnection")));
 
+        // HttpContextAccessor for CurrentUserService
+        services.AddHttpContextAccessor();
+
+        // Current user extraction from JWT claims
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+
         // Services
         RegisterServices(services);
 
@@ -47,6 +53,10 @@ public static class DependencyInjection
         services.AddScoped<IJwtTokenService, JwtTokenService>();
 
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+        services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+
+        services.AddScoped<IEmailService, EmailService>();
 
         services.AddScoped<ICategoryService, CategoryService>();
 

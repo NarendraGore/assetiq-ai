@@ -1,4 +1,4 @@
-﻿
+
 namespace AssetIQAI.Infrastructure.DTOs.Supplier;
 public class SupplierResponse
 {
@@ -10,4 +10,5 @@ public class SupplierResponse
     public string Address { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public int ProductCount { get; set; }
 }

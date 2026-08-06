@@ -1,14 +1,29 @@
-﻿using AssetIQAI.Domain.Entities;
+using AssetIQAI.Domain.Common;
+using AssetIQAI.Domain.Entities;
+using AssetIQAI.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetIQAI.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    private readonly ICurrentUserService? _currentUserService;
+
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options,
+        ICurrentUserService? currentUserService = null)
         : base(options)
     {
+        _currentUserService = currentUserService;
     }
+
+    /// <summary>
+    /// The user the current request belongs to. Used by the global query filters
+    /// below so each user only ever sees their own rows. Null during startup
+    /// (seeding/migrations), which is fine because owned entities aren't queried
+    /// there.
+    /// </summary>
+    private Guid? CurrentUserId => _currentUserService?.UserId;
 
     // DbSets
     public DbSet<User> Users => Set<User>();
@@ -16,6 +31,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Supplier> Suppliers => Set<Supplier>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
     public DbSet<Product> Products => Set<Product>();
 
@@ -28,9 +45,27 @@ public class ApplicationDbContext : DbContext
         ConfigureUser(modelBuilder);
         ConfigureRole(modelBuilder);
         ConfigureRefreshToken(modelBuilder);
+        ConfigurePasswordResetToken(modelBuilder);
         ConfigureCategory(modelBuilder);
         ConfigureSupplier(modelBuilder);
         ConfigureProduct(modelBuilder);
+        ConfigureStockTransaction(modelBuilder);
+
+        // Per-user data isolation: every request only sees rows it owns.
+        // Applied here (not in the static Configure* helpers) because the filter
+        // must reference the instance-level CurrentUserId so EF re-evaluates it
+        // for each query.
+        modelBuilder.Entity<Category>()
+            .HasQueryFilter(x => x.OwnerId == CurrentUserId);
+
+        modelBuilder.Entity<Supplier>()
+            .HasQueryFilter(x => x.OwnerId == CurrentUserId);
+
+        modelBuilder.Entity<Product>()
+            .HasQueryFilter(x => x.OwnerId == CurrentUserId);
+
+        modelBuilder.Entity<StockTransaction>()
+            .HasQueryFilter(x => x.OwnerId == CurrentUserId);
 
         modelBuilder.ApplyConfigurationsFromAssembly(
        typeof(ApplicationDbContext).Assembly);
@@ -105,6 +140,23 @@ public class ApplicationDbContext : DbContext
         });
     }
 
+    private static void ConfigurePasswordResetToken(ModelBuilder modelBuilder)
+    {
+        // PasswordResetToken configuration
+        modelBuilder.Entity<PasswordResetToken>(entity =>
+        {
+            entity.Property(x => x.TokenHash)
+                .IsRequired();
+
+            entity.HasIndex(x => x.TokenHash);
+
+            entity.HasOne(x => x.User)
+                .WithMany(x => x.PasswordResetTokens)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
     private static void ConfigureCategory(ModelBuilder modelBuilder)
     {
         // Category configuration
@@ -117,7 +169,10 @@ public class ApplicationDbContext : DbContext
             entity.Property(x => x.Description)
                 .HasMaxLength(500);
 
-            entity.HasIndex(x => x.Name)
+            // Name is unique per owner, not globally, so two users can each have
+            // a "Electronics" category. The OwnerId prefix also serves the
+            // per-user query filter, so no separate OwnerId index is needed.
+            entity.HasIndex(x => new { x.OwnerId, x.Name })
                 .IsUnique();
         });
     }
@@ -139,6 +194,8 @@ public class ApplicationDbContext : DbContext
 
             entity.Property(x => x.Phone)
                 .HasMaxLength(20);
+
+            entity.HasIndex(x => x.OwnerId);
         });
     }
 
@@ -154,7 +211,9 @@ public class ApplicationDbContext : DbContext
                 .HasMaxLength(50)
                 .IsRequired();
 
-            entity.HasIndex(x => x.SKU)
+            // SKU is unique per owner, not globally. The OwnerId prefix also
+            // serves the per-user query filter.
+            entity.HasIndex(x => new { x.OwnerId, x.SKU })
                 .IsUnique();
 
             entity.Property(x => x.Description)
@@ -185,5 +244,46 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(x => x.SupplierId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+    }
+
+    private static void ConfigureStockTransaction(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<StockTransaction>(entity =>
+        {
+            entity.HasIndex(x => x.OwnerId);
+        });
+    }
+
+    // Stamp OwnerId on new owned entities so callers never have to remember to
+    // set it. Runs for both async and sync saves.
+    public override Task<int> SaveChangesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        ApplyOwnership();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override int SaveChanges()
+    {
+        ApplyOwnership();
+        return base.SaveChanges();
+    }
+
+    private void ApplyOwnership()
+    {
+        var userId = CurrentUserId;
+        if (!userId.HasValue)
+        {
+            return;
+        }
+
+        foreach (var entry in ChangeTracker.Entries<IOwnedEntity>())
+        {
+            if (entry.State == EntityState.Added &&
+                entry.Entity.OwnerId == Guid.Empty)
+            {
+                entry.Entity.OwnerId = userId.Value;
+            }
+        }
     }
 }
