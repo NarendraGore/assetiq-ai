@@ -20,7 +20,9 @@ export default function SuppliersPage() {
     setSearch,
     debouncedSearch,
     page,
+    setPage,
     pageSize,
+    setPageSize,
   } = useSupplierFilters();
 
   const { data, isLoading, isFetching, isError, refetch } = useSuppliers({
@@ -94,6 +96,12 @@ export default function SuppliersPage() {
         isSearchResult={!!debouncedSearch}
         onRetry={refetch}
         onAddSupplier={openCreate}
+        page={data?.page ?? page}
+        pageSize={data?.pageSize ?? pageSize}
+        totalCount={data?.totalCount ?? 0}
+        totalPages={data?.totalPages ?? 0}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
       />
 
       <SupplierDialog

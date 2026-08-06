@@ -88,9 +88,6 @@ function getTransactionLabel(type: number): string {
       return "Stock Out";
 
     case 3:
-      return "Transfer";
-
-    case 4:
       return "Adjustment";
 
     default:
@@ -107,9 +104,6 @@ function getTransactionClass(type: number): string {
       return "bg-destructive/10 text-destructive";
 
     case 3:
-      return "bg-primary/10 text-primary";
-
-    case 4:
       return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
 
     default:

@@ -4,8 +4,7 @@ import type { StockReport } from "../types";
 const transactionTypeMap: Record<number, string> = {
   1: "IN",
   2: "OUT",
-  3: "TRANSFER",
-  4: "ADJUSTMENT",
+  3: "ADJUSTMENT",
 };
 
 export const stockExportColumns: ExportColumn<StockReport>[] = [

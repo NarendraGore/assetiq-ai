@@ -15,35 +15,29 @@ import DashboardSkeleton from "../skeleton/DashboardSkeleton";
 import EmptyState from "../EmptyState";
 
 import { DataTableError } from "@/components/tables";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 import { useDashboardSummary } from "../../hooks/useDashboardSummary";
-import { useInventorySummary } from "../../hooks/useInventorySummary";
 import { useDashboardFilter } from "../../hooks/useDashboardFilter";
 
 export default function DashboardSummary() {
   const { filter } = useDashboardFilter();
 
+  /**
+   * All six cards come from this one endpoint. Sourcing half of them from
+   * `inventory-summary` doubled the request count for values the summary
+   * already returns, and meant either call failing blanked the whole row.
+   */
   const {
     data: summary,
-    isLoading: summaryLoading,
-    isError: summaryError,
-    error: summaryErrorMessage,
-    refetch: refetchSummary,
+    isPending,
+    isError,
+    error,
+    refetch,
   } = useDashboardSummary(filter);
 
-  const {
-    data: inventory,
-    isLoading: inventoryLoading,
-    isError: inventoryError,
-    error: inventoryErrorMessage,
-    refetch: refetchInventory,
-  } = useInventorySummary(filter);
-
-  const isLoading = summaryLoading || inventoryLoading;
-  const isError = summaryError || inventoryError;
-
   const cards = useMemo(() => {
-    if (!summary || !inventory) return [];
+    if (!summary) return [];
 
     return [
       {
@@ -69,14 +63,14 @@ export default function DashboardSummary() {
       },
       {
         title: "Inventory Value",
-        value: `₹${inventory.totalInventoryValue.toLocaleString("en-IN")}`,
+        value: formatCurrency(summary.totalInventoryValue),
         subtitle: "Current Stock Value",
         icon: Wallet,
         color: "bg-violet-600",
       },
       {
         title: "Low Stock",
-        value: inventory.lowStockProducts,
+        value: summary.lowStockProducts,
         subtitle: "Requires Attention",
         icon: AlertTriangle,
         color: "bg-amber-500",
@@ -89,9 +83,14 @@ export default function DashboardSummary() {
         color: "bg-red-600",
       },
     ];
-  }, [summary, inventory]);
+  }, [summary]);
 
-  if (isLoading) {
+  /**
+   * `isPending` rather than `isLoading`: with `keepPreviousData` the previous
+   * period stays on screen while the next one loads, so the skeleton only
+   * shows on the very first fetch instead of on every tab switch.
+   */
+  if (isPending) {
     return <DashboardSkeleton />;
   }
 
@@ -99,19 +98,14 @@ export default function DashboardSummary() {
     return (
       <DataTableError
         message={
-          (summaryErrorMessage as Error)?.message ||
-          (inventoryErrorMessage as Error)?.message ||
-          "Failed to load dashboard summary."
+          (error as Error)?.message || "Failed to load dashboard summary."
         }
-        onRetry={() => {
-          void refetchSummary();
-          void refetchInventory();
-        }}
+        onRetry={() => void refetch()}
       />
     );
   }
 
-  if (!summary || !inventory || cards.length === 0) {
+  if (!summary || cards.length === 0) {
     return (
       <EmptyState
         title="No Dashboard Data"

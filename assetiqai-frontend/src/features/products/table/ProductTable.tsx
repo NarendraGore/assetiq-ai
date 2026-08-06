@@ -24,7 +24,7 @@ import { ProductListItem } from "../types";
 
 import ProductSkeleton from "./ProductSkeleton";
 import ProductEmptyState from "./ProductEmptyState";
-import ProductServerPagination from "./ProductServerPagination";
+import ServerPagination from "@/components/tables/ServerPagination";
 
 interface ProductTableProps {
   columns: ColumnDef<ProductListItem>[];
@@ -163,7 +163,7 @@ export default function ProductTable({
         </Table>
       </div>
 
-      <ProductServerPagination
+      <ServerPagination
         page={page}
         pageSize={pageSize}
         totalCount={totalCount}

@@ -181,6 +181,7 @@ export default function ProductsPage() {
         }}
         mode="edit"
         productId={selectedProduct?.id}
+        fallback={selectedProduct}
         loading={isUpdating}
         onSubmit={async (values) => {
           if (!selectedProduct) return;
@@ -198,6 +199,7 @@ export default function ProductsPage() {
           if (!open) closeView();
         }}
         productId={selectedProduct?.id}
+        fallback={selectedProduct}
         onEdit={() => {
           if (!selectedProduct) return;
 

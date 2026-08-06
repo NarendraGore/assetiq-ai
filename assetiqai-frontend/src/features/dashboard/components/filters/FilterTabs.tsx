@@ -51,7 +51,11 @@ export default function FilterTabs() {
   };
 
   return (
-    <div className="inline-flex rounded-xl border bg-card p-1 shadow-sm">
+    <div
+      role="tablist"
+      aria-label="Dashboard period"
+      className="inline-flex rounded-xl border bg-card p-1 shadow-sm"
+    >
       {filters.map((item, index) => {
         const active = filter === item.value;
 

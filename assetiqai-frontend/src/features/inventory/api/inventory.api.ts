@@ -1,26 +1,78 @@
-import api from "@/lib/axios";
+import axios from "@/lib/axios";
 
-export const getInventory = async () => {
-  const res = await api.get("/api/v1/stock/inventory");
-  return res.data;
-};
+import type {
+  InventoryItem,
+  InventoryListResponse,
+  InventoryQueryParams,
+  StockAdjustRequest,
+  StockHistoryQueryParams,
+  StockHistoryResponse,
+  StockInRequest,
+  StockMutationResponse,
+  StockOutRequest,
+} from "../types";
 
-export const getStockHistory = async () => {
-  const res = await api.get("/api/v1/stock/history");
-  return res.data;
-};
+/**
+ * `NEXT_PUBLIC_API_URL` already ends in `/api`, so paths here start at `/v1`.
+ * (The earlier stub used `/api/v1/...`, which resolved to `/api/api/v1/...`.)
+ */
+const BASE_URL = "/v1/stock";
 
-export const stockIn = async (data: { productId: string; quantity: number; remarks?: string }) => {
-  const res = await api.post("/api/v1/stock/in", data);
-  return res.data;
-};
+export const inventoryApi = {
+  async getInventory(
+    params: InventoryQueryParams = {},
+  ): Promise<InventoryListResponse> {
+    const { data } = await axios.get<InventoryListResponse>(
+      `${BASE_URL}/inventory`,
+      { params },
+    );
 
-export const stockOut = async (data: { productId: string; quantity: number; remarks?: string }) => {
-  const res = await api.post("/api/v1/stock/out", data);
-  return res.data;
-};
+    return data;
+  },
 
-export const adjustStock = async (data: { productId: string; newQuantity: number; remarks?: string }) => {
-  const res = await api.post("/api/v1/stock/adjust", data);
-  return res.data;
+  async getLowStock(): Promise<InventoryItem[]> {
+    const { data } = await axios.get<InventoryItem[]>(`${BASE_URL}/low-stock`);
+
+    return data;
+  },
+
+  async getStockHistory(
+    params: StockHistoryQueryParams = {},
+  ): Promise<StockHistoryResponse> {
+    const { data } = await axios.get<StockHistoryResponse>(
+      `${BASE_URL}/history`,
+      { params },
+    );
+
+    return data;
+  },
+
+  async stockIn(payload: StockInRequest): Promise<StockMutationResponse> {
+    const { data } = await axios.post<StockMutationResponse>(
+      `${BASE_URL}/in`,
+      payload,
+    );
+
+    return data;
+  },
+
+  async stockOut(payload: StockOutRequest): Promise<StockMutationResponse> {
+    const { data } = await axios.post<StockMutationResponse>(
+      `${BASE_URL}/out`,
+      payload,
+    );
+
+    return data;
+  },
+
+  async adjustStock(
+    payload: StockAdjustRequest,
+  ): Promise<StockMutationResponse> {
+    const { data } = await axios.post<StockMutationResponse>(
+      `${BASE_URL}/adjust`,
+      payload,
+    );
+
+    return data;
+  },
 };

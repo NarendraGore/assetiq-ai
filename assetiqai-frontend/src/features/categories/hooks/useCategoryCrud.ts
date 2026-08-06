@@ -2,6 +2,9 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
+
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 import {
   CreateCategoryRequest,
@@ -23,9 +26,9 @@ export function useCategoryCrud() {
         await createMutation.mutateAsync(values);
 
         toast.success("Category created successfully.");
-      } catch {
-        toast.error("Failed to create category.");
-        throw new Error();
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Failed to create category."));
+        throw error;
       }
     },
     [createMutation]
@@ -43,9 +46,9 @@ export function useCategoryCrud() {
         });
 
         toast.success("Category updated successfully.");
-      } catch {
-        toast.error("Failed to update category.");
-        throw new Error();
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Failed to update category."));
+        throw error;
       }
     },
     [updateMutation]
@@ -57,9 +60,16 @@ export function useCategoryCrud() {
         await deleteMutation.mutateAsync(id);
 
         toast.success("Category deleted successfully.");
-      } catch {
-        toast.error("Failed to delete category.");
-        throw new Error();
+      } catch (error) {
+        // A 409 means the category is still referenced by products; surface the
+        // backend's explanation rather than a generic failure.
+        const fallback =
+          error instanceof AxiosError && error.response?.status === 409
+            ? "This category is in use by one or more products and cannot be deleted."
+            : "Failed to delete category.";
+
+        toast.error(getErrorMessage(error, fallback));
+        throw error;
       }
     },
     [deleteMutation]

@@ -1,5 +1,7 @@
 import api from "@/lib/axios";
 
+import type { DashboardFilter } from "../types/dashboard-filter.types";
+
 import type {
   DashboardSummary,
   InventorySummary,
@@ -13,107 +15,110 @@ import type {
 } from "../types/dashboard.types";
 
 /**
- * Dashboard Summary
+ * Every dashboard endpoint is scoped by the same period selector, so the
+ * filter travels as a `period` query param. Keep the param name in sync with
+ * the API's DashboardController — an unbound name is ignored server-side,
+ * which would silently return unfiltered data.
  */
-export async function getSummary(): Promise<DashboardSummary> {
+const periodParams = (filter: DashboardFilter) => ({
+  params: { period: filter },
+});
+
+export async function getSummary(
+  filter: DashboardFilter,
+): Promise<DashboardSummary> {
   const { data } = await api.get<DashboardSummary>(
-    "/Dashboard/summary"
+    "/Dashboard/summary",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Inventory Summary
- */
-export async function getInventorySummary(): Promise<InventorySummary> {
+export async function getInventorySummary(
+  filter: DashboardFilter,
+): Promise<InventorySummary> {
   const { data } = await api.get<InventorySummary>(
-    "/Dashboard/inventory-summary"
+    "/Dashboard/inventory-summary",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Category Distribution Chart
- */
-export async function getCategoryChart(): Promise<CategoryChart[]> {
+export async function getCategoryChart(
+  filter: DashboardFilter,
+): Promise<CategoryChart[]> {
   const { data } = await api.get<CategoryChart[]>(
-    "/Dashboard/category-chart"
+    "/Dashboard/category-chart",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Supplier Distribution Chart
- */
-export async function getSupplierChart(): Promise<SupplierChart[]> {
+export async function getSupplierChart(
+  filter: DashboardFilter,
+): Promise<SupplierChart[]> {
   const { data } = await api.get<SupplierChart[]>(
-    "/Dashboard/supplier-chart"
+    "/Dashboard/supplier-chart",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Inventory Trend Chart
- */
-export async function getInventoryChart(): Promise<InventoryChart[]> {
+export async function getInventoryChart(
+  filter: DashboardFilter,
+): Promise<InventoryChart[]> {
   const { data } = await api.get<InventoryChart[]>(
-    "/Dashboard/inventory-chart"
+    "/Dashboard/inventory-chart",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Stock In vs Stock Out Chart
- */
-export async function getStockChart(): Promise<StockChart[]> {
+export async function getStockChart(
+  filter: DashboardFilter,
+): Promise<StockChart[]> {
   const { data } = await api.get<StockChart[]>(
-    "/Dashboard/stock-chart"
+    "/Dashboard/stock-chart",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Recent Transactions
- */
-export async function getRecentTransactions(): Promise<
-  RecentTransaction[]
-> {
+export async function getRecentTransactions(
+  filter: DashboardFilter,
+): Promise<RecentTransaction[]> {
   const { data } = await api.get<RecentTransaction[]>(
-    "/Dashboard/recent-transactions"
+    "/Dashboard/recent-transactions",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Low Stock Products
- */
-export async function getLowStock(): Promise<
-  LowStockProduct[]
-> {
+export async function getLowStock(
+  filter: DashboardFilter,
+): Promise<LowStockProduct[]> {
   const { data } = await api.get<LowStockProduct[]>(
-    "/Dashboard/low-stock"
+    "/Dashboard/low-stock",
+    periodParams(filter),
   );
 
   return data;
 }
 
-/**
- * Out Of Stock Products
- */
-export async function getOutOfStock(): Promise<
-  OutOfStockProduct[]
-> {
+export async function getOutOfStock(
+  filter: DashboardFilter,
+): Promise<OutOfStockProduct[]> {
   const { data } = await api.get<OutOfStockProduct[]>(
-    "/Dashboard/out-of-stock"
+    "/Dashboard/out-of-stock",
+    periodParams(filter),
   );
 
   return data;
 }
-

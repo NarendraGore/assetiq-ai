@@ -32,9 +32,14 @@ export default function DeleteSupplierDialog({
   onDelete,
 }: DeleteSupplierDialogProps) {
   const handleDelete = async () => {
-    await onDelete();
+    try {
+      await onDelete();
 
-    onOpenChange(false);
+      onOpenChange(false);
+    } catch {
+      // Keep the dialog open so the user sees the failure (surfaced via toast)
+      // and can retry or cancel — e.g. a 409 when the supplier is still in use.
+    }
   };
 
   return (

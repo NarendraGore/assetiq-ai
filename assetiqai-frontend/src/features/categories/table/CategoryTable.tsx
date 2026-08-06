@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Category } from "../types";
 
 import DataTable from "@/components/tables/DataTable";
+import ServerPagination from "@/components/tables/ServerPagination";
 
 import CategorySkeleton from "./CategorySkeleton";
 import CategoryEmptyState from "./CategoryEmptyState";
@@ -24,6 +25,15 @@ interface CategoryTableProps {
   onAddCategory?: () => void;
 
   onRowClick?: (category: Category) => void;
+
+  /* Server pagination — the API returns one page at a time, so paging must be
+     driven by the response rather than the TanStack row model. */
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 }
 
 export default function CategoryTable({
@@ -41,6 +51,13 @@ export default function CategoryTable({
   onAddCategory,
 
   onRowClick,
+
+  page,
+  pageSize,
+  totalCount,
+  totalPages,
+  onPageChange,
+  onPageSizeChange,
 }: CategoryTableProps) {
   if (isLoading) {
     return <CategorySkeleton />;
@@ -82,9 +99,17 @@ export default function CategoryTable({
         columns={columns}
         data={data}
         enableSorting
-        enablePagination
-        pageSize={10}
+        enablePagination={false}
         onRowClick={onRowClick}
+      />
+
+      <ServerPagination
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </section>
   );

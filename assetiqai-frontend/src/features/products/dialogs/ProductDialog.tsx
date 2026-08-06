@@ -14,6 +14,8 @@ import { ProductFormValues } from "../validation";
 
 import { ProductForm } from "../form/ProductForm";
 import { useProduct } from "../hooks/useProduct";
+import { useProductLookups } from "../hooks/useProductLookups";
+import type { Product, ProductListItem } from "../types";
 
 interface ProductDialogProps {
   open: boolean;
@@ -23,6 +25,12 @@ interface ProductDialogProps {
 
   /** Required for edit mode — the full product detail is fetched by id. */
   productId?: string;
+
+  /**
+   * The list row that triggered the edit. Used to backfill category/supplier
+   * names the detail endpoint may omit, so the selects seed correctly.
+   */
+  fallback?: ProductListItem | null;
 
   loading?: boolean;
 
@@ -36,6 +44,8 @@ export default function ProductDialog({
   mode = "create",
 
   productId,
+
+  fallback,
 
   loading = false,
 
@@ -55,6 +65,32 @@ export default function ProductDialog({
     isLoading: isLoadingDetail,
     isError: isDetailError,
   } = useProduct(shouldFetch ? (productId as string) : "");
+
+  const { categoryOptions, supplierOptions } = useProductLookups();
+
+  /**
+   * Backfill the category/supplier names onto the detail record. The detail
+   * endpoint sometimes returns them null even though the ids are present, so we
+   * derive the display name from the clicked list row first, then from the
+   * loaded lookup lists by id. This keeps the edit selects populated.
+   */
+  const resolvedProduct: Product | undefined = product
+    ? {
+        ...product,
+        categoryName:
+          product.categoryName ||
+          fallback?.categoryName ||
+          categoryOptions.find((option) => option.id === product.categoryId)
+            ?.name ||
+          null,
+        supplierName:
+          product.supplierName ||
+          fallback?.supplierName ||
+          supplierOptions.find((option) => option.id === product.supplierId)
+            ?.name ||
+          null,
+      }
+    : undefined;
 
   return (
     <Dialog
@@ -102,7 +138,7 @@ export default function ProductDialog({
         ) : (
           <ProductForm
             mode={mode}
-            defaultValues={isCreate ? null : product}
+            defaultValues={isCreate ? null : resolvedProduct}
             loading={loading}
             onSubmit={onSubmit}
             onCancel={() => onOpenChange(false)}
