@@ -22,10 +22,37 @@ const authRoutes = [
   "/reset-password",
 ];
 
+function isTokenValid(token: string): boolean {
+  try {
+    const payload = token.split(".")[1];
+
+    if (!payload) return false;
+
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+
+    const padded = normalized.padEnd(
+      normalized.length + ((4 - (normalized.length % 4)) % 4),
+      "=",
+    );
+
+    const decoded = JSON.parse(atob(padded));
+
+    const exp = typeof decoded?.exp === "number" ? decoded.exp * 1000 : null;
+
+    if (exp === null) return false;
+
+    return Date.now() < exp - 10_000;
+  } catch {
+    return false;
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   const token = request.cookies.get("accessToken")?.value;
+
+  const hasValidSession = !!token && isTokenValid(token);
 
   const isProtected = protectedRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
@@ -38,21 +65,23 @@ export function middleware(request: NextRequest) {
   // Landing page always resolves to a real destination.
   if (pathname === "/") {
     return NextResponse.redirect(
-      new URL(token ? "/dashboard" : "/login", request.url),
+      new URL(hasValidSession ? "/dashboard" : "/login", request.url),
     );
   }
 
   /**
-   * No session on a protected route: send to login and remember the
+   * No (valid) session on a protected route: send to login and remember the
    * destination so the user resumes exactly where they intended.
-   * This is what makes a copied URL work in a second browser.
+   * An expired/invalid cookie is cleared so it cannot cause a redirect loop.
    */
-  if (isProtected && !token) {
+  if (isProtected && !hasValidSession) {
     const loginUrl = new URL("/login", request.url);
 
     loginUrl.searchParams.set("returnUrl", `${pathname}${search}`);
 
     const response = NextResponse.redirect(loginUrl);
+
+    if (token) response.cookies.delete("accessToken");
 
     // Protected HTML must never be cached by a shared proxy.
     response.headers.set("Cache-Control", "no-store, must-revalidate");
@@ -61,7 +90,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Already signed in: keep the user out of the auth screens.
-  if (isAuthRoute && token) {
+  if (isAuthRoute && hasValidSession) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
