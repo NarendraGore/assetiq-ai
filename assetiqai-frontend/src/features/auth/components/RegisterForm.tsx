@@ -74,7 +74,8 @@ export default function RegisterForm() {
         <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
 
         <CardDescription>
-          Register to access the Asset Management Dashboard.
+          Join ASSETIQ AI and start managing your assets with intelligent
+          insights.
         </CardDescription>
       </CardHeader>
 

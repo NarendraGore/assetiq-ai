@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import "./globals.css";
 
 import { Geist } from "next/font/google";
@@ -10,6 +12,15 @@ import { AuthProvider } from "@/features/auth/context/AuthProvider";
 import QueryProvider from "@/providers/QueryProvider";
 
 import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: {
+    default: "ASSETIQ AI",
+    template: "%s | ASSETIQ AI",
+  },
+  description:
+    "ASSETIQ AI - Intelligent asset and inventory management platform.",
+};
 
 const geist = Geist({
   subsets: ["latin"],
