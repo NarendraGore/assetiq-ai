@@ -20,7 +20,11 @@ public class GenericRepository<T> : IGenericRepository<T>
 
     public async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.FindAsync(id);
+        // IMPORTANT: DbSet.FindAsync bypasses global query filters, which would
+        // let a user fetch another user's owned entity by guessing its id. Use
+        // FirstOrDefaultAsync instead so the per-user filter applies.
+        return await _dbSet
+            .FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
     }
 
     public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(
@@ -77,8 +81,10 @@ public class GenericRepository<T> : IGenericRepository<T>
 
     public async Task<bool> ExistsAsync(Guid id)
     {
-        var entity = await _dbSet.FindAsync(id);
-        return entity != null;
+        // Respect global query filters (see GetByIdAsync) so existence checks are
+        // scoped to the current user, not the whole table.
+        return await _dbSet
+            .AnyAsync(e => EF.Property<Guid>(e, "Id") == id);
     }
 
     public async Task SaveChangesAsync()

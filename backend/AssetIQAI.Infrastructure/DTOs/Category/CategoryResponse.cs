@@ -1,4 +1,4 @@
-﻿namespace AssetIQAI.Infrastructure.DTOs.Category;
+namespace AssetIQAI.Infrastructure.DTOs.Category;
 
 public class CategoryResponse
 {
@@ -11,4 +11,6 @@ public class CategoryResponse
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public int ProductCount { get; set; }
 }

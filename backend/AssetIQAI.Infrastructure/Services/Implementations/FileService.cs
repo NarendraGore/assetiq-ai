@@ -1,11 +1,19 @@
-﻿using AssetIQAI.Infrastructure.Services.Interfaces;
+﻿using System.Net.Http.Headers;
+using AssetIQAI.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace AssetIQAI.Infrastructure.Services.Implementations;
 
+/// <summary>
+/// Stores images in Supabase Storage via its REST API. Local disk is
+/// ephemeral on free hosts (Railway, Render), so images must live in
+/// durable object storage instead.
+/// </summary>
 public class FileService : IFileService
 {
-    private readonly string _uploadPath;
+    private readonly HttpClient _httpClient;
+    private readonly string _bucket;
 
     private static readonly string[] AllowedExtensions =
     {
@@ -17,14 +25,23 @@ public class FileService : IFileService
 
     private const long MaxFileSize = 5 * 1024 * 1024;
 
-    public FileService(string uploadPath)
+    public FileService(HttpClient httpClient, IConfiguration configuration)
     {
-        _uploadPath = uploadPath;
+        var url = configuration["Supabase:Url"];
+        var serviceRoleKey = configuration["Supabase:ServiceRoleKey"];
+        _bucket = configuration["Supabase:Bucket"] ?? "uploads";
 
-        if (!Directory.Exists(_uploadPath))
+        if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(serviceRoleKey))
         {
-            Directory.CreateDirectory(_uploadPath);
+            throw new InvalidOperationException(
+                "Supabase Storage is not configured. Set Supabase__Url, " +
+                "Supabase__ServiceRoleKey and (optionally) Supabase__Bucket.");
         }
+
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri(url.TrimEnd('/') + "/");
+        _httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", serviceRoleKey);
     }
 
     public async Task<string> UploadImageAsync(IFormFile file)
@@ -38,13 +55,27 @@ public class FileService : IFileService
 
         var fileName = $"{Guid.NewGuid()}{extension}";
 
-        var filePath = Path.Combine(_uploadPath, fileName);
+        await using var stream = file.OpenReadStream();
 
-        using var stream = new FileStream(filePath, FileMode.Create);
+        using var content = new StreamContent(stream);
 
-        await file.CopyToAsync(stream);
+        content.Headers.ContentType =
+            new MediaTypeHeaderValue(GetMimeType(extension));
 
-        return $"/uploads/{fileName}";
+        var response = await _httpClient.PostAsync(
+            $"storage/v1/object/{_bucket}/{fileName}",
+            content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+
+            throw new Exception(
+                $"Failed to upload image: {(int)response.StatusCode} {body}");
+        }
+
+        // Bucket is expected to be public, so the URL is directly fetchable.
+        return $"{_httpClient.BaseAddress}storage/v1/object/public/{_bucket}/{fileName}";
     }
 
     public async Task<bool> DeleteImageAsync(string fileName)
@@ -52,16 +83,39 @@ public class FileService : IFileService
         if (string.IsNullOrWhiteSpace(fileName))
             return false;
 
-        fileName = Path.GetFileName(fileName);
+        var objectName = ResolveObjectName(fileName);
 
-        var filePath = Path.Combine(_uploadPath, fileName);
-
-        if (!File.Exists(filePath))
+        if (string.IsNullOrWhiteSpace(objectName))
             return false;
 
-        await Task.Run(() => File.Delete(filePath));
+        var response = await _httpClient.DeleteAsync(
+            $"storage/v1/object/{_bucket}/{objectName}");
 
-        return true;
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            return false;
+
+        return response.IsSuccessStatusCode;
+    }
+
+    /// <summary>
+    /// Accepts either a bare file name ("abc.png") or a full Supabase public
+    /// URL, and reduces it to the object name stored under the bucket.
+    /// </summary>
+    private static string? ResolveObjectName(string value)
+    {
+        var uri = Uri.TryCreate(value, UriKind.Absolute, out var parsed)
+            ? parsed
+            : null;
+
+        var raw = uri?.AbsolutePath ?? value;
+
+        const string marker = "/object/";
+
+        var idx = raw.LastIndexOf(marker, StringComparison.OrdinalIgnoreCase);
+
+        var path = idx >= 0 ? raw[(idx + marker.Length)..] : raw.TrimStart('/');
+
+        return Path.GetFileName(path);
     }
 
     private static void ValidateFile(IFormFile file)
@@ -74,4 +128,13 @@ public class FileService : IFileService
         if (file.Length > MaxFileSize)
             throw new Exception("Image size cannot exceed 5 MB.");
     }
+
+    private static string GetMimeType(string extension) =>
+        extension.ToLowerInvariant() switch
+        {
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".webp" => "image/webp",
+            _ => "application/octet-stream"
+        };
 }

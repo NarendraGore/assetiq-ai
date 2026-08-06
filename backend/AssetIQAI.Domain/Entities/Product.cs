@@ -2,7 +2,7 @@
 
 namespace AssetIQAI.Domain.Entities;
 
-public class Product : BaseEntity
+public class Product : BaseEntity, IOwnedEntity
 {
     public string Name { get; set; } = string.Empty;
 
@@ -27,6 +27,8 @@ public class Product : BaseEntity
     public string? ImageUrl { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    public Guid OwnerId { get; set; }
 
     public ICollection<StockTransaction> StockTransactions { get; set; }
     = new List<StockTransaction>();

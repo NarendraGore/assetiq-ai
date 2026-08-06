@@ -50,7 +50,7 @@ public class CategoriesController : ControllerBase
     }
 
     // PUT: api/v1/categories/{id}
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,Employee")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
@@ -62,7 +62,7 @@ public class CategoriesController : ControllerBase
     }
 
     // DELETE: api/v1/categories/{id}
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,Employee")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

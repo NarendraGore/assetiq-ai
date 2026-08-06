@@ -2,11 +2,13 @@
 
 namespace AssetIQAI.Domain.Entities;
 
-public class Category : BaseEntity
+public class Category : BaseEntity, IOwnedEntity
 {
     public string Name { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
+
+    public Guid OwnerId { get; set; }
 
     public ICollection<Product> Products { get; set; }
     = new List<Product>();

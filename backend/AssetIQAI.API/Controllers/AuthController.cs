@@ -112,6 +112,34 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+    {
+        await _authService.ForgotPasswordAsync(request);
+
+        // Always the same response, regardless of whether the email exists,
+        // to avoid leaking which emails are registered.
+        return Ok(new
+        {
+            Success = true,
+            Message = "If an account exists for that email, a password reset link has been sent."
+        });
+    }
+
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    {
+        await _authService.ResetPasswordAsync(request);
+
+        return Ok(new
+        {
+            Success = true,
+            Message = "Password has been reset successfully."
+        });
+    }
+
     [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(LogoutRequest request)
