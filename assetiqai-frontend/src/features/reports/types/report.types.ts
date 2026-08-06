@@ -19,7 +19,8 @@ export type DateRangePreset =
   | "last7Days"
   | "last30Days"
   | "thisMonth"
-  | "thisYear";
+  | "thisYear"
+  | "allTime";
 
 /**
  * Resolves a preset into concrete boundaries. Kept next to the type so the
@@ -51,6 +52,11 @@ export function resolveDateRangePreset(preset: DateRangePreset): DateRange {
       from.setMonth(0, 1);
       from.setHours(0, 0, 0, 0);
       break;
+
+    case "allTime":
+      // No boundaries: the caller drops fromDate/toDate entirely so the API
+      // returns every transaction regardless of date.
+      return {};
   }
 
   return { from, to };
@@ -71,6 +77,9 @@ export interface Sorting {
 }
 
 export type ExportType = "csv" | "excel";
+
+/** Which report tab is currently active. */
+export type ReportTab = "inventory" | "stock";
 
 export interface ReportResponse<T> {
   data: T[];

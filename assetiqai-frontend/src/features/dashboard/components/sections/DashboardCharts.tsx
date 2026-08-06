@@ -13,8 +13,8 @@ export default function DashboardCharts() {
   return (
     <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <SectionCard
-        title="Inventory Trend"
-        description="Inventory value by product"
+        title="Top Products by Inventory Value"
+        description="Top 10 products by inventory value"
       >
         <InventoryTrendChart />
       </SectionCard>

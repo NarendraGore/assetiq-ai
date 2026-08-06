@@ -4,10 +4,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { InventoryReportTable, StockReportTable } from "./tables";
 
-export default function ReportSection() {
+import type { ReportTab } from "../types";
+
+interface ReportSectionProps {
+  activeTab: ReportTab;
+  onTabChange: (tab: ReportTab) => void;
+}
+
+export default function ReportSection({
+  activeTab,
+  onTabChange,
+}: ReportSectionProps) {
   return (
     <section className="space-y-6">
-      <Tabs defaultValue="inventory" className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => onTabChange(value as ReportTab)}
+        className="space-y-6"
+      >
         <TabsList
           className="
             h-11

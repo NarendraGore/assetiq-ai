@@ -141,6 +141,7 @@ export default function SuppliersPage() {
           if (!open) closeDelete();
         }}
         supplierName={selectedSupplier?.companyName}
+        productCount={selectedSupplier?.productCount}
         loading={isDeleting}
         onDelete={async () => {
           if (!selectedSupplier) return;

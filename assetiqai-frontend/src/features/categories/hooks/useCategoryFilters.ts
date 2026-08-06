@@ -40,12 +40,18 @@ export function useCategoryFilters() {
 
   /**
    * Keep state synced with browser navigation
+   *
+   * The URL/searchParams are an external system (next/navigation). Mirroring
+   * them into local input state so the user can keep typing mid-session is an
+   * intentional subscribe-and-copy pattern, not a derived-value computation.
    */
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- URL is an external system we subscribe to */
     setSearchState(urlSearch);
     setDebouncedSearch(urlSearch);
     setPageState(urlPage);
     setPageSizeState(urlPageSize);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [urlSearch, urlPage, urlPageSize]);
 
   /**
@@ -63,6 +69,7 @@ export function useCategoryFilters() {
    * Reset page whenever the debounced search changes.
    */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a new search must always start on page one
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch]);
 

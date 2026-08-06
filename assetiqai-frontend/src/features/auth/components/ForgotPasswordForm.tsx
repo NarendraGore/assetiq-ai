@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/getErrorMessage";
 import { z } from "zod";
 
+import * as authApi from "../api/auth.api";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,13 +44,7 @@ export default function ForgotPasswordForm() {
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
-      /**
-       * TODO
-       *
-       * await authApi.forgotPassword(data);
-       */
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await authApi.forgotPassword({ email: data.email });
 
       toast.success(
         "If an account exists, a password reset link has been sent.",

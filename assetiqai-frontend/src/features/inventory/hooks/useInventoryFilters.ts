@@ -57,6 +57,7 @@ export function useInventoryFilters(): InventoryFiltersState {
 
   /* Any new search resets to the first page. */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a new search must always start on page one
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch]);
 

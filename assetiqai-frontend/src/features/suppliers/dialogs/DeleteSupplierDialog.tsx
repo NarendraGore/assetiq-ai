@@ -16,11 +16,9 @@ import {
 interface DeleteSupplierDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-
   supplierName?: string;
-
+  productCount?: number;
   loading?: boolean;
-
   onDelete: () => Promise<void>;
 }
 
@@ -28,9 +26,12 @@ export default function DeleteSupplierDialog({
   open,
   onOpenChange,
   supplierName,
+  productCount = 0,
   loading = false,
   onDelete,
 }: DeleteSupplierDialogProps) {
+  const hasProducts = productCount > 0;
+
   const handleDelete = async () => {
     try {
       await onDelete();
@@ -61,23 +62,36 @@ export default function DeleteSupplierDialog({
             <AlertDialogTitle>Delete Supplier</AlertDialogTitle>
           </div>
 
-          <AlertDialogDescription>
-            Are you sure you want to permanently delete{" "}
-            <span className="font-semibold text-foreground">
-              {supplierName ?? "this supplier"}
-            </span>
-            ?
-            <br />
-            <br />
-            This action cannot be undone.
-          </AlertDialogDescription>
+          {hasProducts ? (
+            <div className="rounded-md border border-amber-500/20 bg-amber-500/10 p-3 text-sm text-amber-700 dark:text-amber-400">
+              <p className="font-semibold">Deletion Prevented</p>
+              <p className="mt-1 text-xs leading-relaxed">
+                This supplier <span className="font-semibold">{supplierName}</span> cannot be deleted because it is assigned to{" "}
+                <span className="font-semibold text-foreground">{productCount}</span> product(s).
+                Please reassign or delete those products before removing this supplier.
+              </p>
+            </div>
+          ) : (
+            <AlertDialogDescription>
+              Are you sure you want to permanently delete{" "}
+              <span className="font-semibold text-foreground">
+                {supplierName ?? "this supplier"}
+              </span>
+              ?
+              <br />
+              <br />
+              This action cannot be undone.
+            </AlertDialogDescription>
+          )}
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>
+            {hasProducts ? "Close" : "Cancel"}
+          </AlertDialogCancel>
 
           <AlertDialogAction
-            disabled={loading}
+            disabled={loading || hasProducts}
             onClick={async (event) => {
               event.preventDefault();
 
@@ -89,6 +103,8 @@ export default function DeleteSupplierDialog({
               hover:bg-destructive/90
               focus-visible:ring-2
               focus-visible:ring-destructive
+              disabled:opacity-50
+              disabled:pointer-events-none
             "
           >
             {loading ? (

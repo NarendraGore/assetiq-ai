@@ -30,6 +30,7 @@ const DEFAULT_OPTIONS: DateRangeOption[] = [
   { label: "Last 30 Days", value: "last30Days" },
   { label: "This Month", value: "thisMonth" },
   { label: "This Year", value: "thisYear" },
+  { label: "All Time", value: "allTime" },
 ];
 
 export default function DateRangeFilter({

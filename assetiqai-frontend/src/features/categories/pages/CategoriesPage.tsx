@@ -140,6 +140,7 @@ export default function CategoriesPage() {
           if (!open) closeDelete();
         }}
         categoryName={selectedCategory?.name}
+        productCount={selectedCategory?.productCount}
         loading={isDeleting}
         onDelete={() => {
           if (!selectedCategory) return Promise.resolve();

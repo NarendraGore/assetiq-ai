@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, Suspense, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Loader2 } from "lucide-react";
@@ -18,6 +18,20 @@ interface ProtectedRouteProps {
  * cannot render protected UI.
  */
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <ProtectedRouteInner>{children}</ProtectedRouteInner>
+    </Suspense>
+  );
+}
+
+function ProtectedRouteInner({ children }: ProtectedRouteProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

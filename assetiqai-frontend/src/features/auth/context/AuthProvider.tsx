@@ -136,12 +136,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
    * Restore the session on first paint. A token that is present but already
    * expired is treated as no session at all, which avoids a doomed request
    * and a redirect flash.
+   *
+   * Note: the restore must run in an effect, not lazy `useState` init, because
+   * localStorage is unavailable during the server render and the initial
+   * state has to match on both sides to avoid a hydration mismatch.
    */
   useEffect(() => {
     const storedUser = getUser();
     const token = getAccessToken();
 
     if (storedUser && token && !isTokenExpired(token)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration-safe session restore, see above
       setUser(storedUser);
       scheduleExpiry(token);
       resetIdleTimer();

@@ -5,6 +5,7 @@ export interface Supplier {
   email: string | null;
   phone: string | null;
   address: string | null;
+  productCount?: number;
   createdAt: string;
   updatedAt: string;
 }

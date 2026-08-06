@@ -118,6 +118,7 @@ export function useHistoryFilters(): HistoryFiltersState {
 
   /* Any filter change resets to the first page. */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a new filter must always start on page one
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch, transactionType, dateRangePreset]);
 

@@ -10,7 +10,13 @@ import FilterActions from "./FilterActions";
 import { useCategories } from "@/features/categories/hooks/useCategories";
 import { useSuppliers } from "@/features/suppliers/hooks";
 
-export default function ReportFilterBar() {
+import type { ReportTab } from "../../types";
+
+interface ReportFilterBarProps {
+  activeTab: ReportTab;
+}
+
+export default function ReportFilterBar({ activeTab }: ReportFilterBarProps) {
   const { data: categoriesData, isLoading: categoriesLoading } =
     useCategories();
 
@@ -71,7 +77,8 @@ export default function ReportFilterBar() {
               loading={suppliersLoading}
             />
 
-            <TransactionTypeFilter />
+            {/* TransactionType only affects the Stock Report, so hide it on Inventory */}
+            {activeTab === "stock" && <TransactionTypeFilter />}
           </div>
 
           <DateRangeFilter />

@@ -9,6 +9,9 @@ interface UpdateProductPayload {
   data: UpdateProductRequest;
 }
 
+import { categoryKeys } from "@/features/categories/constants";
+import { supplierKeys } from "@/features/suppliers/constants";
+
 export function useUpdateProduct() {
   const queryClient = useQueryClient();
 
@@ -23,6 +26,14 @@ export function useUpdateProduct() {
 
       queryClient.invalidateQueries({
         queryKey: productKeys.detail(variables.id),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: categoryKeys.all,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: supplierKeys.all,
       });
     },
   });
