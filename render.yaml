@@ -1,0 +1,53 @@
+# Render Blueprint — deploy the backend on the free tier.
+# 1. Connect this repo to Render.
+# 2. Set the `sync: false` variables in the Render dashboard (secrets are
+#    never committed). For a free Postgres, create a "PostgreSQL" add-on and
+#    paste its Internal Connection String into ConnectionStrings__DefaultConnection.
+services:
+  - type: web
+    name: assetiqai-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Secret
+        sync: false
+      - key: Jwt__Issuer
+        value: AssetIQAI
+      - key: Jwt__Audience
+        value: AssetIQAIUsers
+      # Comma-separated list of frontend origins, e.g. https://assetiqai.vercel.app
+      - key: CORS_ORIGINS
+        sync: false
+      - key: App__FrontendBaseUrl
+        sync: false
+      # Supabase Storage (bucket must exist and be public)
+      - key: Supabase__Url
+        sync: false
+      - key: Supabase__ServiceRoleKey
+        sync: false
+      - key: Supabase__Bucket
+        value: uploads
+      # SMTP (Gmail app password or any provider)
+      - key: Email__Enabled
+        value: "false"
+      - key: Email__Host
+        value: smtp.gmail.com
+      - key: Email__Port
+        value: "587"
+      - key: Email__Username
+        sync: false
+      - key: Email__Password
+        sync: false
+      - key: Email__FromEmail
+        sync: false
+      - key: Email__FromName
+        value: AssetIQ AI

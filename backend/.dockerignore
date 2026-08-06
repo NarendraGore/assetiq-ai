@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+logs/
+TestResults/
+**/*.user
+**/*.suo
+Dockerfile
+.dockerignore
+render.yaml
+*.md

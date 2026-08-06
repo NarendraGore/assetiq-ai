@@ -97,9 +97,6 @@ public class SupplierService : ISupplierService
         if (supplier == null)
             throw new Exception("Supplier not found.");
 
-        // Block deletion while products still reference this supplier. The FK is
-        // set to Restrict, so this would otherwise fail with an opaque DB error.
-        // InvalidOperationException maps to 409 Conflict in ExceptionMiddleware.
         if (await _supplierRepository.HasProductsAsync(id))
             throw new InvalidOperationException(
                 "Cannot delete this supplier because it has products assigned to it. Reassign or delete those products first.");
