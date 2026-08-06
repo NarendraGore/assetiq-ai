@@ -5,11 +5,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace AssetIQAI.Infrastructure.Services.Implementations;
 
-/// <summary>
-/// Stores images in Supabase Storage via its REST API. Local disk is
-/// ephemeral on free hosts (Railway, Render), so images must live in
-/// durable object storage instead.
-/// </summary>
 public class FileService : IFileService
 {
     private readonly HttpClient _httpClient;
@@ -74,7 +69,7 @@ public class FileService : IFileService
                 $"Failed to upload image: {(int)response.StatusCode} {body}");
         }
 
-        // Bucket is expected to be public, so the URL is directly fetchable.
+
         return $"{_httpClient.BaseAddress}storage/v1/object/public/{_bucket}/{fileName}";
     }
 
@@ -97,10 +92,6 @@ public class FileService : IFileService
         return response.IsSuccessStatusCode;
     }
 
-    /// <summary>
-    /// Accepts either a bare file name ("abc.png") or a full Supabase public
-    /// URL, and reduces it to the object name stored under the bucket.
-    /// </summary>
     private static string? ResolveObjectName(string value)
     {
         var uri = Uri.TryCreate(value, UriKind.Absolute, out var parsed)

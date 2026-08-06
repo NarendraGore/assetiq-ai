@@ -97,7 +97,7 @@ public class ProductRepository
             .Include(x => x.Category)
             .Include(x => x.Supplier);
 
-        // Search
+
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             query = query.Where(x =>
@@ -105,14 +105,14 @@ public class ProductRepository
                 x.SKU.Contains(request.Search));
         }
 
-        // Category Filter
+
         if (request.CategoryId.HasValue)
         {
             query = query.Where(x =>
                 x.CategoryId == request.CategoryId.Value);
         }
 
-        // Supplier Filter
+
         if (request.SupplierId.HasValue)
         {
             query = query.Where(x =>

@@ -18,7 +18,7 @@ public class CategoriesController : ControllerBase
         _categoryService = categoryService;
     }
 
-    // GET: api/v1/categories
+
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationRequest request)
     {
@@ -27,7 +27,7 @@ public class CategoriesController : ControllerBase
         return Ok(categories);
     }
 
-    // GET: api/v1/categories/{id}
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -36,7 +36,7 @@ public class CategoriesController : ControllerBase
         return Ok(category);
     }
 
-    // POST: api/v1/categories
+
     [Authorize(Roles = "Admin,Manager,Employee")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateCategoryRequest request)
@@ -49,7 +49,7 @@ public class CategoriesController : ControllerBase
             category);
     }
 
-    // PUT: api/v1/categories/{id}
+
     [Authorize(Roles = "Admin,Manager,Employee")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
@@ -61,7 +61,7 @@ public class CategoriesController : ControllerBase
         return Ok(category);
     }
 
-    // DELETE: api/v1/categories/{id}
+
     [Authorize(Roles = "Admin,Manager,Employee")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)

@@ -6,8 +6,8 @@ public static class CorsExtensions
     this IServiceCollection services,
     IConfiguration configuration)
     {
-        // Allow overriding the whole origin list from a single env var so the
-        // production frontend domain works without editing appsettings.
+
+
         var origins = configuration["CORS_ORIGINS"]
             ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             ?? configuration

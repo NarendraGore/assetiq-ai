@@ -18,3 +18,7 @@ logs/
 
 TestResults/
 .vs
+
+# Local image uploads (Supabase Storage is used in production)
+AssetIQAI.API/wwwroot/uploads/
+**/wwwroot/uploads/

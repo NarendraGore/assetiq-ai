@@ -17,15 +17,9 @@ public class ApplicationDbContext : DbContext
         _currentUserService = currentUserService;
     }
 
-    /// <summary>
-    /// The user the current request belongs to. Used by the global query filters
-    /// below so each user only ever sees their own rows. Null during startup
-    /// (seeding/migrations), which is fine because owned entities aren't queried
-    /// there.
-    /// </summary>
     private Guid? CurrentUserId => _currentUserService?.UserId;
 
-    // DbSets
+
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Category> Categories => Set<Category>();
@@ -51,10 +45,6 @@ public class ApplicationDbContext : DbContext
         ConfigureProduct(modelBuilder);
         ConfigureStockTransaction(modelBuilder);
 
-        // Per-user data isolation: every request only sees rows it owns.
-        // Applied here (not in the static Configure* helpers) because the filter
-        // must reference the instance-level CurrentUserId so EF re-evaluates it
-        // for each query.
         modelBuilder.Entity<Category>()
             .HasQueryFilter(x => x.OwnerId == CurrentUserId);
 
@@ -71,7 +61,7 @@ public class ApplicationDbContext : DbContext
        typeof(ApplicationDbContext).Assembly);
     }
 
-    // 👇 Write it here
+
     private static void ConfigureUser(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
@@ -106,7 +96,7 @@ public class ApplicationDbContext : DbContext
 
     private static void ConfigureRole(ModelBuilder modelBuilder)
     {
-        // Role configuration
+
 
         modelBuilder.Entity<Role>(entity =>
         {
@@ -124,7 +114,7 @@ public class ApplicationDbContext : DbContext
 
     private static void ConfigureRefreshToken(ModelBuilder modelBuilder)
     {
-        // RefreshToken configuration
+
         modelBuilder.Entity<RefreshToken>(entity =>
         {
             entity.Property(x => x.Token)
@@ -142,7 +132,7 @@ public class ApplicationDbContext : DbContext
 
     private static void ConfigurePasswordResetToken(ModelBuilder modelBuilder)
     {
-        // PasswordResetToken configuration
+
         modelBuilder.Entity<PasswordResetToken>(entity =>
         {
             entity.Property(x => x.TokenHash)
@@ -159,7 +149,7 @@ public class ApplicationDbContext : DbContext
 
     private static void ConfigureCategory(ModelBuilder modelBuilder)
     {
-        // Category configuration
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.Property(x => x.Name)
@@ -169,9 +159,6 @@ public class ApplicationDbContext : DbContext
             entity.Property(x => x.Description)
                 .HasMaxLength(500);
 
-            // Name is unique per owner, not globally, so two users can each have
-            // a "Electronics" category. The OwnerId prefix also serves the
-            // per-user query filter, so no separate OwnerId index is needed.
             entity.HasIndex(x => new { x.OwnerId, x.Name })
                 .IsUnique();
         });
@@ -179,7 +166,7 @@ public class ApplicationDbContext : DbContext
 
     private static void ConfigureSupplier(ModelBuilder modelBuilder)
     {
-        // Supplier configuration
+
         modelBuilder.Entity<Supplier>(entity =>
         {
             entity.Property(x => x.CompanyName)
@@ -211,8 +198,6 @@ public class ApplicationDbContext : DbContext
                 .HasMaxLength(50)
                 .IsRequired();
 
-            // SKU is unique per owner, not globally. The OwnerId prefix also
-            // serves the per-user query filter.
             entity.HasIndex(x => new { x.OwnerId, x.SKU })
                 .IsUnique();
 
@@ -254,8 +239,6 @@ public class ApplicationDbContext : DbContext
         });
     }
 
-    // Stamp OwnerId on new owned entities so callers never have to remember to
-    // set it. Runs for both async and sync saves.
     public override Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default)
     {

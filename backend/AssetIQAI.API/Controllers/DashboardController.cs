@@ -21,9 +21,6 @@ public class DashboardController : ControllerBase
         _dashboardService = dashboardService;
     }
 
-    /// <summary>
-    /// Inventory Summary Dashboard
-    /// </summary>
     [HttpGet("inventory-summary")]
     public async Task<ActionResult<InventorySummaryResponse>> GetInventorySummary()
     {
@@ -32,9 +29,6 @@ public class DashboardController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Recent Stock Transactions
-    /// </summary>
     [HttpGet("recent-transactions")]
     public async Task<ActionResult<IEnumerable<StockTransactionResponse>>> GetRecentTransactions()
     {
@@ -43,9 +37,6 @@ public class DashboardController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Low Stock Products
-    /// </summary>
     [HttpGet("low-stock")]
     public async Task<ActionResult<IEnumerable<InventoryResponse>>> GetLowStock()
     {
@@ -54,9 +45,6 @@ public class DashboardController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Out Of Stock Products
-    /// </summary>
     [HttpGet("out-of-stock")]
     public async Task<ActionResult<IEnumerable<InventoryResponse>>> GetOutOfStock()
     {
@@ -111,6 +99,6 @@ public class DashboardController : ControllerBase
     {
         var result = await _dashboardService.GetInventoryChartsAsync();
         return Ok(result);
-        
+
     }
 }

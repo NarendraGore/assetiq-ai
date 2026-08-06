@@ -29,8 +29,8 @@ public class SupplierRepository
 
     public async Task<bool> HasProductsAsync(Guid supplierId)
     {
-        // Query filter scopes this to the current user's products, matching the
-        // scope of the supplier being deleted.
+
+
         return await _context.Products
             .AnyAsync(p => p.SupplierId == supplierId);
     }

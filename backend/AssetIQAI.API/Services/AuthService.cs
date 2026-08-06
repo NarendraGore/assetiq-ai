@@ -49,13 +49,13 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
     {
-        // Validate password confirmation
+
         if (request.Password != request.ConfirmPassword)
         {
             throw new Exception("Password and Confirm Password do not match.");
         }
 
-        // Check if email already exists
+
         var existingUser = await _userRepository.GetByEmailAsync(request.Email);
 
         if (existingUser != null)
@@ -63,7 +63,7 @@ public class AuthService : IAuthService
             throw new Exception("Email already exists.");
         }
 
-        // Get Admin role
+
         var adminRole = await _context.Roles
             .FirstOrDefaultAsync(r => r.Name == "Admin");
 
@@ -72,7 +72,7 @@ public class AuthService : IAuthService
             throw new Exception("Admin role not found. Please run the role seeder.");
         }
 
-        // Create user
+
         var user = new User
         {
             Id = Guid.NewGuid(),
@@ -90,7 +90,7 @@ public class AuthService : IAuthService
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
 
-        // Send welcome email (non-blocking: registration must succeed even if email fails)
+
         try
         {
             await _emailService.SendRegistrationSuccessEmailAsync(
@@ -105,7 +105,7 @@ public class AuthService : IAuthService
                 user.Email);
         }
 
-        // Generate Tokens
+
         var accessToken = _jwtTokenService.GenerateAccessToken(user);
         var refreshToken = _jwtTokenService.GenerateRefreshToken();
 
@@ -230,19 +230,16 @@ public class AuthService : IAuthService
     {
         var user = await _userRepository.GetByEmailAsync(request.Email);
 
-        // Non-enumeration: if the email is unknown or the account is inactive
-        // we return normally without revealing that. The controller always
-        // responds with the same generic message.
         if (user == null || !user.IsActive)
         {
             return;
         }
 
-        // Invalidate any earlier unused reset tokens so only the newest link works.
+
         await _passwordResetTokenRepository
             .InvalidateActiveTokensForUserAsync(user.Id);
 
-        // Raw token goes to the user; only its hash is stored.
+
         var rawToken = GenerateSecureToken();
 
         var resetToken = new PasswordResetToken
@@ -299,7 +296,7 @@ public class AuthService : IAuthService
             throw new Exception("Invalid or already used reset token.");
         }
 
-        // Update password and consume the token in a single save.
+
         user.PasswordHash = _passwordHasher.HashPassword(request.Password);
         user.UpdatedAt = DateTime.UtcNow;
 
@@ -309,7 +306,7 @@ public class AuthService : IAuthService
         await _passwordResetTokenRepository.UpdateAsync(storedToken);
         await _passwordResetTokenRepository.SaveChangesAsync();
 
-        // Revoke existing refresh tokens so old sessions can't outlive a reset.
+
         var activeRefreshTokens = await _context.RefreshTokens
             .Where(x => x.UserId == user.Id && !x.IsRevoked)
             .ToListAsync();
@@ -322,7 +319,7 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
     }
 
-    // Cryptographically strong, URL-safe token handed to the user.
+
     private static string GenerateSecureToken()
     {
         var randomBytes = new byte[32];
@@ -337,7 +334,7 @@ public class AuthService : IAuthService
             .Replace("=", string.Empty);
     }
 
-    // Only the SHA-256 hash is ever stored, so a DB leak cannot reset passwords.
+
     private static string HashToken(string token)
     {
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));

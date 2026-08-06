@@ -1,60 +1,3 @@
-﻿
-
-//[ApiController]
-//[ApiVersion("1.0")]
-//[Route("api/v{version:apiVersion}/[controller]")]
-//public class AuthController : ControllerBase
-//{
-//    private readonly JwtSettings _jwt;
-
-//    public AuthController(IOptions<JwtSettings> options)
-//    {
-//        _jwt = options.Value;
-//    }
-
-//    [HttpPost("token")]
-//    public IActionResult GenerateToken()
-//    {
-//        var claims = new List<Claim>
-//        {
-//            new(ClaimTypes.NameIdentifier, "1"),
-//            new(ClaimTypes.Name, "Narendra"),
-//            new(ClaimTypes.Role, "Admin")
-//        };
-
-//        var key = new SymmetricSecurityKey(
-//            Encoding.UTF8.GetBytes(_jwt.SecretKey));
-
-//        var credentials = new SigningCredentials(
-//            key,
-//            SecurityAlgorithms.HmacSha256);
-
-//        var token = new JwtSecurityToken(
-//            issuer: _jwt.Issuer,
-//            audience: _jwt.Audience,
-//            claims: claims,
-//            expires: DateTime.UtcNow.AddMinutes(_jwt.ExpiryMinutes),
-//            signingCredentials: credentials);
-
-//        return Ok(new
-//        {
-//            Token = new JwtSecurityTokenHandler().WriteToken(token)
-//        });
-//    }
-
-//    [Authorize]
-//    [HttpGet("protected")]
-//    public IActionResult Protected()
-//    {
-//        return Ok("JWT Authentication Working");
-//    }
-
-//    [HttpGet]
-//    public IActionResult Get()
-//    {
-//        return Ok("API Version 1");
-//    }
-//}
 
 using Asp.Versioning;
 using AssetIQAI.API.DTOs.Auth;
@@ -75,10 +18,6 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
-
-    // ==========================
-    // Authentication Endpoints
-    // ==========================
 
     [AllowAnonymous]
     [HttpPost("register")]
@@ -118,8 +57,6 @@ public class AuthController : ControllerBase
     {
         await _authService.ForgotPasswordAsync(request);
 
-        // Always the same response, regardless of whether the email exists,
-        // to avoid leaking which emails are registered.
         return Ok(new
         {
             Success = true,
@@ -152,10 +89,6 @@ public class AuthController : ControllerBase
             Message = "Logout successful."
         });
     }
-
-    // ==========================
-    // Authorization Test Endpoints
-    // ==========================
 
     [AllowAnonymous]
     [HttpGet("public")]

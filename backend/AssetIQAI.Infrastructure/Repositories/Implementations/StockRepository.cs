@@ -89,7 +89,7 @@ public class StockRepository
         IQueryable<StockTransaction> query = _context.StockTransactions
             .Include(x => x.Product);
 
-        // Search
+
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             query = query.Where(x =>
@@ -97,21 +97,21 @@ public class StockRepository
                 x.Product.SKU.Contains(request.Search));
         }
 
-        // Transaction Type
+
         if (request.TransactionType.HasValue)
         {
             query = query.Where(x =>
                 x.TransactionType == request.TransactionType.Value);
         }
 
-        // From Date
+
         if (request.FromDate.HasValue)
         {
             query = query.Where(x =>
                 x.CreatedAt >= request.FromDate.Value);
         }
 
-        // To Date
+
         if (request.ToDate.HasValue)
         {
             query = query.Where(x =>

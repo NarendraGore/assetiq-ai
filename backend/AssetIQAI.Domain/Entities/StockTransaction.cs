@@ -11,10 +11,6 @@ public class StockTransaction : BaseEntity, IOwnedEntity
 
     public StockTransactionType TransactionType { get; set; }
 
-    /// <summary>
-    /// Quantity entered by user.
-    /// For Adjustment, this represents the adjusted quantity.
-    /// </summary>
     public int Quantity { get; set; }
 
     public int PreviousQuantity { get; set; }
