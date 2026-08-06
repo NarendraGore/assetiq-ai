@@ -16,9 +16,7 @@ export function useSupplierFilters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  /**
-   * Read values from URL
-   */
+
   const urlSearch = searchParams.get("search") ?? "";
   const urlPage = Math.max(
     Number(searchParams.get("page") ?? DEFAULT_PAGE),
@@ -30,21 +28,13 @@ export function useSupplierFilters() {
     DEFAULT_PAGE_SIZE
   );
 
-  /**
-   * Local state
-   */
+
   const [search, setSearchState] = useState(urlSearch);
   const [debouncedSearch, setDebouncedSearch] = useState(urlSearch);
   const [page, setPageState] = useState(urlPage);
   const [pageSize, setPageSizeState] = useState(urlPageSize);
 
-  /**
-   * Keep state synced with browser navigation
-   *
-   * The URL/searchParams are an external system (next/navigation). Mirroring
-   * them into local input state so the user can keep typing mid-session is an
-   * intentional subscribe-and-copy pattern, not a derived-value computation.
-   */
+
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect -- URL is an external system we subscribe to */
     setSearchState(urlSearch);
@@ -54,9 +44,7 @@ export function useSupplierFilters() {
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [urlSearch, urlPage, urlPageSize]);
 
-  /**
-   * Debounce search
-   */
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setDebouncedSearch(search.trim());
@@ -65,17 +53,13 @@ export function useSupplierFilters() {
     return () => window.clearTimeout(timer);
   }, [search]);
 
-  /**
-   * Reset page whenever the debounced search changes.
-   */
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- a new search must always start on page one
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch]);
 
-  /**
-   * Stable URL synchronization
-   */
+
   useEffect(() => {
     const params = new URLSearchParams();
 
@@ -113,9 +97,7 @@ export function useSupplierFilters() {
     searchParams,
   ]);
 
-  /**
-   * Public setters
-   */
+
   const setSearch = useCallback((value: string) => {
     setSearchState(value);
   }, []);

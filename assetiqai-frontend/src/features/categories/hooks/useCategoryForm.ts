@@ -39,9 +39,7 @@ export function useCategoryForm({
     reValidateMode: "onChange",
   });
 
-  /**
-   * Prevent unnecessary resets.
-   */
+
   const previousId = useRef<string | null>(null);
 
   useEffect(() => {

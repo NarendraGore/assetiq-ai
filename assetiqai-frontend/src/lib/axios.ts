@@ -8,10 +8,7 @@ import {
   buildLoginUrl,
 } from "@/features/auth/utils/token";
 
-/**
- * `.trim()` guards against a stray space in .env.local, which would otherwise
- * produce request URLs like " https://host/api/..." that fail to resolve.
- */
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL?.trim();
 
 const api = axios.create({
@@ -46,10 +43,7 @@ function processQueue(error: unknown, token?: string) {
   failedQueue = [];
 }
 
-/**
- * Refresh failed for good: drop the session and bounce to login, keeping the
- * current page as returnUrl so the user resumes there after signing in.
- */
+
 function redirectToLogin() {
   if (typeof window === "undefined") return;
 
@@ -80,7 +74,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-/** Endpoints where a 401 is a real answer, not a signal to refresh. */
+
 const authEndpoints = [
   "/auth/login",
   "/auth/register",
@@ -98,7 +92,7 @@ api.interceptors.response.use(
 
     if (error.response?.status !== 401) return Promise.reject(error);
 
-    // Already retried once — refreshing again would loop.
+
     if (originalRequest._retry) return Promise.reject(error);
 
     const url = originalRequest.url ?? "";
@@ -109,10 +103,7 @@ api.interceptors.response.use(
 
     originalRequest._retry = true;
 
-    /**
-     * A refresh is already in flight: queue this request and replay it with
-     * the new token rather than firing a second refresh.
-     */
+
     if (refreshPromise) {
       return new Promise((resolve, reject) => {
         failedQueue.push({
@@ -133,7 +124,7 @@ api.interceptors.response.use(
         throw new Error("Refresh token not found.");
       }
 
-      // Plain axios: using `api` here would recurse through this interceptor.
+
       const response = await axios.post(
         `${baseURL}/auth/refresh-token`,
         { refreshToken },

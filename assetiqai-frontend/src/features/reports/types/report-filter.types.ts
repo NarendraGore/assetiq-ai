@@ -11,11 +11,7 @@ export interface ReportFilters extends Sorting {
 
   dateRange: DateRange;
 
-  /**
-   * Which shortcut produced `dateRange`, if any. Purely presentational — the
-   * API only ever sees the resolved `dateRange`. Kept so the active preset
-   * button stays highlighted across re-renders.
-   */
+
   dateRangePreset?: DateRangePreset;
 
   page: number;

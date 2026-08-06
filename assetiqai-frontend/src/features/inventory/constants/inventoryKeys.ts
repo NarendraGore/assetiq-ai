@@ -3,11 +3,7 @@ import type {
   StockHistoryQueryParams,
 } from "../types";
 
-/**
- * React Query key factory for the inventory feature. Mirrors the pattern used
- * by `productKeys` so cache invalidation after a stock mutation is a single
- * `invalidateQueries({ queryKey: inventoryKeys.all })`.
- */
+
 export const inventoryKeys = {
   all: ["inventory"] as const,
 

@@ -10,12 +10,7 @@ interface SummaryCardProps {
   title: string;
   value: string | number;
   icon: LucideIcon;
-  /**
-   * Background utility for the icon tile. These stay fixed saturated hues in
-   * both themes on purpose — they are categorical accents (like chart series),
-   * not surfaces, so flipping them with the theme would lose the colour coding.
-   * The white glyph keeps AA contrast against every value used.
-   */
+
   color?: string;
   subtitle?: string;
 }

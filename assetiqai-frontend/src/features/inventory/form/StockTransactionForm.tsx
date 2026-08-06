@@ -15,15 +15,15 @@ import StockTransactionFields from "./StockTransactionFields";
 interface StockTransactionFormProps {
   action: StockAction;
 
-  /** Product the dialog was opened for, if launched from a row. */
+
   lockedProduct?: ProductOption | null;
 
-  /** Bumps on each open so the form re-seeds. */
+
   resetKey?: string | number;
 
   loading?: boolean;
 
-  /** Removes inactive products from the free-choice picker. */
+
   isProductInactive?: (productId: string) => boolean;
 
   onSubmit: (values: StockFormValues) => void | Promise<void>;
@@ -47,11 +47,7 @@ export default function StockTransactionForm({
 }: StockTransactionFormProps) {
   const { options, isLoading: isLoadingOptions } = useProductOptions();
 
-  /**
-   * Only active products are selectable in the free-choice picker. A locked
-   * product (row-launched) bypasses this list entirely, and its own active
-   * check is enforced upstream.
-   */
+
   const selectableOptions = useMemo(
     () =>
       isProductInactive
@@ -60,11 +56,7 @@ export default function StockTransactionForm({
     [options, isProductInactive],
   );
 
-  /**
-   * Resolves the current stock for a product. Used by the schema to cap
-   * Stock Out and negative Adjustments. The locked product takes precedence
-   * (row-launched dialog), otherwise we look in the free-choice list.
-   */
+
   const getAvailableStock = useMemo(() => {
     const lookup = new Map(
       options.map((opt) => [opt.productId, opt.currentStock]),

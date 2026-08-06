@@ -1,6 +1,4 @@
-/**
- * Full product entity as returned by the detail / create / update endpoints.
- */
+
 export interface Product {
   id: string;
   name: string;
@@ -19,13 +17,7 @@ export interface Product {
   updatedAt: string;
 }
 
-/**
- * Slim product shape returned by the list endpoint (`GET /products`).
- *
- * The list intentionally omits the heavier detail fields (description,
- * category/supplier ids, timestamps, etc.), so the table types against this
- * lighter row rather than the full {@link Product}.
- */
+
 export interface ProductListItem {
   id: string;
   name: string;
@@ -37,7 +29,7 @@ export interface ProductListItem {
   isActive: boolean;
 }
 
-/* ---------- Requests ---------- */
+
 
 export interface CreateProductRequest {
   name: string;
@@ -65,7 +57,7 @@ export interface UpdateProductRequest {
   isActive: boolean;
 }
 
-/* ---------- Query ---------- */
+
 
 export interface ProductQueryParams {
   page?: number;
@@ -77,7 +69,7 @@ export interface ProductQueryParams {
   MaxPrice?: number;
 }
 
-/* ---------- Pagination ---------- */
+
 
 export interface PaginatedResponse<T> {
   items: T[];
@@ -87,6 +79,6 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-/* ---------- Responses ---------- */
+
 
 export type ProductListResponse = PaginatedResponse<ProductListItem>;

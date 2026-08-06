@@ -23,13 +23,10 @@ interface ProductDialogProps {
 
   mode?: "create" | "edit";
 
-  /** Required for edit mode — the full product detail is fetched by id. */
+
   productId?: string;
 
-  /**
-   * The list row that triggered the edit. Used to backfill category/supplier
-   * names the detail endpoint may omit, so the selects seed correctly.
-   */
+
   fallback?: ProductListItem | null;
 
   loading?: boolean;
@@ -53,11 +50,7 @@ export default function ProductDialog({
 }: ProductDialogProps) {
   const isCreate = mode === "create";
 
-  /**
-   * The list row only carries a slim projection, so edit needs the full
-   * detail (categoryId, supplierId, description, minimumStock). Fetch it only
-   * while the edit dialog is actually open.
-   */
+
   const shouldFetch = !isCreate && open && !!productId;
 
   const {
@@ -68,12 +61,7 @@ export default function ProductDialog({
 
   const { categoryOptions, supplierOptions } = useProductLookups();
 
-  /**
-   * Backfill the category/supplier names onto the detail record. The detail
-   * endpoint sometimes returns them null even though the ids are present, so we
-   * derive the display name from the clicked list row first, then from the
-   * loaded lookup lists by id. This keeps the edit selects populated.
-   */
+
   const resolvedProduct: Product | undefined = product
     ? {
         ...product,

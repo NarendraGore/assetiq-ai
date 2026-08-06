@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-/**
- * Optional text field helper.
- *
- * The API treats empty strings and nulls interchangeably, so an
- * untouched optional input must validate cleanly.
- */
+
 const optionalString = (max: number, message: string) =>
   z
     .string()
@@ -14,9 +9,7 @@ const optionalString = (max: number, message: string) =>
     .optional()
     .or(z.literal(""));
 
-/**
- * Supplier Form Validation Schema
- */
+
 export const supplierSchema = z.object({
   companyName: z
     .string()
@@ -53,20 +46,13 @@ export const supplierSchema = z.object({
   ),
 });
 
-/**
- * React Hook Form Values
- */
+
 export type SupplierFormValues = z.infer<typeof supplierSchema>;
 
-/**
- * Backward-compatible alias
- * (used by useSupplierForm)
- */
+
 export type SupplierSchema = SupplierFormValues;
 
-/**
- * Default Form Values
- */
+
 export const supplierDefaultValues: SupplierFormValues = {
   companyName: "",
   contactPerson: "",

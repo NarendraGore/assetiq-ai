@@ -12,10 +12,7 @@ import type {
   StockOutRequest,
 } from "../types";
 
-/**
- * `NEXT_PUBLIC_API_URL` already ends in `/api`, so paths here start at `/v1`.
- * (The earlier stub used `/api/v1/...`, which resolved to `/api/api/v1/...`.)
- */
+
 const BASE_URL = "/v1/stock";
 
 export const inventoryApi = {

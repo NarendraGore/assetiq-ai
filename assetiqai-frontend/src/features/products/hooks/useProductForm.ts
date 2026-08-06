@@ -28,9 +28,9 @@ export function useProductForm({
   defaultValues,
 }: UseProductFormProps = {}): UseFormReturn<ProductFormValues> {
   const form = useForm<ProductFormValues>({
-    // `z.coerce.number()` widens the schema's *input* type to `unknown` under
-    // Zod v4, which no longer matches `ProductFormValues`. The cast realigns
-    // the resolver with the form's value shape; validation is unaffected.
+
+
+
     resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
 
     defaultValues: productDefaultValues,
@@ -39,11 +39,7 @@ export function useProductForm({
     reValidateMode: "onChange",
   });
 
-  /**
-   * Prevent unnecessary resets: reset when the product being edited changes, or
-   * when its category/supplier ids arrive (the detail response can land after
-   * the first render, so keying on id alone would leave the selects empty).
-   */
+
   const previousKey = useRef<string | null>(null);
 
   useEffect(() => {

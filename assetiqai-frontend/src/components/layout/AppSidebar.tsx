@@ -38,10 +38,6 @@ export default function AppSidebar() {
       collapsible="icon"
       className="border-r border-sidebar-border"
     >
-      {/* ---------------------------------------------------------------- */}
-      {/* Header */}
-      {/* ---------------------------------------------------------------- */}
-
       <SidebarHeader className="border-b border-sidebar-border px-2 py-2">
         <SidebarMenu>
           <SidebarMenuItem>
@@ -78,10 +74,6 @@ export default function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
 
-      {/* ---------------------------------------------------------------- */}
-      {/* Navigation */}
-      {/* ---------------------------------------------------------------- */}
-
       <SidebarContent className="py-3">
         {groups.map((group) => (
           <SidebarGroup key={group.label}>
@@ -117,10 +109,6 @@ export default function AppSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
-
-      {/* ---------------------------------------------------------------- */}
-      {/* Footer */}
-      {/* ---------------------------------------------------------------- */}
 
       <SidebarFooter className="border-t border-sidebar-border">
         <SidebarProfile />

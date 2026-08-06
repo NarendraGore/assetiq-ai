@@ -13,12 +13,7 @@ export const reportEndpoints = {
   stock: "/reports/stock",
 } as const;
 
-/**
- * Builds the query string for a report request.
- *
- * `filters` is authoritative; the trailing arguments are only fallbacks for
- * callers that page/sort outside the filter object.
- */
+
 export function buildReportQueryParams(
   filters: ReportFilters,
   pageIndex = 1,
@@ -72,17 +67,7 @@ export function buildReportQueryParams(
   return params;
 }
 
-/**
- * Shapes the reports endpoints have actually been observed to return.
- *
- * The rest of this feature is written against the canonical
- * `{ data, pagination }` contract, but the API mirrors the paging envelope used
- * by `/products`, `/categories` and `/suppliers` — `{ items, totalCount, page,
- * pageSize, totalPages }` — and the un-paged endpoints return a bare array.
- * Reading `response.pagination.totalRecords` therefore threw a TypeError before
- * anything could render. Normalising here keeps that mismatch at the API
- * boundary instead of leaking into every component.
- */
+
 type RawReportResponse<T> =
   | T[]
   | {

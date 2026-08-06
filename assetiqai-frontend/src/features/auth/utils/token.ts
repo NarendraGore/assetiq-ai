@@ -4,16 +4,12 @@ export const ACCESS_TOKEN_KEY = "accessToken";
 export const REFRESH_TOKEN_KEY = "refreshToken";
 export const USER_KEY = "user";
 
-/** Broadcast channel key: bumped on every auth change so other tabs react. */
+
 export const AUTH_EVENT_KEY = "auth-event";
 
 const isBrowser = () => typeof window !== "undefined";
 
-/**
- * Cookie is a *mirror* of the access token so `middleware.ts` can gate routes
- * on the server before any JS runs. The real credential still travels in the
- * Authorization header. Secure is set on https so it is not sent in clear text.
- */
+
 const writeCookie = (token: string, expiresAt: Date | null) => {
   const secure = window.location.protocol === "https:" ? "; Secure" : "";
   const expires = expiresAt ? `; Expires=${expiresAt.toUTCString()}` : "";
@@ -27,11 +23,7 @@ const deleteCookie = () => {
   document.cookie = `${ACCESS_TOKEN_KEY}=; Path=/; SameSite=Lax${secure}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 };
 
-/**
- * Decode a JWT payload without verifying the signature.
- * Verification is the API's job — we only need `exp` to avoid firing
- * requests we already know will 401.
- */
+
 export const decodeToken = (token: string): Record<string, unknown> | null => {
   try {
     const payload = token.split(".")[1];
@@ -51,7 +43,7 @@ export const decodeToken = (token: string): Record<string, unknown> | null => {
   }
 };
 
-/** Epoch milliseconds at which the access token expires, or null if unknown. */
+
 export const getTokenExpiry = (token: string): number | null => {
   const payload = decodeToken(token);
 
@@ -60,16 +52,13 @@ export const getTokenExpiry = (token: string): number | null => {
   return typeof exp === "number" ? exp * 1000 : null;
 };
 
-/**
- * `true` when the token is missing or past its `exp`.
- * A 10s skew guards against the clock drift between browser and server.
- */
+
 export const isTokenExpired = (token: string | null, skewMs = 10_000) => {
   if (!token) return true;
 
   const expiry = getTokenExpiry(token);
 
-  // No exp claim: let the API be the judge rather than logging the user out.
+
   if (expiry === null) return false;
 
   return Date.now() >= expiry - skewMs;
@@ -90,7 +79,7 @@ export const saveAuthData = (
 
   writeCookie(accessToken, expiry ? new Date(expiry) : null);
 
-  // Notify other tabs (the `storage` event does not fire in the writing tab).
+
   localStorage.setItem(AUTH_EVENT_KEY, `login:${Date.now()}`);
 };
 
@@ -110,7 +99,7 @@ export const getUser = (): User | null => {
   try {
     return JSON.parse(user) as User;
   } catch {
-    // Corrupted payload would otherwise throw on every render.
+
     localStorage.removeItem(USER_KEY);
 
     return null;
@@ -129,11 +118,7 @@ export const clearAuthData = () => {
   localStorage.setItem(AUTH_EVENT_KEY, `logout:${Date.now()}`);
 };
 
-/**
- * Build a login URL that remembers where the user was headed, so that
- * opening a deep link in a fresh browser lands back on that page after
- * signing in. Guards against open redirects by allowing same-origin paths only.
- */
+
 export const buildLoginUrl = (returnUrl?: string | null) => {
   if (!returnUrl) return "/login";
 
@@ -144,7 +129,7 @@ export const buildLoginUrl = (returnUrl?: string | null) => {
   return `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
 };
 
-/** Only same-origin absolute paths may be used as a post-login destination. */
+
 export const sanitizeReturnUrl = (
   returnUrl: string | null | undefined,
   fallback = "/dashboard",

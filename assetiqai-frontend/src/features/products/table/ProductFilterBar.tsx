@@ -67,7 +67,7 @@ export default function ProductFilterBar({
           xl:grid-cols-5
         "
       >
-        {/* Category */}
+        { }
         <div className="space-y-1.5">
           <Label className="text-xs text-muted-foreground">Category</Label>
 
@@ -92,7 +92,7 @@ export default function ProductFilterBar({
           </Select>
         </div>
 
-        {/* Supplier */}
+        { }
         <div className="space-y-1.5">
           <Label className="text-xs text-muted-foreground">Supplier</Label>
 
@@ -117,7 +117,7 @@ export default function ProductFilterBar({
           </Select>
         </div>
 
-        {/* Min price */}
+        { }
         <div className="space-y-1.5">
           <Label htmlFor="minPrice" className="text-xs text-muted-foreground">
             Min price
@@ -135,7 +135,7 @@ export default function ProductFilterBar({
           />
         </div>
 
-        {/* Max price */}
+        { }
         <div className="space-y-1.5">
           <Label htmlFor="maxPrice" className="text-xs text-muted-foreground">
             Max price
@@ -153,7 +153,7 @@ export default function ProductFilterBar({
           />
         </div>
 
-        {/* Reset */}
+        { }
         <div className="flex items-end">
           <Button
             type="button"

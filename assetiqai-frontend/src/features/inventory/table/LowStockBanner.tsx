@@ -9,17 +9,11 @@ import type { InventoryItem } from "../types";
 import { useLowStock } from "../hooks";
 
 interface LowStockBannerProps {
-  /** Opens Stock In pre-filled for the clicked product. */
+
   onRestock: (item: InventoryItem) => void;
 }
 
-/**
- * Alert banner summarising products at or below their minimum threshold.
- *
- * Fulfils the "Low Stock — highlight & badges" requirement: it shows a live
- * count badge and a chip per affected product; clicking a chip opens Stock In
- * pre-filled for that product. Renders nothing when stock is healthy.
- */
+
 export default function LowStockBanner({ onRestock }: LowStockBannerProps) {
   const { data, isLoading } = useLowStock();
 

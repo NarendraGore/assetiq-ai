@@ -12,12 +12,7 @@ interface UseInventoryReportOptions {
 }
 
 export function useInventoryReport({ filters }: UseInventoryReportOptions) {
-  /**
-   * Key off the exact query string that will be sent. The previous version
-   * hand-listed fields — including `startDate`/`endDate`, which do not exist on
-   * `ReportFilters` — so the key silently omitted the date range and cached
-   * results leaked across different windows.
-   */
+
   const queryString = buildReportQueryParams(filters).toString();
 
   return useQuery<InventoryReportResponse>({

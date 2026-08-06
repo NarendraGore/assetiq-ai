@@ -1,12 +1,6 @@
 import { z } from "zod";
 
-/**
- * Stock transaction validation.
- *
- * Stock In / Stock Out take a positive whole quantity. Adjustment is a signed
- * delta (per product decision): positive adds to current stock, negative
- * removes — but it may not be zero, since a zero adjustment is a no-op.
- */
+
 
 const productId = z
   .string({ error: "Please select a product." })
@@ -19,15 +13,10 @@ const remarks = z
   .optional()
   .or(z.literal(""));
 
-/**
- * Looks up the available stock for the product currently selected in the form.
- * Returns `undefined` when the product isn't known yet (options still loading),
- * in which case the client-side cap is skipped and the server stays the final
- * authority.
- */
+
 export type StockLookup = (productId: string) => number | undefined;
 
-/** Shared schema for Stock In and Stock Out (positive whole quantity). */
+
 export const stockMovementSchema = z.object({
   productId,
   quantity: z.coerce
@@ -40,11 +29,7 @@ export const stockMovementSchema = z.object({
 
 export type StockMovementValues = z.infer<typeof stockMovementSchema>;
 
-/**
- * Stock Out schema. Same shape as a movement, but the quantity to remove may
- * not exceed the product's available stock — mirrored on the server, enforced
- * here so the user gets immediate feedback and a disabled submit.
- */
+
 export const createStockOutSchema = (getAvailableStock?: StockLookup) =>
   stockMovementSchema.superRefine((values, ctx) => {
     const available = getAvailableStock?.(values.productId);
@@ -64,7 +49,7 @@ export const createStockOutSchema = (getAvailableStock?: StockLookup) =>
     }
   });
 
-/** Adjustment schema — signed delta, non-zero. */
+
 export const stockAdjustSchema = z.object({
   productId,
   quantity: z.coerce
@@ -80,10 +65,7 @@ export const stockAdjustSchema = z.object({
 
 export type StockAdjustValues = z.infer<typeof stockAdjustSchema>;
 
-/**
- * Adjustment schema that also blocks corrections which would drive stock below
- * zero (available + delta < 0). A positive delta is always allowed.
- */
+
 export const createStockAdjustSchema = (getAvailableStock?: StockLookup) =>
   stockAdjustSchema.superRefine((values, ctx) => {
     const available = getAvailableStock?.(values.productId);

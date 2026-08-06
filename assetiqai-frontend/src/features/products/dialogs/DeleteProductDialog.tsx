@@ -37,8 +37,8 @@ export default function DeleteProductDialog({
 
       onOpenChange(false);
     } catch {
-      // Keep the dialog open so the user sees the failure (surfaced via toast)
-      // and can retry or cancel — e.g. a 409 when the product has related records.
+
+
     }
   };
 

@@ -20,15 +20,11 @@ interface InventoryToolbarProps {
 
   onRefresh: () => void;
 
-  /** Opens the shared stock-transaction dialog (defaults to Stock In). */
+
   onNewTransaction: () => void;
 }
 
-/**
- * Inventory list toolbar: free-text search, a refresh control and the primary
- * "New transaction" action. Mirrors `ProductToolbar` so the two lists feel the
- * same, with the add-action relabelled for stock movements.
- */
+
 export default function InventoryToolbar({
   search,
   isRefreshing = false,

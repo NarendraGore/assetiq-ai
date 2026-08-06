@@ -7,7 +7,7 @@ interface CategorySkeletonProps {
 export function CategorySkeleton({ rows = 8 }: CategorySkeletonProps) {
   return (
     <div className="space-y-6">
-      {/* Toolbar */}
+      { }
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <Skeleton className="h-10 w-full max-w-sm rounded-lg" />
 
@@ -17,9 +17,9 @@ export function CategorySkeleton({ rows = 8 }: CategorySkeletonProps) {
         </div>
       </div>
 
-      {/* Table */}
+      { }
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-        {/* Header */}
+        { }
         <div className="grid grid-cols-5 gap-4 border-b border-border bg-muted/40 px-6 py-4">
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-4 w-40" />
@@ -28,7 +28,7 @@ export function CategorySkeleton({ rows = 8 }: CategorySkeletonProps) {
           <Skeleton className="ml-auto h-4 w-16" />
         </div>
 
-        {/* Rows */}
+        { }
         <div>
           {Array.from({ length: rows }).map((_, index) => (
             <div
@@ -60,7 +60,7 @@ export function CategorySkeleton({ rows = 8 }: CategorySkeletonProps) {
         </div>
       </div>
 
-      {/* Pagination */}
+      { }
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Skeleton className="h-4 w-44" />
 

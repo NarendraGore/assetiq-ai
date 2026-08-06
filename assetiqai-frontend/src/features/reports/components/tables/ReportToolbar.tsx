@@ -63,7 +63,7 @@ export default function ReportToolbar<T extends object>({
         lg:justify-between
       "
     >
-      {/* Left */}
+      { }
       <div className="flex min-w-0 flex-1 flex-col gap-3 lg:flex-row lg:items-center">
         {(title || typeof total === "number") && (
           <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export default function ReportToolbar<T extends object>({
         {children && <div className="flex flex-1 items-center">{children}</div>}
       </div>
 
-      {/* Right */}
+      { }
       <div className="flex flex-wrap items-center justify-end gap-2">
         {onRefresh && (
           <Button

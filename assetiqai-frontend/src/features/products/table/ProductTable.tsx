@@ -34,14 +34,14 @@ interface ProductTableProps {
   isFetching?: boolean;
   isError?: boolean;
 
-  /** Distinguishes "no products yet" from "no results for these filters". */
+
   isFiltered?: boolean;
 
   onRetry?: () => void;
   onAddProduct?: () => void;
   onRowClick?: (product: ProductListItem) => void;
 
-  /* Server pagination */
+
   page: number;
   pageSize: number;
   totalCount: number;
@@ -86,7 +86,7 @@ export default function ProductTable({
       sorting,
     },
 
-    // Sorting/pagination happen against the current server page only.
+
     manualPagination: true,
   });
 

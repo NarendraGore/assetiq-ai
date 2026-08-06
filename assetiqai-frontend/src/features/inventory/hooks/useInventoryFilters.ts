@@ -21,11 +21,7 @@ export interface InventoryFiltersState {
   resetFilters: () => void;
 }
 
-/**
- * Search + pagination state for the inventory list, synced to the URL so a
- * filtered view can be shared/reloaded. Follows the same shape as
- * `useProductFilters` but scoped to the inventory tab's own query params.
- */
+
 export function useInventoryFilters(): InventoryFiltersState {
   const router = useRouter();
   const pathname = usePathname();
@@ -46,7 +42,7 @@ export function useInventoryFilters(): InventoryFiltersState {
   const [page, setPageState] = useState(urlPage);
   const [pageSize, setPageSizeState] = useState(urlPageSize);
 
-  /* Debounce the free-text search. */
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setDebouncedSearch(search.trim());
@@ -55,13 +51,13 @@ export function useInventoryFilters(): InventoryFiltersState {
     return () => window.clearTimeout(timer);
   }, [search]);
 
-  /* Any new search resets to the first page. */
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- a new search must always start on page one
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch]);
 
-  /* Reflect state in the URL (scoped to inventory-only params). */
+
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
 

@@ -1,8 +1,4 @@
-/**
- * ==========================================
- * Dashboard Summary
- * ==========================================
- */
+
 
 export interface DashboardSummary {
   totalProducts: number;
@@ -14,11 +10,7 @@ export interface DashboardSummary {
   totalCategories: number;
   totalSuppliers: number;
 }
-/**
- * ==========================================
- * Inventory Summary
- * ==========================================
- */
+
 export interface InventorySummary {
   totalProducts: number;
   activeProducts: number;
@@ -27,55 +19,35 @@ export interface InventorySummary {
   totalInventoryValue: number;
 }
 
-/**
- * ==========================================
- * Category Chart
- * ==========================================
- */
+
 
 export interface CategoryChart {
   categoryName: string;
   productCount: number;
 }
 
-/**
- * ==========================================
- * Supplier Chart
- * ==========================================
- */
+
 
 export interface SupplierChart {
   supplierName: string;
   productCount: number;
 }
 
-/**
- * ==========================================
- * Inventory Trend Chart
- * ==========================================
- */
+
 
 export interface InventoryChart {
   productName: string;
   inventoryValue: number;
 }
 
-/**
- * ==========================================
- * Stock In / Stock Out Chart
- * ==========================================
- */
+
 
 export interface StockChart {
   month: string;
   stockIn: number;
   stockOut: number;
 }
-/**
- * ==========================================
- * Recent Transactions
- * ==========================================
- */
+
 
 export interface RecentTransaction {
   transactionId: string;
@@ -89,11 +61,7 @@ export interface RecentTransaction {
   createdAt: string;
   createdBy: string;
 }
-/**
- * ==========================================
- * Low Stock Product
- * ==========================================
- */
+
 
 export interface LowStockProduct {
    productId: string;
@@ -108,11 +76,7 @@ export interface LowStockProduct {
   isLowStock: boolean;
 }
 
-/**
- * ==========================================
- * Out Of Stock Product
- * ==========================================
- */
+
 
 export interface OutOfStockProduct {
    productId: string;

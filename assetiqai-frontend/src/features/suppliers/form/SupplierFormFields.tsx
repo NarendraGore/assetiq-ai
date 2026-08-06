@@ -15,7 +15,7 @@ interface SupplierFormFieldsProps {
 export function SupplierFormFields({ form }: SupplierFormFieldsProps) {
   return (
     <div className="space-y-6">
-      {/* Company Name */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="companyName">
           Company Name
@@ -46,7 +46,7 @@ export function SupplierFormFields({ form }: SupplierFormFieldsProps) {
         />
       </div>
 
-      {/* Contact Person + Email */}
+      { }
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="contactPerson">Contact Person</Label>
@@ -107,7 +107,7 @@ export function SupplierFormFields({ form }: SupplierFormFieldsProps) {
         </div>
       </div>
 
-      {/* Phone */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="phone">Phone</Label>
 
@@ -149,7 +149,7 @@ export function SupplierFormFields({ form }: SupplierFormFieldsProps) {
         />
       </div>
 
-      {/* Address */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="address">Address</Label>
 

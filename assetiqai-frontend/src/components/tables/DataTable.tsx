@@ -33,10 +33,6 @@ export interface DataTableProps<TData, TValue> {
 
   pageSize?: number;
 
-  /**
-   * Dims the table and blocks interaction while a refetch is in flight.
-   * Several call sites already passed this; the prop simply did not exist.
-   */
   loading?: boolean;
 
   onRowClick?: (row: TData) => void;
@@ -115,11 +111,7 @@ export default function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 onClick={() => onRowClick?.(row.original)}
-                className={
-                  onRowClick
-                    ? "cursor-pointer hover:bg-muted"
-                    : ""
-                }
+                className={onRowClick ? "cursor-pointer hover:bg-muted" : ""}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="whitespace-nowrap">

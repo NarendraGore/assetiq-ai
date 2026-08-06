@@ -21,12 +21,12 @@ interface StockTransactionDialogProps {
   open: boolean;
   action: StockAction;
 
-  /** Product the dialog was opened for, if launched from a row. */
+
   item?: InventoryItem | null;
 
   loading?: boolean;
 
-  /** Filters inactive products out of the free-choice picker. */
+
   isProductInactive?: (productId: string) => boolean;
 
   onOpenChange: (open: boolean) => void;

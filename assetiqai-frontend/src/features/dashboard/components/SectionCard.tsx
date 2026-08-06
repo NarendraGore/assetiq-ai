@@ -12,7 +12,7 @@ import {
 
 interface SectionCardProps {
   title: string;
-  /** Sub-heading under the title. Every caller already passed this. */
+
   description?: string;
   children: ReactNode;
   action?: ReactNode;

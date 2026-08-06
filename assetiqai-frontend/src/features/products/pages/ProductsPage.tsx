@@ -158,7 +158,7 @@ export default function ProductsPage() {
         onPageSizeChange={setPageSize}
       />
 
-      {/* Create */}
+      { }
       <ProductDialog
         open={isCreateOpen}
         onOpenChange={(open) => {
@@ -173,7 +173,7 @@ export default function ProductsPage() {
         }}
       />
 
-      {/* Edit */}
+      { }
       <ProductDialog
         open={isEditOpen}
         onOpenChange={(open) => {
@@ -192,7 +192,7 @@ export default function ProductsPage() {
         }}
       />
 
-      {/* View */}
+      { }
       <ProductDetailsDialog
         open={isViewOpen}
         onOpenChange={(open) => {
@@ -210,7 +210,7 @@ export default function ProductsPage() {
         }}
       />
 
-      {/* Delete */}
+      { }
       <DeleteProductDialog
         open={isDeleteOpen}
         onOpenChange={(open) => {

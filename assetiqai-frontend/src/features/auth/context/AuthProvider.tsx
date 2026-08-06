@@ -47,18 +47,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const queryClient = useQueryClient();
 
-  /**
-   * Every cached response belongs to the account that fetched it. Without this
-   * the next person to sign in on the same browser sees the previous user's
-   * dashboard, tables and report rows rendered from cache until each query
-   * refetches — and with `refetchOnMount: false` some never do.
-   */
+
   const clearQueryCache = useCallback(() => {
     queryClient.cancelQueries();
     queryClient.removeQueries();
   }, [queryClient]);
 
-  /** Timers are refs so re-renders never reset a running countdown. */
+
   const expiryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -70,11 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     idleTimer.current = null;
   }, []);
 
-  /**
-   * Tear down the session and send the user to login with a reason, so the
-   * screen can explain *why* they were signed out instead of silently
-   * bouncing them. `returnUrl` preserves the page they were on.
-   */
+
   const endSession = useCallback(
     (reason: SessionEndReason) => {
       clearTimers();
@@ -100,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [clearTimers, clearQueryCache],
   );
 
-  /** Sign out the moment the access token's `exp` passes. */
+
   const scheduleExpiry = useCallback(
     (token: string) => {
       if (expiryTimer.current) clearTimeout(expiryTimer.current);
@@ -117,8 +108,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return;
       }
 
-      // setTimeout caps out around 24.8 days; longer sessions are re-checked
-      // on the next mount or activity instead.
+
+
       if (delay > 2_147_483_647) return;
 
       expiryTimer.current = setTimeout(() => endSession("expired"), delay);
@@ -132,15 +123,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     idleTimer.current = setTimeout(() => endSession("idle"), IDLE_TIMEOUT_MS);
   }, [endSession]);
 
-  /**
-   * Restore the session on first paint. A token that is present but already
-   * expired is treated as no session at all, which avoids a doomed request
-   * and a redirect flash.
-   *
-   * Note: the restore must run in an effect, not lazy `useState` init, because
-   * localStorage is unavailable during the server render and the initial
-   * state has to match on both sides to avoid a hydration mismatch.
-   */
+
   useEffect(() => {
     const storedUser = getUser();
     const token = getAccessToken();
@@ -161,11 +144,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return clearTimers;
   }, [scheduleExpiry, resetIdleTimer, clearTimers]);
 
-  /**
-   * Cross-tab sync. Signing out in one tab must sign out every tab, and
-   * signing in elsewhere should not leave this tab showing a stale identity.
-   * The `storage` event only fires in *other* tabs, which is exactly right.
-   */
+
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
       if (event.key !== AUTH_EVENT_KEY && event.key !== ACCESS_TOKEN_KEY) {
@@ -183,8 +162,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return;
       }
 
-      // A different account signed in elsewhere: drop the previous user's
-      // cached responses before adopting the new identity.
+
+
       if (storedUser.id !== user?.id) {
         clearQueryCache();
       }
@@ -198,7 +177,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => window.removeEventListener("storage", onStorage);
   }, [scheduleExpiry, clearTimers, clearQueryCache, user?.id]);
 
-  /** Idle tracking only runs while someone is actually signed in. */
+
   useEffect(() => {
     if (!user) return;
 
@@ -222,8 +201,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         const response = await authApi.login({ email, password });
 
-        // Start every session from an empty cache — the browser may still be
-        // holding the previous account's data.
+
+
         clearQueryCache();
 
         saveAuthData(
@@ -251,7 +230,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const refreshToken = getRefreshToken();
 
-      // Best-effort revocation; a failure here must not trap the user.
+
       if (refreshToken) {
         await authApi.logout({ refreshToken });
       }

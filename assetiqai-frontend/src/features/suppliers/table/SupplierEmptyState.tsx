@@ -49,7 +49,7 @@ export function SupplierEmptyState({
       "
     >
       <div className="mx-auto flex max-w-md flex-col items-center">
-        {/* Icon */}
+        { }
         <div
           className="
             mb-6
@@ -61,22 +61,22 @@ export function SupplierEmptyState({
             rounded-full
             bg-primary/10
             text-primary
-           
-           
+
+
           "
         >
           <Truck className="h-8 w-8" />
         </div>
 
-        {/* Heading */}
+        { }
         <h2 className="text-xl font-semibold text-foreground">{heading}</h2>
 
-        {/* Description */}
+        { }
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           {subHeading}
         </p>
 
-        {/* Action */}
+        { }
         {!isSearchResult && onAction && (
           <Button
             type="button"

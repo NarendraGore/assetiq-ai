@@ -38,8 +38,8 @@ export default function DeleteCategoryDialog({
 
       onOpenChange(false);
     } catch {
-      // Keep the dialog open so the user sees the failure (surfaced via toast)
-      // and can retry or cancel — e.g. a 409 when the category is still in use.
+
+
     }
   };
 

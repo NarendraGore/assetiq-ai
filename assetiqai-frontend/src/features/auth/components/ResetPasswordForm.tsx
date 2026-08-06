@@ -33,7 +33,7 @@ function ResetPasswordFormInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // The token arrives via the emailed link: /reset-password?token=...
+
   const token = searchParams.get("token") ?? "";
 
   const [showPassword, setShowPassword] = useState(false);
@@ -54,10 +54,7 @@ function ResetPasswordFormInner() {
     },
   });
 
-  /**
-   * `watch` returns undefined on the very first render before defaultValues
-   * are applied in some RHF paths, and `password.length` below would throw.
-   */
+
   const password = watch("password") ?? "";
 
   const onSubmit = async (data: ResetPasswordFormData) => {
@@ -207,10 +204,7 @@ function ResetPasswordFormInner() {
   );
 }
 
-/**
- * `useSearchParams` requires a Suspense boundary, otherwise the whole route
- * opts out of static rendering and the build warns.
- */
+
 export default function ResetPasswordForm() {
   return (
     <Suspense

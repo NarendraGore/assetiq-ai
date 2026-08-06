@@ -87,9 +87,9 @@ export const outOfStockColumns: ColumnDef<OutOfStockProduct>[] = [
           bg-destructive/10
           text-destructive
           hover:bg-destructive/10
-         
-         
-         
+
+
+
         "
       >
         <PackageX className="h-3.5 w-3.5" />

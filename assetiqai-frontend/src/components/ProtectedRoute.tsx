@@ -12,11 +12,6 @@ interface ProtectedRouteProps {
   children: ReactNode;
 }
 
-/**
- * Client-side companion to `middleware.ts`. Middleware gates on the cookie;
- * this gates on the decoded session, so a tampered or expired token still
- * cannot render protected UI.
- */
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   return (
     <Suspense
@@ -43,7 +38,6 @@ function ProtectedRouteInner({ children }: ProtectedRouteProps) {
 
     const query = searchParams.toString();
 
-    // Remember the destination so login can return the user here.
     router.replace(buildLoginUrl(`${pathname}${query ? `?${query}` : ""}`));
   }, [loading, isAuthenticated, router, pathname, searchParams]);
 
@@ -65,7 +59,6 @@ function ProtectedRouteInner({ children }: ProtectedRouteProps) {
     );
   }
 
-  // Redirect is in flight; render nothing rather than flashing the app shell.
   if (!isAuthenticated) return null;
 
   return <>{children}</>;

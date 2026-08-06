@@ -12,9 +12,7 @@ import {
   MessageResponse,
 } from "../types/auth.types";
 
-/**
- * Register
- */
+
 export const register = async (
   data: RegisterDto
 ): Promise<AuthResponse> => {
@@ -23,9 +21,7 @@ export const register = async (
   return response.data;
 };
 
-/**
- * Login
- */
+
 export const login = async (
   data: LoginDto
 ): Promise<AuthResponse> => {
@@ -35,9 +31,7 @@ export const login = async (
   return response.data;
 };
 
-/**
- * Refresh Token
- */
+
 export const refreshToken = async (
   data: RefreshTokenDto
 ): Promise<AuthResponse> => {
@@ -49,13 +43,7 @@ export const refreshToken = async (
   return response.data;
 };
 
-/**
- * Forgot Password
- *
- * Always resolves with the same generic message from the API, whether or not
- * the email is registered, so callers must not treat success as confirmation
- * that an account exists.
- */
+
 export const forgotPassword = async (
   data: ForgotPasswordDto
 ): Promise<MessageResponse> => {
@@ -67,9 +55,7 @@ export const forgotPassword = async (
   return response.data;
 };
 
-/**
- * Reset Password
- */
+
 export const resetPassword = async (
   data: ResetPasswordDto
 ): Promise<MessageResponse> => {
@@ -81,27 +67,21 @@ export const resetPassword = async (
   return response.data;
 };
 
-/**
- * Logout
- */
+
 export const logout = async (
   data: LogoutDto
 ): Promise<void> => {
   await api.post("/auth/logout", data);
 };
 
-/**
- * Get Profile
- */
+
 export const getProfile = async (): Promise<ProfileResponse> => {
   const response = await api.get<ProfileResponse>("/auth/profile");
 
   return response.data;
 };
 
-/**
- * Public Endpoint (optional, useful for testing)
- */
+
 export const getPublicMessage = async (): Promise<string> => {
   const response = await api.get("/auth/public");
 

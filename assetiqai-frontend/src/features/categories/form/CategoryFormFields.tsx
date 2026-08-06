@@ -15,7 +15,7 @@ interface CategoryFormFieldsProps {
 export function CategoryFormFields({ form }: CategoryFormFieldsProps) {
   return (
     <div className="space-y-6">
-      {/* Category Name */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="name">
           Category Name
@@ -46,7 +46,7 @@ export function CategoryFormFields({ form }: CategoryFormFieldsProps) {
         />
       </div>
 
-      {/* Description */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
 

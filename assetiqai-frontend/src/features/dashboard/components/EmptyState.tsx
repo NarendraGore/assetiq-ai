@@ -6,7 +6,7 @@ import { Inbox } from "lucide-react";
 interface EmptyStateProps {
   title?: string;
   description?: string;
-  /** Optional call-to-action (e.g. a Retry button) rendered under the copy. */
+
   action?: ReactNode;
 }
 

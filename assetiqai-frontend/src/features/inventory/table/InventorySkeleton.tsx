@@ -5,9 +5,7 @@ interface InventorySkeletonProps {
   columns?: number;
 }
 
-/**
- * Generic table skeleton reused by the Inventory and History tables.
- */
+
 export default function InventorySkeleton({
   rows = 8,
   columns = 8,

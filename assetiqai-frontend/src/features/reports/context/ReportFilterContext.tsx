@@ -20,7 +20,7 @@ export interface ReportFilterContextValue {
     value: ReportFilters[K],
   ) => void;
 
-  /** Apply a named window and keep the matching button highlighted. */
+
   setDateRangePreset: (preset: DateRangePreset) => void;
 
   resetFilters: () => void;
@@ -43,8 +43,8 @@ export function ReportFilterProvider({ children }: Props) {
       setFilter((prev) => ({
         ...prev,
         [key]: value,
-        // Any filter change invalidates the current page — otherwise the user
-        // can land on page 7 of a 2-page result and see an empty table.
+
+
         ...(key === "page" ? null : { page: 1 }),
       }));
     },
@@ -64,9 +64,9 @@ export function ReportFilterProvider({ children }: Props) {
     setFilter(createDefaultReportFilters());
   }, []);
 
-  // No `applyFilters`: every filter is part of the query key, so React Query
-  // refetches the moment state changes. An explicit apply step would only be
-  // needed if the filters were staged separately from the key.
+
+
+
   const value = useMemo(
     () => ({ filter, updateFilter, setDateRangePreset, resetFilters }),
     [filter, updateFilter, setDateRangePreset, resetFilters],

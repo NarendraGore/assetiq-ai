@@ -1,15 +1,6 @@
 import { AxiosError } from "axios";
 
-/**
- * Pull a human-readable message off an unknown error.
- * Replaces `catch (error: any)`, which silently disabled type checking on
- * every property access downstream.
- *
- * Handles the API's `ApiResponse` envelope, whose useful text lives in an
- * `errors` array (the top-level `message`/`Message` is only a generic title
- * like "Conflict"). Property casing is matched both ways because the exception
- * middleware serializes with PascalCase while other endpoints use camelCase.
- */
+
 export function getErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof AxiosError) {
     const data = error.response?.data as
@@ -23,7 +14,7 @@ export function getErrorMessage(error: unknown, fallback: string): string {
         }
       | undefined;
 
-    // Prefer a specific error from the envelope's errors array, if present.
+
     const errorsList = data?.errors ?? data?.Errors;
     if (Array.isArray(errorsList)) {
       const first = errorsList.find(
@@ -33,8 +24,8 @@ export function getErrorMessage(error: unknown, fallback: string): string {
       if (first) return first;
     }
 
-    // Generic envelope titles ("Conflict", "Internal Server Error", …) aren't
-    // helpful on their own, so fall back rather than surface them.
+
+
     const generic = new Set([
       "conflict",
       "internal server error",
