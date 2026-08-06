@@ -9,6 +9,7 @@ using AssetIQAI.Infrastructure.Security;
 using AssetIQAI.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace AssetIQAI.API.Services;
@@ -24,6 +25,7 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly ApplicationDbContext _context;
     private readonly ILogger<AuthService> _logger;
+    private readonly IServiceScopeFactory _scopeFactory;
 
     public AuthService(
         IUserRepository userRepository,
@@ -34,7 +36,8 @@ public class AuthService : IAuthService
         IEmailService emailService,
         IConfiguration configuration,
         ApplicationDbContext context,
-        ILogger<AuthService> logger)
+        ILogger<AuthService> logger,
+        IServiceScopeFactory scopeFactory)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -45,6 +48,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _context = context;
         _logger = logger;
+        _scopeFactory = scopeFactory;
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
@@ -91,19 +95,22 @@ public class AuthService : IAuthService
         await _userRepository.SaveChangesAsync();
 
 
-        try
+        var emailAddress = user.Email;
+        var recipientName = $"{user.FirstName} {user.LastName}";
+
+        _ = Task.Run(async () =>
         {
-            await _emailService.SendRegistrationSuccessEmailAsync(
-                user.Email,
-                $"{user.FirstName} {user.LastName}");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(
-                ex,
-                "Failed to send registration email to {Email}. Registration succeeded.",
-                user.Email);
-        }
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+                await emailService.SendRegistrationSuccessEmailAsync(emailAddress, recipientName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send registration email to {Email}. Registration succeeded.", emailAddress);
+            }
+        });
 
 
         var accessToken = _jwtTokenService.GenerateAccessToken(user);
@@ -260,10 +267,22 @@ public class AuthService : IAuthService
         var resetLink =
             $"{frontendBaseUrl.TrimEnd('/')}/reset-password?token={Uri.EscapeDataString(rawToken)}";
 
-        await _emailService.SendPasswordResetEmailAsync(
-            user.Email,
-            $"{user.FirstName} {user.LastName}",
-            resetLink);
+        var resetEmailAddress = user.Email;
+        var resetRecipientName = $"{user.FirstName} {user.LastName}";
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+                await emailService.SendPasswordResetEmailAsync(resetEmailAddress, resetRecipientName, resetLink);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send password reset email to {Email}.", resetEmailAddress);
+            }
+        });
     }
 
     public async Task ResetPasswordAsync(ResetPasswordRequest request)
