@@ -33,7 +33,7 @@ export function ProductFormFields({
 }: ProductFormFieldsProps) {
   return (
     <div className="space-y-6">
-      {/* Name + SKU */}
+      { }
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">
@@ -96,7 +96,7 @@ export function ProductFormFields({
         </div>
       </div>
 
-      {/* Category + Supplier */}
+      { }
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="categoryId">
@@ -185,7 +185,7 @@ export function ProductFormFields({
         </div>
       </div>
 
-      {/* Unit price + Stock + Minimum stock */}
+      { }
       <div className="grid gap-6 sm:grid-cols-3">
         <div className="space-y-2">
           <Label htmlFor="unitPrice">
@@ -290,7 +290,7 @@ export function ProductFormFields({
         </div>
       </div>
 
-      {/* Description */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
 
@@ -328,7 +328,7 @@ export function ProductFormFields({
         />
       </div>
 
-      {/* Active status */}
+      { }
       <div className="space-y-2">
         <Label>Status</Label>
 

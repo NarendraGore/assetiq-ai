@@ -28,12 +28,6 @@ interface ServerPaginationProps {
   onPageSizeChange: (pageSize: number) => void;
 }
 
-/**
- * Pagination bar for lists paged by the API.
- *
- * Unlike {@link TablePagination}, page state comes from the API response rather
- * than the TanStack row model — the row model only ever holds the current page.
- */
 export default function ServerPagination({
   page,
   pageSize,

@@ -2,10 +2,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-/**
- * Card count and grid must mirror `DashboardSummary` (six cards), otherwise the
- * layout visibly reflows the moment the real data lands.
- */
+
 export default function DashboardSkeleton() {
   return (
     <div className="space-y-6">

@@ -14,7 +14,7 @@ import InventoryActions from "./InventoryActions";
 interface InventoryColumnsProps {
   onStockIn: (item: InventoryItem) => void;
   onStockOut: (item: InventoryItem) => void;
-  /** Returns true when the product is inactive and stock ops must be blocked. */
+
   isProductInactive?: (productId: string) => boolean;
 }
 
@@ -43,12 +43,7 @@ function SortableHeader<TData, TValue>({
   );
 }
 
-/**
- * Renders the current-stock cell with a threshold-aware badge:
- * - 0 → destructive "Out of stock"
- * - at/below minimum → amber "Low" with the count
- * - otherwise → neutral count
- */
+
 function StockBadge({ item }: { item: InventoryItem }) {
   const { currentStock, isLowStock } = item;
 

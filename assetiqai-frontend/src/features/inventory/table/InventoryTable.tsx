@@ -68,7 +68,7 @@ export default function InventoryTable({
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
     state: { sorting },
-    // Sorting is client-side over the current server page only.
+
     manualPagination: true,
   });
 

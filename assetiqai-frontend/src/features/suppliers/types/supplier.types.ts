@@ -10,7 +10,7 @@ export interface Supplier {
   updatedAt: string;
 }
 
-/* ---------- Requests ---------- */
+
 
 export interface CreateSupplierRequest {
   companyName: string;
@@ -28,7 +28,7 @@ export interface UpdateSupplierRequest {
   address?: string;
 }
 
-/* ---------- Query ---------- */
+
 
 export interface SupplierQueryParams {
   page?: number;
@@ -36,7 +36,7 @@ export interface SupplierQueryParams {
   search?: string;
 }
 
-/* ---------- Pagination ---------- */
+
 
 export interface PaginatedResponse<T> {
   items: T[];
@@ -46,6 +46,6 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-/* ---------- Responses ---------- */
+
 
 export type SupplierListResponse = PaginatedResponse<Supplier>;

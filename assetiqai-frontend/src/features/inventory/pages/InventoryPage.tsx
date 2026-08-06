@@ -36,7 +36,7 @@ import {
 import type { InventoryItem } from "../types";
 
 export default function InventoryPage() {
-  /* ---------- Inventory tab ---------- */
+
   const {
     search,
     setSearch,
@@ -60,10 +60,10 @@ export default function InventoryPage() {
     Search: debouncedSearch,
   });
 
-  /* ---------- Product active status cross-reference ---------- */
+
   const { isProductInactive } = useProductActiveStatus();
 
-  /* ---------- History tab ---------- */
+
   const history = useHistoryFilters();
 
   const {
@@ -81,7 +81,7 @@ export default function InventoryPage() {
     ToDate: history.toDate,
   });
 
-  /* ---------- Stock transaction dialog ---------- */
+
   const { isOpen, action, selectedItem, open, close } = useStockDialogs();
 
   const {
@@ -96,9 +96,9 @@ export default function InventoryPage() {
   const isMutating = isStockingIn || isStockingOut || isAdjusting;
 
   const handleSubmit = async (values: StockFormValues) => {
-    // Final guard: inactive products cannot receive stock movements. The UI
-    // already disables the entry points, but this covers any edge (e.g. a
-    // product deactivated while the dialog was open).
+
+
+
     if (isProductInactive(values.productId)) {
       toast.error(
         "This product is inactive. Reactivate it before recording stock movements.",
@@ -154,7 +154,7 @@ export default function InventoryPage() {
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
 
-        {/* Inventory */}
+        { }
         <TabsContent value="inventory" className="space-y-6">
           <LowStockBanner onRestock={(item) => open("in", item)} />
 
@@ -183,7 +183,7 @@ export default function InventoryPage() {
           />
         </TabsContent>
 
-        {/* History */}
+        { }
         <TabsContent value="history" className="space-y-6">
           <HistoryToolbar
             search={history.search}

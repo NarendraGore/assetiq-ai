@@ -28,11 +28,7 @@ const STORAGE_KEY = "dashboard-filter";
 const isDashboardFilter = (value: unknown): value is DashboardFilter =>
   DASHBOARD_FILTERS.includes(value as DashboardFilter);
 
-/**
- * Read the saved filter during the initial render. Restoring it in an effect
- * instead would start every query on "today" and immediately re-run all nine
- * dashboard endpoints with the stored period — a guaranteed double fetch.
- */
+
 const readStoredFilter = (): DashboardFilter => {
   if (typeof window === "undefined") return "today";
 
@@ -44,7 +40,7 @@ const readStoredFilter = (): DashboardFilter => {
 export function DashboardFilterProvider({ children }: { children: ReactNode }) {
   const [filter, setFilter] = useState<DashboardFilter>(readStoredFilter);
 
-  // Persist filter
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 

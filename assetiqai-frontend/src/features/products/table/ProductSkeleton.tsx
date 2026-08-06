@@ -7,9 +7,9 @@ interface ProductSkeletonProps {
 export function ProductSkeleton({ rows = 8 }: ProductSkeletonProps) {
   return (
     <div className="space-y-6">
-      {/* Table */}
+      { }
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-        {/* Header */}
+        { }
         <div className="grid grid-cols-7 gap-4 border-b border-border bg-muted/40 px-6 py-4">
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-4 w-24" />
@@ -20,7 +20,7 @@ export function ProductSkeleton({ rows = 8 }: ProductSkeletonProps) {
           <Skeleton className="ml-auto h-4 w-16" />
         </div>
 
-        {/* Rows */}
+        { }
         <div>
           {Array.from({ length: rows }).map((_, index) => (
             <div
@@ -59,7 +59,7 @@ export function ProductSkeleton({ rows = 8 }: ProductSkeletonProps) {
         </div>
       </div>
 
-      {/* Pagination */}
+      { }
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Skeleton className="h-4 w-44" />
 

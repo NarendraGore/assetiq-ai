@@ -17,10 +17,7 @@ interface SupplierTableProps {
   isLoading?: boolean;
   isError?: boolean;
 
-  /**
-   * Drives the empty-state copy: a search that returns nothing is not
-   * the same as an inventory with no suppliers yet.
-   */
+
   isSearchResult?: boolean;
 
   onRetry?: () => void;
@@ -32,8 +29,7 @@ interface SupplierTableProps {
 
   onRowClick?: (supplier: Supplier) => void;
 
-  /* Server pagination — the API returns one page at a time, so paging must be
-     driven by the response rather than the TanStack row model. */
+
   page: number;
   pageSize: number;
   totalCount: number;

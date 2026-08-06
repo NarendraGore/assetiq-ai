@@ -1,19 +1,11 @@
-/**
- * Canonical report primitives.
- *
- * Before this file was unified there were three competing shapes for a date
- * range (`{fromDate,toDate}`, `{from,to}` and the bare string `"last30Days"`)
- * and two names for the sort direction (`sortDirection` vs `sortOrder`). The
- * names below are the ones the API layer actually serialises, so every other
- * module conforms to them.
- */
+
 
 export interface DateRange {
   from?: Date;
   to?: Date;
 }
 
-/** Named windows the UI offers as one-click shortcuts. */
+
 export type DateRangePreset =
   | "today"
   | "last7Days"
@@ -22,10 +14,7 @@ export type DateRangePreset =
   | "thisYear"
   | "allTime";
 
-/**
- * Resolves a preset into concrete boundaries. Kept next to the type so the
- * preset list and the maths can never drift apart.
- */
+
 export function resolveDateRangePreset(preset: DateRangePreset): DateRange {
   const to = new Date();
   const from = new Date(to);
@@ -54,8 +43,8 @@ export function resolveDateRangePreset(preset: DateRangePreset): DateRange {
       break;
 
     case "allTime":
-      // No boundaries: the caller drops fromDate/toDate entirely so the API
-      // returns every transaction regardless of date.
+
+
       return {};
   }
 
@@ -78,7 +67,7 @@ export interface Sorting {
 
 export type ExportType = "csv" | "excel";
 
-/** Which report tab is currently active. */
+
 export type ReportTab = "inventory" | "stock";
 
 export interface ReportResponse<T> {

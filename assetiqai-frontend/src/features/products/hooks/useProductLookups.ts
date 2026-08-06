@@ -10,13 +10,7 @@ export interface LookupOption {
   name: string;
 }
 
-/**
- * Loads the full category and supplier lists used to populate the product
- * form selects and the list-page filter dropdowns.
- *
- * A large page size is requested so every option is available in a single
- * dropdown without its own pagination — these reference lists are small.
- */
+
 export function useProductLookups() {
   const categoriesQuery = useCategories({ page: 1, pageSize: 100 });
   const suppliersQuery = useSuppliers({ page: 1, pageSize: 100 });

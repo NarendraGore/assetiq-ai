@@ -26,8 +26,7 @@ interface CategoryTableProps {
 
   onRowClick?: (category: Category) => void;
 
-  /* Server pagination — the API returns one page at a time, so paging must be
-     driven by the response rather than the TanStack row model. */
+
   page: number;
   pageSize: number;
   totalCount: number;

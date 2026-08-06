@@ -12,10 +12,7 @@ interface UseStockReportOptions {
 }
 
 export function useStockReport({ filters }: UseStockReportOptions) {
-  /**
-   * Key off the exact query string that will be sent — see the note in
-   * `useInventoryReport` for why the hand-listed key was wrong.
-   */
+
   const queryString = buildReportQueryParams(filters).toString();
 
   return useQuery<StockReportResponse>({

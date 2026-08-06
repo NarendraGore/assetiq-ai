@@ -61,8 +61,8 @@ export function useCategoryCrud() {
 
         toast.success("Category deleted successfully.");
       } catch (error) {
-        // A 409 means the category is still referenced by products; surface the
-        // backend's explanation rather than a generic failure.
+
+
         const fallback =
           error instanceof AxiosError && error.response?.status === 409
             ? "This category is in use by one or more products and cannot be deleted."

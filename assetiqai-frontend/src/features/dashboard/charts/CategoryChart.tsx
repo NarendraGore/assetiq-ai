@@ -26,12 +26,7 @@ const COLORS = [
   "#4f46e5",
 ];
 
-/**
- * Vertical center of the donut, in pixels from the top of the chart area. The
- * wrapper is 360px tall with a ~60px legend strip pinned to the bottom, so
- * 150px sits in the middle of the remaining donut area and lets the HTML
- * overlay label land on the exact same point.
- */
+
 const DONUT_CY = 150;
 
 export default function CategoryChart() {
@@ -39,8 +34,8 @@ export default function CategoryChart() {
 
   const { data = [], isLoading, isError, error } = useCategoryChart(filter);
 
-  // With many categories the legend becomes unreadable. Keep the top 7 slices
-  // by product count and roll the rest into "Other" for clarity.
+
+
   const processedData = React.useMemo(() => {
     if (data.length <= 7) return data;
 
@@ -88,12 +83,7 @@ export default function CategoryChart() {
 
   return (
     <div className="relative h-[360px] w-full">
-      {/*
-        Center label rendered as an HTML overlay pinned to the donut's exact
-        center (DONUT_CY). Percentage-based SVG <text> is relative to the whole
-        viewport, which the bottom legend shifts downward — an absolute overlay
-        tied to the same cy keeps the count perfectly centered in the ring.
-      */}
+      { }
       <div
         className="pointer-events-none absolute inset-x-0 z-10 flex flex-col items-center"
         style={{ top: DONUT_CY, transform: "translateY(-50%)" }}

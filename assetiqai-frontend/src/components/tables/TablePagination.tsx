@@ -33,7 +33,7 @@ export default function TablePagination<TData>({
 
   return (
     <div className="flex flex-col gap-4 border-t border-border bg-card px-6 py-4 transition-colors duration-200 md:flex-row md:items-center md:justify-between">
-      {/* Left - Records Info */}
+      { }
       <div className="text-sm text-muted-foreground">
         Showing{" "}
         <span className="font-medium text-foreground">
@@ -48,9 +48,9 @@ export default function TablePagination<TData>({
         records
       </div>
 
-      {/* Right - Controls */}
+      { }
       <div className="flex flex-wrap items-center gap-4">
-        {/* Rows per page selector */}
+        { }
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Rows per page</span>
 
@@ -76,12 +76,12 @@ export default function TablePagination<TData>({
           </Select>
         </div>
 
-        {/* Page info */}
+        { }
         <div className="text-sm font-medium text-foreground">
           Page {pageIndex + 1} of {Math.max(totalPages, 1)}
         </div>
 
-        {/* Navigation buttons */}
+        { }
         <div className="flex items-center gap-2">
           <Button
             variant="outline"

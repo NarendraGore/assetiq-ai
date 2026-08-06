@@ -6,9 +6,7 @@ import { inventoryApi } from "../api";
 import { inventoryKeys } from "../constants";
 import type { StockHistoryQueryParams } from "../types";
 
-/**
- * Paginated, filterable stock-transaction history.
- */
+
 export function useStockHistory(params: StockHistoryQueryParams = {}) {
   const {
     Page = 1,

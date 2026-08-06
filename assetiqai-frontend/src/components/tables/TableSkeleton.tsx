@@ -13,7 +13,7 @@ export default function TableSkeleton({
 }: TableSkeletonProps) {
   return (
     <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-      {/* Toolbar */}
+      { }
       <div className="flex flex-col gap-4 border-b p-4 md:flex-row md:items-center md:justify-between">
         <Skeleton className="h-10 w-full max-w-sm" />
 
@@ -23,7 +23,7 @@ export default function TableSkeleton({
         </div>
       </div>
 
-      {/* Table */}
+      { }
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead className="bg-muted">
@@ -50,7 +50,7 @@ export default function TableSkeleton({
         </table>
       </div>
 
-      {/* Pagination */}
+      { }
       <div className="flex flex-col gap-4 border-t p-4 md:flex-row md:items-center md:justify-between">
         <Skeleton className="h-4 w-48" />
 

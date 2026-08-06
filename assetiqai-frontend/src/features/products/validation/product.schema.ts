@@ -1,12 +1,6 @@
 import { z } from "zod";
 
-/**
- * Product Form Validation Schema
- *
- * Image upload is intentionally out of scope for now, so `imageUrl` is not
- * part of the form. Numeric fields are coerced from their string input values
- * and constrained to sensible inventory ranges.
- */
+
 export const productSchema = z.object({
   name: z
     .string()
@@ -55,19 +49,13 @@ export const productSchema = z.object({
   isActive: z.boolean(),
 });
 
-/**
- * React Hook Form Values
- */
+
 export type ProductFormValues = z.infer<typeof productSchema>;
 
-/**
- * Backward-compatible alias (used by useProductForm)
- */
+
 export type ProductSchema = ProductFormValues;
 
-/**
- * Default Form Values
- */
+
 export const productDefaultValues: ProductFormValues = {
   name: "",
   sku: "",

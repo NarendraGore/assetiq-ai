@@ -23,10 +23,10 @@ export default function InventoryTrendChart() {
 
   const { data = [], isLoading, isError, error } = useInventoryChart(filter);
 
-  // With many products the bars become unreadable slivers. Show only the ten
-  // highest-value products so the chart stays legible. The backend already
-  // orders by inventory value descending, but we sort defensively and slice
-  // here so this holds regardless of response order.
+
+
+
+
   const topData = [...data]
     .sort((a, b) => (b.inventoryValue ?? 0) - (a.inventoryValue ?? 0))
     .slice(0, 10);

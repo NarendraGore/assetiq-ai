@@ -77,7 +77,7 @@ export default function ReportFilterBar({ activeTab }: ReportFilterBarProps) {
               loading={suppliersLoading}
             />
 
-            {/* TransactionType only affects the Stock Report, so hide it on Inventory */}
+            { }
             {activeTab === "stock" && <TransactionTypeFilter />}
           </div>
 

@@ -21,7 +21,7 @@ interface InventoryActionsProps {
   item: InventoryItem;
   onStockIn: (item: InventoryItem) => void;
   onStockOut: (item: InventoryItem) => void;
-  /** Inactive products cannot receive stock movements. */
+
   disabled?: boolean;
 }
 

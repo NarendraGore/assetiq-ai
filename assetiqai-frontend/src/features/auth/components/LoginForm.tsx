@@ -37,16 +37,10 @@ function LoginFormInner() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  /**
-   * Where to go after signing in. Set by middleware when a deep link was
-   * opened without a session — this is what makes a copied URL resume
-   * correctly in a different browser.
-   */
   const returnUrl = sanitizeReturnUrl(searchParams.get("returnUrl"));
 
   const reason = searchParams.get("reason");
 
-  /** Explain an involuntary sign-out instead of silently showing the form. */
   useEffect(() => {
     if (reason === "expired" || reason === "idle") {
       toast.info(SESSION_END_MESSAGE[reason]);
@@ -74,7 +68,6 @@ function LoginFormInner() {
 
       router.replace(returnUrl);
 
-      // Ensure server components re-read the new session cookie.
       router.refresh();
     } catch (error) {
       toast.error(getErrorMessage(error, "Invalid email or password."));
@@ -90,12 +83,18 @@ function LoginFormInner() {
 
         <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
 
-        <CardDescription>Sign in to continue to your dashboard.</CardDescription>
+        <CardDescription>
+          Sign in to continue to your dashboard.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-          {/* Email */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-5"
+          noValidate
+        >
+          { }
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
 
@@ -112,13 +111,17 @@ function LoginFormInner() {
             />
 
             {errors.email && (
-              <p id="email-error" role="alert" className="text-sm text-destructive">
+              <p
+                id="email-error"
+                role="alert"
+                className="text-sm text-destructive"
+              >
                 {errors.email.message}
               </p>
             )}
           </div>
 
-          {/* Password */}
+          { }
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
@@ -196,10 +199,7 @@ function LoginFormInner() {
   );
 }
 
-/**
- * `useSearchParams` requires a Suspense boundary, otherwise the whole route
- * opts out of static rendering and the build warns.
- */
+
 export default function LoginForm() {
   return (
     <Suspense

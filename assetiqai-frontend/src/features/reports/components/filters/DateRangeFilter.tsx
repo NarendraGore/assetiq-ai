@@ -18,12 +18,7 @@ interface DateRangeFilterProps {
   className?: string;
 }
 
-/**
- * These are presets, not date ranges. The previous version typed `value` as
- * `DateRange` while assigning bare strings to it, then compared that string
- * against `filter.dateRange` (an object) — so no button ever rendered as
- * active and the chosen window never reached the API.
- */
+
 const DEFAULT_OPTIONS: DateRangeOption[] = [
   { label: "Today", value: "today" },
   { label: "Last 7 Days", value: "last7Days" },

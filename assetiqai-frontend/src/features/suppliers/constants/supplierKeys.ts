@@ -4,14 +4,14 @@ export const supplierKeys = {
 
   all: ["suppliers"] as const,
 
-  
+
   lists: () => [...supplierKeys.all, "list"] as const,
 
- 
+
   list: (filters: SupplierQueryParams) =>
     [...supplierKeys.lists(), filters] as const,
 
-  
+
   details: () => [...supplierKeys.all, "detail"] as const,
 
   detail: (id: string) =>

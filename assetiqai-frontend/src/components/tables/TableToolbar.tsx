@@ -27,7 +27,7 @@ export default function TableToolbar({
 }: TableToolbarProps) {
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors duration-200 md:flex-row md:items-center md:justify-between">
-      {/* Left Section - Search and Filters */}
+      { }
       <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-center">
         {onSearchChange && (
           <div className="relative w-full sm:max-w-sm">
@@ -46,7 +46,7 @@ export default function TableToolbar({
         {children}
       </div>
 
-      {/* Right Section - Total Records and Refresh */}
+      { }
       <div className="flex items-center justify-between gap-4 md:justify-end">
         {typeof totalRecords === "number" && (
           <div className="flex items-center gap-2">

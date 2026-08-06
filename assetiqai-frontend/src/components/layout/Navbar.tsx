@@ -34,12 +34,6 @@ export default function Navbar() {
 
   const { resolvedTheme, setTheme } = useTheme();
 
-  /**
-   * The server has no idea which theme will resolve, so the icon must not be
-   * rendered until after hydration — otherwise React logs a mismatch and the
-   * wrong icon flashes on first paint. `useSyncExternalStore` yields `true`
-   * only once the client has hydrated.
-   */
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -68,7 +62,7 @@ export default function Navbar() {
         backdrop-blur
       "
     >
-      {/* Left */}
+      { }
       <div className="flex min-w-0 items-center gap-3">
         <SidebarTrigger className="-ml-2" />
 
@@ -99,7 +93,7 @@ export default function Navbar() {
         </Breadcrumb>
       </div>
 
-      {/* Right */}
+      { }
       <div
         className="
           flex
@@ -143,7 +137,7 @@ export default function Navbar() {
             focus-visible:ring-ring
           "
         >
-          {/* Placeholder keeps layout stable until the theme is known. */}
+
           {!mounted ? (
             <span className="h-5 w-5" />
           ) : isDark ? (

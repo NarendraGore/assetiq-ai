@@ -41,11 +41,7 @@ interface HistoryToolbarProps {
   onRefresh: () => void;
 }
 
-/**
- * Filter bar for the History tab: free-text search, a transaction-type select
- * and a set of date-range preset chips (the "Date Filters" requirement), plus
- * refresh and reset controls.
- */
+
 export default function HistoryToolbar({
   search,
   onSearchChange,

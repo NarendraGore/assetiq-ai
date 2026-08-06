@@ -42,11 +42,7 @@ interface HistoryTableProps {
   onPageSizeChange: (pageSize: number) => void;
 }
 
-/**
- * Server-paginated transaction history table. Sorting is client-side over the
- * current page; paging is driven by the API response. Shares the skeleton,
- * empty-state and pagination primitives with the Inventory table.
- */
+
 export default function HistoryTable({
   columns,
   data,

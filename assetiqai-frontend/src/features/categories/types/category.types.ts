@@ -7,7 +7,7 @@ export interface Category {
   updatedAt: string;
 }
 
-/* ---------- Requests ---------- */
+
 
 export interface CreateCategoryRequest {
   name: string;
@@ -19,7 +19,7 @@ export interface UpdateCategoryRequest {
   description?: string;
 }
 
-/* ---------- Query ---------- */
+
 
 export interface CategoryQueryParams {
   page?: number;
@@ -27,7 +27,7 @@ export interface CategoryQueryParams {
   search?: string;
 }
 
-/* ---------- Pagination ---------- */
+
 
 export interface PaginatedResponse<T> {
   items: T[];
@@ -37,6 +37,6 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-/* ---------- Responses ---------- */
+
 
 export type CategoryListResponse = PaginatedResponse<Category>;

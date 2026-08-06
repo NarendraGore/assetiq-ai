@@ -29,10 +29,7 @@ interface ResolvedRange {
   to?: Date;
 }
 
-/**
- * Turns a preset into a concrete `{ from, to }` window. `all` resolves to an
- * empty window so the API returns everything.
- */
+
 function resolvePreset(preset: DateRangePreset): ResolvedRange {
   const now = new Date();
 
@@ -92,11 +89,7 @@ export interface HistoryFiltersState {
   resetFilters: () => void;
 }
 
-/**
- * Search + transaction-type + date-range + pagination for the History tab.
- * State is local (not URL-synced) so it never collides with the Inventory
- * tab's own `search`/`page` params on the shared route.
- */
+
 export function useHistoryFilters(): HistoryFiltersState {
   const [search, setSearchState] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -116,7 +109,7 @@ export function useHistoryFilters(): HistoryFiltersState {
     return () => window.clearTimeout(timer);
   }, [search]);
 
-  /* Any filter change resets to the first page. */
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- a new filter must always start on page one
     setPageState(DEFAULT_PAGE);

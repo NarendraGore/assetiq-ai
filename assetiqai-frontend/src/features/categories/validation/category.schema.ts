@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-/**
- * Category Form Validation Schema
- */
+
 export const categorySchema = z.object({
   name: z
     .string()
@@ -18,20 +16,13 @@ export const categorySchema = z.object({
     .or(z.literal("")),
 });
 
-/**
- * React Hook Form Values
- */
+
 export type CategoryFormValues = z.infer<typeof categorySchema>;
 
-/**
- * Backward-compatible alias
- * (used by useCategoryForm)
- */
+
 export type CategorySchema = CategoryFormValues;
 
-/**
- * Default Form Values
- */
+
 export const categoryDefaultValues: CategoryFormValues = {
   name: "",
   description: "",

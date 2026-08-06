@@ -1,14 +1,10 @@
 import type { DateRangePreset, ReportFilters } from "../types";
 import { resolveDateRangePreset } from "../types";
 
-/** The window a report opens on before the user touches anything. */
+
 export const DEFAULT_DATE_RANGE_PRESET: DateRangePreset = "last30Days";
 
-/**
- * Single source of truth for filter defaults. `ReportFilterContext` used to
- * keep a second, subtly different copy of this object; both now read from here
- * so "reset" and "initial load" can never diverge.
- */
+
 export function createDefaultReportFilters(): ReportFilters {
   return {
     search: "",

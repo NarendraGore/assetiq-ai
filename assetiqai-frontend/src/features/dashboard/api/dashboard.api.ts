@@ -14,12 +14,7 @@ import type {
   OutOfStockProduct,
 } from "../types/dashboard.types";
 
-/**
- * Every dashboard endpoint is scoped by the same period selector, so the
- * filter travels as a `period` query param. Keep the param name in sync with
- * the API's DashboardController — an unbound name is ignored server-side,
- * which would silently return unfiltered data.
- */
+
 const periodParams = (filter: DashboardFilter) => ({
   params: { period: filter },
 });

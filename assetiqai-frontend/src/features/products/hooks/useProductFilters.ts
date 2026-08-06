@@ -14,11 +14,7 @@ const PRICE_DEBOUNCE_MS = 500;
 
 const ALL = "all";
 
-/**
- * Reads/writes an optional numeric query param. Empty string, `null` and
- * non-numeric values all resolve to `undefined` so the API simply omits the
- * bound.
- */
+
 function parseNumber(value: string | null): number | undefined {
   if (value === null || value.trim() === "") return undefined;
 
@@ -28,19 +24,19 @@ function parseNumber(value: string | null): number | undefined {
 }
 
 export interface ProductFiltersState {
-  /* Search */
+
   search: string;
   setSearch: (value: string) => void;
   debouncedSearch: string;
 
-  /* Category / Supplier */
+
   categoryId?: string;
   setCategoryId: (value?: string) => void;
 
   supplierId?: string;
   setSupplierId: (value?: string) => void;
 
-  /* Price (raw input strings kept for controlled inputs) */
+
   minPriceInput: string;
   maxPriceInput: string;
   setMinPrice: (value: string) => void;
@@ -48,13 +44,13 @@ export interface ProductFiltersState {
   minPrice?: number;
   maxPrice?: number;
 
-  /* Pagination */
+
   page: number;
   setPage: (value: number) => void;
   pageSize: number;
   setPageSize: (value: number) => void;
 
-  /* Misc */
+
   hasActiveFilters: boolean;
   resetFilters: () => void;
 }
@@ -64,7 +60,7 @@ export function useProductFilters(): ProductFiltersState {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  /* ---------- Initial values from URL ---------- */
+
 
   const urlSearch = searchParams.get("search") ?? "";
   const urlCategory = searchParams.get("categoryId") ?? undefined;
@@ -82,7 +78,7 @@ export function useProductFilters(): ProductFiltersState {
     DEFAULT_PAGE_SIZE
   );
 
-  /* ---------- Local state ---------- */
+
 
   const [search, setSearchState] = useState(urlSearch);
   const [debouncedSearch, setDebouncedSearch] = useState(urlSearch);
@@ -107,7 +103,7 @@ export function useProductFilters(): ProductFiltersState {
   const [page, setPageState] = useState(urlPage);
   const [pageSize, setPageSizeState] = useState(urlPageSize);
 
-  /* ---------- Debounce search ---------- */
+
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -117,7 +113,7 @@ export function useProductFilters(): ProductFiltersState {
     return () => window.clearTimeout(timer);
   }, [search]);
 
-  /* ---------- Debounce price ---------- */
+
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -135,13 +131,9 @@ export function useProductFilters(): ProductFiltersState {
     return () => window.clearTimeout(timer);
   }, [maxPriceInput]);
 
-  /* ---------- Reset to page 1 when any filter changes ---------- */
 
-  /**
-   * Skipped on mount: the effect would otherwise clobber a `?page=3` deep link
-   * back to page 1 on first render, since it runs once with the URL's own
-   * initial filter values.
-   */
+
+
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -153,7 +145,7 @@ export function useProductFilters(): ProductFiltersState {
     setPageState(DEFAULT_PAGE);
   }, [debouncedSearch, categoryId, supplierId, minPrice, maxPrice]);
 
-  /* ---------- Sync to URL ---------- */
+
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -189,7 +181,7 @@ export function useProductFilters(): ProductFiltersState {
     searchParams,
   ]);
 
-  /* ---------- Setters ---------- */
+
 
   const setSearch = useCallback((value: string) => {
     setSearchState(value);

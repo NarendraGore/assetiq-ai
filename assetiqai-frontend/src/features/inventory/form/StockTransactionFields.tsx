@@ -24,7 +24,7 @@ interface StockTransactionFieldsProps {
   options: ProductOption[];
   isLoadingOptions?: boolean;
 
-  /** When opened from a row, the product is fixed and shown read-only. */
+
   lockedProduct?: ProductOption | null;
 }
 
@@ -65,7 +65,7 @@ export default function StockTransactionFields({
 
   return (
     <div className="space-y-6">
-      {/* Product */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="productId">
           Product
@@ -144,7 +144,7 @@ export default function StockTransactionFields({
         )}
       </div>
 
-      {/* Quantity */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="quantity">
           {QUANTITY_LABEL[action]}
@@ -197,7 +197,7 @@ export default function StockTransactionFields({
         )}
       </div>
 
-      {/* Remarks */}
+      { }
       <div className="space-y-2">
         <Label htmlFor="remarks">Remarks</Label>
 

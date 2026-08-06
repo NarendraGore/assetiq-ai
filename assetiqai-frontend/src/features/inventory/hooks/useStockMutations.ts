@@ -14,13 +14,7 @@ import type {
   StockOutRequest,
 } from "../types";
 
-/**
- * The three stock-mutation operations, each wrapped with toast feedback and
- * cache invalidation. Every mutation invalidates the whole `inventory` key so
- * the list, low-stock and history views all refresh together.
- *
- * Handlers re-throw on failure so the calling dialog can keep itself open.
- */
+
 export function useStockMutations() {
   const queryClient = useQueryClient();
 

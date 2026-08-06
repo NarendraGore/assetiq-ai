@@ -35,11 +35,7 @@ function SortableHeader<TData, TValue>({
   );
 }
 
-/**
- * Columns for the stock-transaction History table. The signed movement column
- * colours Stock In green and Stock Out red; Adjustment shows its raw signed
- * delta so a correction reads naturally.
- */
+
 export const historyColumns: ColumnDef<StockTransaction>[] = [
   {
     accessorKey: "createdAt",

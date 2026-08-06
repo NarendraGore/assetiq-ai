@@ -24,11 +24,7 @@ interface ProductDetailsDialogProps {
 
   productId?: string;
 
-  /**
-   * The list row the user clicked. The detail endpoint doesn't always return
-   * category/supplier names, but the list projection does — so we fall back to
-   * it (and to a lookup-by-id below) to guarantee the names always render.
-   */
+
   fallback?: ProductListItem | null;
 
   onEdit?: () => void;
@@ -81,11 +77,7 @@ export default function ProductDetailsDialog({
 
   const { categoryOptions, supplierOptions } = useProductLookups();
 
-  /**
-   * Resolve the category/supplier name from the most reliable source available,
-   * in priority order: the detail response, the clicked list row, then a
-   * lookup by id against the loaded reference lists.
-   */
+
   const categoryName =
     product?.categoryName ||
     fallback?.categoryName ||
@@ -125,7 +117,7 @@ export default function ProductDetailsDialog({
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Header block */}
+            { }
             <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-border bg-muted/40 p-4">
               <div className="space-y-1">
                 <h3 className="text-lg font-semibold text-foreground">
@@ -141,7 +133,7 @@ export default function ProductDetailsDialog({
               </Badge>
             </div>
 
-            {/* Details */}
+            { }
             <div className="rounded-xl border border-border px-4">
               <DetailRow label="Category">
                 {categoryName || "—"}
@@ -178,7 +170,7 @@ export default function ProductDetailsDialog({
               </DetailRow>
             </div>
 
-            {/* Description */}
+            { }
             <div className="space-y-2">
               <span className="text-sm text-muted-foreground">Description</span>
               <p className="text-sm leading-6 text-foreground">

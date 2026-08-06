@@ -10,18 +10,7 @@ import type {
 
 const BASE_URL = "/products";
 
-/**
- * The detail endpoint (`GET /products/{id}`) doesn't always match the flat
- * {@link Product} shape the UI types against. Depending on the backend
- * serializer it can return the category/supplier as nested navigation objects
- * (`category: { id, name }`, `supplier: { id, companyName }`) instead of the
- * flat `categoryId`/`categoryName` pair. When that happens the edit form's
- * selects and the details dialog render blank even though the product clearly
- * has a category and supplier.
- *
- * This normaliser accepts either shape and always produces the flat fields the
- * rest of the feature relies on.
- */
+
 interface RawRelation {
   id?: string | null;
   name?: string | null;
@@ -68,11 +57,7 @@ function normalizeProduct(raw: RawProduct): Product {
   };
 }
 
-/**
- * The API treats empty strings and nulls interchangeably for optional fields,
- * so an untouched optional input is normalised to `undefined` before it goes
- * over the wire. Numeric and boolean values are left untouched.
- */
+
 function normalizePayload<
   T extends CreateProductRequest | UpdateProductRequest,
 >(payload: T): T {

@@ -1,10 +1,4 @@
-/**
- * Stock transaction type enum + display helpers.
- *
- * The history endpoint returns a numeric `transactionType`. This is the single
- * source of truth for how those numbers map to labels, badge colours and the
- * options shown in the History filter.
- */
+
 
 export const TRANSACTION_TYPE = {
   STOCK_IN: 1,
@@ -39,10 +33,7 @@ export function getTransactionLabel(type: number): string {
   }
 }
 
-/**
- * Tailwind classes for the coloured transaction badge. Kept aligned with the
- * palette used by the Reports feature's stock columns.
- */
+
 export function getTransactionClass(type: number): string {
   switch (type) {
     case TRANSACTION_TYPE.STOCK_IN:

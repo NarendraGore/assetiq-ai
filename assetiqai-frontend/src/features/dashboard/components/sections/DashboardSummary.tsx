@@ -23,11 +23,7 @@ import { useDashboardFilter } from "../../hooks/useDashboardFilter";
 export default function DashboardSummary() {
   const { filter } = useDashboardFilter();
 
-  /**
-   * All six cards come from this one endpoint. Sourcing half of them from
-   * `inventory-summary` doubled the request count for values the summary
-   * already returns, and meant either call failing blanked the whole row.
-   */
+
   const {
     data: summary,
     isPending,
@@ -85,11 +81,7 @@ export default function DashboardSummary() {
     ];
   }, [summary]);
 
-  /**
-   * `isPending` rather than `isLoading`: with `keepPreviousData` the previous
-   * period stays on screen while the next one loads, so the skeleton only
-   * shows on the very first fetch instead of on every tab switch.
-   */
+
   if (isPending) {
     return <DashboardSkeleton />;
   }

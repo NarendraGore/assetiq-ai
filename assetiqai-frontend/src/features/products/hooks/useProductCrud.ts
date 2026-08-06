@@ -28,9 +28,9 @@ export function useProductCrud() {
         toast.success("Product created successfully.");
       } catch (error) {
         toast.error(getErrorMessage(error, "Failed to create product."));
-        // Rethrow the original error so the caller can keep the dialog open and
-        // callers/reporting still see the real cause. `throw new Error()` here
-        // replaced it with an empty, untraceable error.
+
+
+
         throw error;
       }
     },
@@ -64,8 +64,8 @@ export function useProductCrud() {
 
         toast.success("Product deleted successfully.");
       } catch (error) {
-        // A 409 means the product is still referenced (e.g. stock transactions);
-        // surface the backend's explanation rather than a generic failure.
+
+
         const fallback =
           error instanceof AxiosError && error.response?.status === 409
             ? "This product has related records and cannot be deleted."
