@@ -41,7 +41,7 @@ export default function AppSidebar() {
       <SidebarHeader className="border-b border-sidebar-border px-2 py-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild size="lg" tooltip="AssetIQ">
+            <SidebarMenuButton asChild size="lg" tooltip="ASSETIQ AI">
               <Link href="/dashboard">
                 <div
                   className="
@@ -62,10 +62,10 @@ export default function AppSidebar() {
                 </div>
 
                 <div className="grid flex-1 text-left leading-tight">
-                  <span className="truncate font-semibold">AssetIQ</span>
+                  <span className="truncate font-semibold">ASSETIQ AI</span>
 
                   <span className="truncate text-xs text-muted-foreground">
-                    Asset Management
+                    Asset Management Platform
                   </span>
                 </div>
               </Link>

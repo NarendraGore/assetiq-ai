@@ -15,7 +15,7 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <DashboardHeader
           title="Dashboard"
-          description="Monitor your inventory and business overview."
+          description="Your real-time inventory health, stock alerts, and business performance at a glance."
         />
 
         <FilterTabs />

@@ -15,34 +15,34 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
               </div>
 
               <h1 className="text-5xl font-bold leading-tight">
-                Asset Management
+                ASSETIQ
                 <br />
-                Dashboard
+                <span className="text-blue-200">AI</span>
               </h1>
 
               <p className="mt-6 max-w-md text-lg text-blue-100">
-                Modern SaaS platform for inventory, assets, employees, analytics
-                and reporting.
+                Intelligent asset and inventory management. Turn your stock into
+                actionable insights.
               </p>
             </div>
 
             <div className="space-y-6">
               <Feature
                 icon={<ShieldCheck className="h-6 w-6" />}
-                title="Secure Authentication"
-                description="JWT + Refresh Token"
+                title="Real-Time Inventory Visibility"
+                description="Monitor stock levels and movements as they happen"
               />
 
               <Feature
                 icon={<ChartColumnBig className="h-6 w-6" />}
-                title="Business Analytics"
-                description="Real-time dashboard"
+                title="Smart Analytics & Reports"
+                description="Track trends and make data-driven decisions"
               />
 
               <Feature
                 icon={<PackageCheck className="h-6 w-6" />}
-                title="Inventory Management"
-                description="Manage assets efficiently"
+                title="Streamlined Asset Control"
+                description="Manage products, categories, and suppliers in one place"
               />
             </div>
           </div>

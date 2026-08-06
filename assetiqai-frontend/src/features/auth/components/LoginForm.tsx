@@ -81,10 +81,13 @@ function LoginFormInner() {
           <ArrowRight className="h-6 w-6" />
         </div>
 
-        <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
+        <CardTitle className="text-3xl font-bold">
+          Welcome to ASSETIQ AI
+        </CardTitle>
 
         <CardDescription>
-          Sign in to continue to your dashboard.
+          Sign in to your account to manage your inventory, products, and
+          suppliers.
         </CardDescription>
       </CardHeader>
 
