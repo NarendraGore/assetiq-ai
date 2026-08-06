@@ -7,6 +7,7 @@ import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Category } from "../types";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 import {
   DropdownMenu,
@@ -92,6 +93,24 @@ export function categoryColumns({
           {row.original.description || "—"}
         </p>
       ),
+    },
+
+    {
+      accessorKey: "productCount",
+
+      header: ({ column }) => (
+        <SortableHeader column={column} title="Products" />
+      ),
+
+      cell: ({ row }) => {
+        const count = row.original.productCount ?? 0;
+
+        return (
+          <Badge variant={count > 0 ? "secondary" : "outline"}>
+            {count} {count === 1 ? "product" : "products"}
+          </Badge>
+        );
+      },
     },
 
     {

@@ -45,12 +45,6 @@ export default function StockTransactionForm({
   onSubmit,
   onCancel,
 }: StockTransactionFormProps) {
-  const form = useStockForm({
-    action,
-    productId: lockedProduct?.productId,
-    resetKey,
-  });
-
   const { options, isLoading: isLoadingOptions } = useProductOptions();
 
   /**
@@ -65,6 +59,30 @@ export default function StockTransactionForm({
         : options,
     [options, isProductInactive],
   );
+
+  /**
+   * Resolves the current stock for a product. Used by the schema to cap
+   * Stock Out and negative Adjustments. The locked product takes precedence
+   * (row-launched dialog), otherwise we look in the free-choice list.
+   */
+  const getAvailableStock = useMemo(() => {
+    const lookup = new Map(
+      options.map((opt) => [opt.productId, opt.currentStock]),
+    );
+
+    if (lockedProduct) {
+      lookup.set(lockedProduct.productId, lockedProduct.currentStock);
+    }
+
+    return (productId: string) => lookup.get(productId);
+  }, [options, lockedProduct]);
+
+  const form = useStockForm({
+    action,
+    productId: lockedProduct?.productId,
+    resetKey,
+    getAvailableStock,
+  });
 
   return (
     <form

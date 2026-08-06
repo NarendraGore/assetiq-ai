@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, Moon, Sun } from "lucide-react";
@@ -37,11 +37,14 @@ export default function Navbar() {
   /**
    * The server has no idea which theme will resolve, so the icon must not be
    * rendered until after hydration — otherwise React logs a mismatch and the
-   * wrong icon flashes on first paint.
+   * wrong icon flashes on first paint. `useSyncExternalStore` yields `true`
+   * only once the client has hydrated.
    */
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const isDark = resolvedTheme === "dark";
 

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Eye, EyeOff, Lock } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { Eye, EyeOff, Lock, Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { getErrorMessage } from "@/lib/getErrorMessage";
@@ -16,6 +16,8 @@ import {
   type ResetPasswordFormData,
 } from "../schemas/reset-password.schema";
 
+import * as authApi from "../api/auth.api";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,8 +29,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function ResetPasswordForm() {
+function ResetPasswordFormInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // The token arrives via the emailed link: /reset-password?token=...
+  const token = searchParams.get("token") ?? "";
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,16 +61,20 @@ export default function ResetPasswordForm() {
   const password = watch("password") ?? "";
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    try {
-      /**
-       * TODO
-       * await authApi.resetPassword({
-       *    token,
-       *    password:data.password
-       * })
-       */
+    if (!token) {
+      toast.error(
+        "This reset link is invalid or incomplete. Please request a new one.",
+      );
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      return;
+    }
+
+    try {
+      await authApi.resetPassword({
+        token,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      });
 
       toast.success("Password reset successfully.");
 
@@ -194,5 +204,23 @@ export default function ResetPasswordForm() {
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+/**
+ * `useSearchParams` requires a Suspense boundary, otherwise the whole route
+ * opts out of static rendering and the build warns.
+ */
+export default function ResetPasswordForm() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[400px] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <ResetPasswordFormInner />
+    </Suspense>
   );
 }

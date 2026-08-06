@@ -4,7 +4,6 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   MoreHorizontal,
-  SlidersHorizontal,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,6 @@ interface InventoryActionsProps {
   item: InventoryItem;
   onStockIn: (item: InventoryItem) => void;
   onStockOut: (item: InventoryItem) => void;
-  onAdjust: (item: InventoryItem) => void;
   /** Inactive products cannot receive stock movements. */
   disabled?: boolean;
 }
@@ -31,7 +29,6 @@ export default function InventoryActions({
   item,
   onStockIn,
   onStockOut,
-  onAdjust,
   disabled = false,
 }: InventoryActionsProps) {
   return (
@@ -80,20 +77,6 @@ export default function InventoryActions({
         >
           <ArrowUpFromLine className="mr-2 h-4 w-4 text-destructive" />
           Stock Out
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          disabled={disabled}
-          onClick={(event) => {
-            event.stopPropagation();
-            onAdjust(item);
-          }}
-          className="cursor-pointer"
-        >
-          <SlidersHorizontal className="mr-2 h-4 w-4 text-amber-600" />
-          Adjust
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

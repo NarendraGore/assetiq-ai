@@ -7,6 +7,9 @@ import {
   LogoutDto,
   AuthResponse,
   ProfileResponse,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  MessageResponse,
 } from "../types/auth.types";
 
 /**
@@ -40,6 +43,38 @@ export const refreshToken = async (
 ): Promise<AuthResponse> => {
   const response = await api.post<AuthResponse>(
     "/auth/refresh-token",
+    data
+  );
+
+  return response.data;
+};
+
+/**
+ * Forgot Password
+ *
+ * Always resolves with the same generic message from the API, whether or not
+ * the email is registered, so callers must not treat success as confirmation
+ * that an account exists.
+ */
+export const forgotPassword = async (
+  data: ForgotPasswordDto
+): Promise<MessageResponse> => {
+  const response = await api.post<MessageResponse>(
+    "/auth/forgot-password",
+    data
+  );
+
+  return response.data;
+};
+
+/**
+ * Reset Password
+ */
+export const resetPassword = async (
+  data: ResetPasswordDto
+): Promise<MessageResponse> => {
+  const response = await api.post<MessageResponse>(
+    "/auth/reset-password",
     data
   );
 

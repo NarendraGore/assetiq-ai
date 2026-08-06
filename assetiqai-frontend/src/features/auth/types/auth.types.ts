@@ -36,6 +36,21 @@ export interface RefreshTokenDto {
   refreshToken: string;
 }
 
+export interface ForgotPasswordDto {
+  email: string;
+}
+
+export interface ResetPasswordDto {
+  token: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface MessageResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface LogoutDto {
   refreshToken: string;
 }

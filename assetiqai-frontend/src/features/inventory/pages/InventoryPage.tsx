@@ -128,7 +128,6 @@ export default function InventoryPage() {
       inventoryColumns({
         onStockIn: (item: InventoryItem) => open("in", item),
         onStockOut: (item: InventoryItem) => open("out", item),
-        onAdjust: (item: InventoryItem) => open("adjust", item),
         isProductInactive,
       }),
     [open, isProductInactive],

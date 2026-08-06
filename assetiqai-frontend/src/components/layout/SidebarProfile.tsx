@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 
 import { useAuth } from "@/features/auth/hooks/useAuth";
 

@@ -7,6 +7,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Supplier } from "../types";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 import SupplierActions from "./SupplierActions";
 
@@ -174,6 +175,24 @@ export function supplierColumns({
           {row.original.address || "—"}
         </p>
       ),
+    },
+
+    {
+      accessorKey: "productCount",
+
+      header: ({ column }) => (
+        <SortableHeader column={column} title="Products" />
+      ),
+
+      cell: ({ row }) => {
+        const count = row.original.productCount ?? 0;
+
+        return (
+          <Badge variant={count > 0 ? "secondary" : "outline"}>
+            {count} {count === 1 ? "product" : "products"}
+          </Badge>
+        );
+      },
     },
 
     {

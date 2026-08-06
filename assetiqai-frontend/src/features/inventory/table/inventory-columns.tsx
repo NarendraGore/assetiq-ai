@@ -14,7 +14,6 @@ import InventoryActions from "./InventoryActions";
 interface InventoryColumnsProps {
   onStockIn: (item: InventoryItem) => void;
   onStockOut: (item: InventoryItem) => void;
-  onAdjust: (item: InventoryItem) => void;
   /** Returns true when the product is inactive and stock ops must be blocked. */
   isProductInactive?: (productId: string) => boolean;
 }
@@ -81,7 +80,6 @@ function StockBadge({ item }: { item: InventoryItem }) {
 export function inventoryColumns({
   onStockIn,
   onStockOut,
-  onAdjust,
   isProductInactive,
 }: InventoryColumnsProps): ColumnDef<InventoryItem>[] {
   return [
@@ -179,7 +177,6 @@ export function inventoryColumns({
             item={row.original}
             onStockIn={onStockIn}
             onStockOut={onStockOut}
-            onAdjust={onAdjust}
             disabled={isProductInactive?.(row.original.productId) ?? false}
           />
         </div>
