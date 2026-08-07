@@ -1,21 +1,25 @@
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using AssetIQAI.Infrastructure.Services.Interfaces;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 
 namespace AssetIQAI.Infrastructure.Services.Implementations;
 
 public class EmailService : IEmailService
 {
+    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmailService> _logger;
 
     public EmailService(
+        HttpClient httpClient,
         IConfiguration configuration,
         ILogger<EmailService> logger)
     {
+        _httpClient = httpClient;
         _configuration = configuration;
         _logger = logger;
     }
@@ -37,9 +41,7 @@ public class EmailService : IEmailService
             recipientName,
             subject: "Reset your AssetIQ AI password",
             htmlBody: BuildPasswordResetHtmlBody(recipientName, resetLink),
-            textBody: textBody,
-            fallbackLogMessage:
-                "Password reset link for {Email}: " + resetLink);
+            textBody: textBody);
     }
 
     public async Task SendRegistrationSuccessEmailAsync(
@@ -60,9 +62,7 @@ public class EmailService : IEmailService
             recipientName,
             subject: "Welcome to AssetIQ AI",
             htmlBody: BuildWelcomeHtmlBody(recipientName, frontendBaseUrl),
-            textBody: textBody,
-            fallbackLogMessage:
-                "Registration success email skipped for {Email}.");
+            textBody: textBody);
     }
 
     private async Task SendMessageAsync(
@@ -70,8 +70,7 @@ public class EmailService : IEmailService
         string recipientName,
         string subject,
         string htmlBody,
-        string textBody,
-        string fallbackLogMessage)
+        string textBody)
     {
         var emailSettings = _configuration.GetSection("Email");
 
@@ -79,64 +78,69 @@ public class EmailService : IEmailService
         if (!enabled)
         {
             _logger.LogWarning(
-                "Email sending is disabled. " + fallbackLogMessage,
+                "Email sending is disabled. Skipping email to {Email}.",
                 toEmail);
 
             return;
         }
 
-        var host = emailSettings["Host"];
-        var port = int.TryParse(emailSettings["Port"], out var parsedPort) ? parsedPort : 587;
-        var useSsl = bool.TryParse(emailSettings["UseSsl"], out var parsedUseSsl) && parsedUseSsl;
-        var username = emailSettings["Username"];
-        var password = emailSettings["Password"];
+        var apiKey = emailSettings["ApiKey"];
+        if (string.IsNullOrWhiteSpace(apiKey))
+        {
+            _logger.LogWarning(
+                "Email is enabled but Brevo API key is not configured. Skipping email to {Email}.",
+                toEmail);
+
+            return;
+        }
 
         var fromEmail = emailSettings["FromEmail"];
         if (string.IsNullOrWhiteSpace(fromEmail))
         {
-            fromEmail = username;
-        }
-
-        var fromName = emailSettings["FromName"] ?? "AssetIQ AI";
-
-        if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(fromEmail))
-        {
-
-
             _logger.LogWarning(
-                "Email is enabled but Host/FromEmail are not configured. " + fallbackLogMessage,
+                "Email is enabled but FromEmail is not configured. Skipping email to {Email}.",
                 toEmail);
 
             return;
         }
 
-        var message = new MimeMessage();
+        var fromName = emailSettings["FromName"] ?? "AssetIQ AI";
 
-        message.From.Add(new MailboxAddress(fromName, fromEmail));
-        message.To.Add(new MailboxAddress(recipientName, toEmail));
-        message.Subject = subject;
-
-        message.Body = new BodyBuilder
+        var payload = new
         {
-            HtmlBody = htmlBody,
-            TextBody = textBody
-        }.ToMessageBody();
+            sender = new { name = fromName, email = fromEmail },
+            to = new[] { new { name = recipientName, email = toEmail } },
+            subject,
+            htmlContent = htmlBody,
+            textContent = textBody
+        };
 
-        using var client = new SmtpClient();
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            "https://api.brevo.com/v3/smtp/email");
 
-        var secureOption = (useSsl || port == 465)
-            ? SecureSocketOptions.SslOnConnect
-            : SecureSocketOptions.StartTls;
+        request.Headers.Add("api-key", apiKey);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        await client.ConnectAsync(host, port, secureOption);
+        request.Content = new StringContent(
+            JsonSerializer.Serialize(payload),
+            Encoding.UTF8,
+            "application/json");
 
-        if (!string.IsNullOrWhiteSpace(username))
+        using var response = await _httpClient.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
         {
-            await client.AuthenticateAsync(username, password);
+            var errorBody = await response.Content.ReadAsStringAsync();
+
+            _logger.LogError(
+                "Brevo send failed for {Email}: {StatusCode} {Error}",
+                toEmail,
+                (int)response.StatusCode,
+                errorBody);
+
+            return;
         }
-
-        await client.SendAsync(message);
-        await client.DisconnectAsync(true);
 
         _logger.LogInformation(
             "Email '{Subject}' sent to {Email}.",

@@ -71,17 +71,14 @@ if (app.Environment.IsProduction())
     var config = app.Services.GetRequiredService<IConfiguration>();
 
     var emailEnabled = config["Email:Enabled"];
-    var emailHost = config["Email:Host"];
-    var emailPort = config["Email:Port"];
-    var emailUsername = config["Email:Username"];
-    var emailPassword = config["Email:Password"];
+    var emailApiKey = config["Email:ApiKey"];
     var emailFrom = config["Email:FromEmail"];
+    var emailFromName = config["Email:FromName"];
 
     Console.Error.WriteLine(
-        "[DIAG] Email::Enabled='" + emailEnabled + "' Host='" + emailHost +
-        "' Port='" + emailPort + "' Username='" + emailUsername +
-        "' PasswordSet='" + !string.IsNullOrWhiteSpace(emailPassword) +
-        "' From='" + emailFrom + "'");
+        "[DIAG] Email::Enabled='" + emailEnabled + "' ApiKeySet='" +
+        !string.IsNullOrWhiteSpace(emailApiKey) + "' From='" + emailFrom +
+        "' FromName='" + emailFromName + "'");
 
     if (string.IsNullOrWhiteSpace(config.GetConnectionString("DefaultConnection")))
     {

@@ -56,7 +56,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
-        services.AddScoped<IEmailService, EmailService>();
+        services.AddHttpClient<IEmailService, EmailService>();
 
         services.AddScoped<ICategoryService, CategoryService>();
 
