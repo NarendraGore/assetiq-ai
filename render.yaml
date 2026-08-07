@@ -36,16 +36,12 @@ services:
         sync: false
       - key: Supabase__Bucket
         value: uploads
-      # SMTP (Gmail app password or any provider)
+      # Brevo (https://www.brevo.com) — HTTP API over port 443.
+      # Render free tier blocks SMTP ports (25/465/587), so SMTP cannot be used.
+      # Get a key: Brevo dashboard -> SMTP & API -> API Keys.
       - key: Email__Enabled
         value: "true"
-      - key: Email__Host
-        value: smtp.gmail.com
-      - key: Email__Port
-        value: "587"
-      - key: Email__Username
-        sync: false
-      - key: Email__Password
+      - key: Email__ApiKey
         sync: false
       - key: Email__FromEmail
         sync: false
