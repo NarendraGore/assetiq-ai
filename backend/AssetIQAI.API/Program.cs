@@ -70,6 +70,19 @@ if (app.Environment.IsProduction())
 {
     var config = app.Services.GetRequiredService<IConfiguration>();
 
+    var emailEnabled = config["Email:Enabled"];
+    var emailHost = config["Email:Host"];
+    var emailPort = config["Email:Port"];
+    var emailUsername = config["Email:Username"];
+    var emailPassword = config["Email:Password"];
+    var emailFrom = config["Email:FromEmail"];
+
+    Console.Error.WriteLine(
+        "[DIAG] Email::Enabled='" + emailEnabled + "' Host='" + emailHost +
+        "' Port='" + emailPort + "' Username='" + emailUsername +
+        "' PasswordSet='" + !string.IsNullOrWhiteSpace(emailPassword) +
+        "' From='" + emailFrom + "'");
+
     if (string.IsNullOrWhiteSpace(config.GetConnectionString("DefaultConnection")))
     {
         throw new InvalidOperationException(
