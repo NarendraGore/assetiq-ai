@@ -38,7 +38,7 @@ services:
         value: uploads
       # SMTP (Gmail app password or any provider)
       - key: Email__Enabled
-        value: "false"
+        value: "true"
       - key: Email__Host
         value: smtp.gmail.com
       - key: Email__Port
