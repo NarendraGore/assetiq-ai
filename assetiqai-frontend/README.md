@@ -1,6 +1,6 @@
 # ASSETIQ AI — Frontend
 
-Next.js 16 frontend for **ASSETIQ AI**, an intelligent asset and inventory management platform.
+Next.js 16 frontend for **ASSETIQ AI**, an asset and inventory management platform.
 
 [Live Demo](https://assetiq-ai-beta.vercel.app)
 

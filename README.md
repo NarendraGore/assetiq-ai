@@ -2,9 +2,9 @@
 
 # ASSETIQ AI
 
-**Intelligent asset and inventory management platform**
+**Asset and inventory management platform**
 
-Full-stack inventory management with real-time dashboards, stock tracking, reporting, and AI-ready analytics.
+Full-stack inventory management with real-time dashboards, stock tracking, reporting, and analytics.
 
 [Live Demo](https://assetiq-ai-beta.vercel.app) · [Backend API](https://assetiq-ai.onrender.com)
 
@@ -131,7 +131,7 @@ cd backend
 dotnet run --project AssetIQAI.API
 ```
 
-The API listens on `http://localhost:7173` (see `launchSettings.json`). Swagger is available at `/swagger`.
+The API listens on `http://localhost:7173` (see `launchSettings.json`). Swagger is available at `/swagger` (local development only).
 
 ### 2. Frontend
 
@@ -174,27 +174,27 @@ The project is deployed via **Render** (backend + PostgreSQL) and **Vercel** (fr
 
 ## Screenshots
 
-Add screenshots here, for example:
-
-```text
-screenshots/login.png
-screenshots/dashboard.png
-screenshots/products.png
-screenshots/inventory.png
-screenshots/reports.png
-```
-
-Then reference them:
+### Login
 
 ![Login](./screenshots/login.png)
+
+### Dashboard
+
 ![Dashboard](./screenshots/dashboard.png)
 
-## Roadmap
+### Products
 
-- AI-powered demand forecasting and low-stock recommendations.
-- Barcode/QR scanning for stock operations.
-- Multi-warehouse support.
-- CSV/Excel import of products and suppliers.
+![Products](./screenshots/products.png)
+
+### Inventory
+
+![Inventory](./screenshots/inventory.png)
+
+### Reports
+
+![Reports](./screenshots/reports.png)
+
+
 
 ---
 
