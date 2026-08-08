@@ -1,6 +1,22 @@
+# OS / editor
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
-docs/issue under epic.txt
-docs/16-Improvement-Plan-and-Recommendations.md
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+*.pem
+
+# AI tooling
+.continue/
+.aider*
+.cursor/
+.copilot/
+
+# Logs
+*.log
+logs/
