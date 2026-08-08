@@ -2,9 +2,9 @@
 
 # ASSETIQ AI
 
-**Intelligent asset and inventory management platform**
+**Asset and inventory management platform**
 
-Full-stack inventory management with real-time dashboards, stock tracking, reporting, and AI-ready analytics.
+Full-stack inventory management with real-time dashboards, stock tracking, reporting, and analytics.
 
 [Live Demo](https://assetiq-ai-beta.vercel.app) · [Backend API](https://assetiq-ai.onrender.com)
 
@@ -194,12 +194,7 @@ The project is deployed via **Render** (backend + PostgreSQL) and **Vercel** (fr
 
 ![Reports](./screenshots/reports.png)
 
-## Roadmap
 
-- AI-powered demand forecasting and low-stock recommendations.
-- Barcode/QR scanning for stock operations.
-- Multi-warehouse support.
-- CSV/Excel import of products and suppliers.
 
 ---
 
