@@ -131,7 +131,7 @@ cd backend
 dotnet run --project AssetIQAI.API
 ```
 
-The API listens on `http://localhost:7173` (see `launchSettings.json`). Swagger is available at `/swagger`.
+The API listens on `http://localhost:7173` (see `launchSettings.json`). Swagger is available at `/swagger` (local development only).
 
 ### 2. Frontend
 
@@ -174,20 +174,25 @@ The project is deployed via **Render** (backend + PostgreSQL) and **Vercel** (fr
 
 ## Screenshots
 
-Add screenshots here, for example:
-
-```text
-screenshots/login.png
-screenshots/dashboard.png
-screenshots/products.png
-screenshots/inventory.png
-screenshots/reports.png
-```
-
-Then reference them:
+### Login
 
 ![Login](./screenshots/login.png)
+
+### Dashboard
+
 ![Dashboard](./screenshots/dashboard.png)
+
+### Products
+
+![Products](./screenshots/products.png)
+
+### Inventory
+
+![Inventory](./screenshots/inventory.png)
+
+### Reports
+
+![Reports](./screenshots/reports.png)
 
 ## Roadmap
 
